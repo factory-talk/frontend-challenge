@@ -1,0 +1,76 @@
+.selectedCitiesPlane {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #95B9C7;
+  padding: 20px;
+  margin-top: 1rem;
+  box-sizing: border-box; 
+}
+
+.selectedCitiesContainer {
+  width: 100%;
+  max-width: 600px; 
+  background-color: #f3ef85;
+  border-radius: 8px; 
+  padding: 16px; 
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  overflow-y: auto; 
+}
+
+.selectedCityItem {
+  padding: 10px;
+  border-bottom: 1px solid #3a3a3a;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  color: #010101;
+  margin-bottom: 1rem;
+  transition: background-color 0.3s ease;
+  box-sizing: border-box;
+}
+
+.selectedCityItem .flexRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%; 
+}
+
+.selectedCityItem .flexCol {
+  display: flex;
+  flex-direction: column;
+}
+
+.selectedCityItem .weatherDetails {
+  display: flex;
+  align-items: center;
+}
+
+.selectedCityItem .weatherDetails div {
+  margin-right: 10px;
+}
+
+.selectedCityItem img {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+  object-fit: cover;
+}
+
+.removeButton {
+  margin-left: auto;
+  color: #ff4d4f;
+  display: flex;
+  align-items: center;
+  font-size: large;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.removeButton:hover {
+  color: #2b2b2b;
+}
