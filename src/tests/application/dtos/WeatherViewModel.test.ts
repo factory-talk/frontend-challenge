@@ -44,7 +44,8 @@ describe('WeatherViewModel', () => {
           mainWeather: 'Clear',
           descWeather: 'clear sky',
           icon: '01d',
-          dateTime: 1627550400
+          dateTime: 1627550400,
+          timezone: 25200
         }),
       };
 
@@ -85,7 +86,7 @@ describe('WeatherViewModel', () => {
     expect(WeatherDTO.deserializeWeatherDTO).toHaveBeenCalledWith(mockWeatherDTO);
     expect(weatherViewModel.getWeatherDTO()).toBe(mockWeatherDTO);
     expect(weatherViewModel.bangkokDateTime).toBe('Monday, July 26, 2021, 9:00 PM');
-    expect(weatherViewModel.bangkokTime).toBe('4:20 PM');
+    expect(weatherViewModel.bangkokTime).toBe('09:00 AM');
     expect(weatherViewModel.weatherIcon).toBe('01d');
   });
   

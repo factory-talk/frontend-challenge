@@ -14,7 +14,7 @@ jest.mock('@infrastructure/utils/Logger', () => ({
 
 const mockWeatherDTO = new WeatherDTO(
   800,
-  'Bangkok',
+  'Chiang Mai',
   0,
   30,
   28,
@@ -25,23 +25,24 @@ const mockWeatherDTO = new WeatherDTO(
   'Clear',
   'clear sky',
   '01d',
-  1627550400
+  1725645600,
+  25200
 );
 
 describe('WeatherUseCases', () => {
   it('should convert UTC time to Bangkok DateTime', () => {
-    const result = WeatherUseCases.convertToBangkokDateTime(1627550400);
-    expect(result).toBe('Thursday, July 29, 2021');
+    const result = WeatherUseCases.convertToBangkokDateTime(1725645600, 25200);
+    expect(result).toBe('Saturday, September 07');
   });
 
   it('should convert UTC time to Bangkok Time', () => {
-    const result = WeatherUseCases.convertToBangkokTime(1627550400);
-    expect(result).toBe('4:20 PM');
+    const result = WeatherUseCases.convertToBangkokTime(1725645600, 25200);
+    expect(result).toBe('01:00 AM');
   });
 
   it('should return a default formatted date string when invalid formatType is provided', () => {
-    const result = WeatherUseCases.convertToBangkokDateTime(1627550400);
-    expect(result).toBe('Thursday, July 29, 2021');
+    const result = WeatherUseCases.convertToBangkokDateTime(1725645600, 25200);
+    expect(result).toBe('Saturday, September 07');
   });
 
   it('should get the correct weather icons based on weather ID (Single icon)', () => {
@@ -82,7 +83,7 @@ describe('WeatherUseCases', () => {
   it('should parse weatherDTO.id as a string and convert to number', () => {
     const mockWeatherDTOWithStringId: WeatherDTO = new WeatherDTO(
       '800',
-      'Bangkok',
+      'Chiang Mai',
       0,
       30,
       28,
@@ -93,7 +94,8 @@ describe('WeatherUseCases', () => {
       'Clear',
       'clear sky',
       '01d',
-      1627550400
+      1725645600,
+      25200
     );
     const result = WeatherUseCases.mapWeatherDTOToViewModel(mockWeatherDTOWithStringId) as WeatherViewModel;
 
