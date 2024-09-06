@@ -38,7 +38,6 @@ const WeatherData: React.FC<WeatherDataProps> = ({ serializedWeatherData, latitu
       if (!weatherData) {
         throw new Error("Weather data is null or undefined");
       }
-      Logger.log("Weather data from controller:", JSON.stringify(weatherData));
       return WeatherViewModel.deserialize(weatherData);
     } catch (error) {
       Logger.logError("Error fetching weather data", error);
@@ -57,7 +56,7 @@ const WeatherData: React.FC<WeatherDataProps> = ({ serializedWeatherData, latitu
           const viewModel = WeatherViewModel.deserialize(weatherData);
           setWeatherViewModel(viewModel);
           setClientSideTime(viewModel.bangkokDateTime);
-          Logger.log('WeatherViewModel created:', JSON.stringify(viewModel));
+          Logger.log('WeatherViewModel created:', viewModel);
         } catch (error) {
           Logger.logError("Error parsing weather data", error);
         }
