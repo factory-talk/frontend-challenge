@@ -36,7 +36,6 @@ export async function getServerSideProps(context) {
       throw new Error("Weather data is null or undefined");
     }
 
-    Logger.log("Weather data from controller:", JSON.stringify(weatherData));
     const serializedWeatherData = JSON.stringify(weatherData);
 
     return {
