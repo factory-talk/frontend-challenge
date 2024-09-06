@@ -80,8 +80,6 @@ export class OpenWeatherAPI {
 
     const { name, main, weather, wind, dt, rain, timezone } = data;
 
-    Logger.log('Received weather data structure:', data);
-
     const wto = new WeatherDTO(
       weather && weather[0] ? weather[0].main : "Unknown Main",
       name || "Unknown Location",
@@ -95,7 +93,8 @@ export class OpenWeatherAPI {
       weather && weather[0] ? weather[0].main : "Unknown Main",
       weather && weather[0] ? weather[0].description : "No description available",
       weather && weather[0] ? weather[0].icon : "01d",
-      dt || Date.now(),
+      dt || 0,
+      timezone || 0
     );
     
     Logger.log("weatherData:", wto)
@@ -147,6 +146,7 @@ async getHourlyForecast(latitude: number, longitude: number): Promise<WeatherDTO
         forecast.weather && forecast.weather[0] ? forecast.weather[0].description : "No description available",
         forecast.weather && forecast.weather[0] ? forecast.weather[0].icon : "01d",
         forecast.dt !== undefined ? forecast.dt : 0, 
+        data.city.timezone !== undefined ? data.city.timezone : 0, 
       );
     });
 

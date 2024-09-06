@@ -15,6 +15,7 @@ export class WeatherDTO {
   descWeather: string;
   icon: string;  
   dateTime: number;
+  timeZone: number;
 
   constructor(
     id: string | number,
@@ -29,7 +30,8 @@ export class WeatherDTO {
     mainWeather: string,
     descWeather: string,
     icon: string,
-    dateTime: number
+    dateTime: number,
+    timeZone: number
     ) {
     this.id = id;
     this.cityName = cityName;
@@ -44,6 +46,7 @@ export class WeatherDTO {
     this.descWeather = descWeather;
     this.icon = icon;
     this.dateTime = dateTime;
+    this.timeZone = timeZone;
   }
 
   public static deserializeWeatherDTO(data: any): WeatherDTO {
@@ -62,7 +65,8 @@ export class WeatherDTO {
         "Unknown Main Weather",
         "Unknown Desc Weather",
         "01d",
-        Date.now()
+        0,
+        0
       );
     }
 
@@ -79,7 +83,8 @@ export class WeatherDTO {
       data.mainWeather ?? "Unknown Main Weather",
       data.descWeather ?? "Unknown Desc Weather",
       data.icon ?? "01d",
-      data.dateTime ?? Date.now()
+      data.dateTime ?? 0,
+      data.timeZone ?? 0
     );
   } 
 
@@ -97,7 +102,8 @@ export class WeatherDTO {
       mainWeather: this.mainWeather,
       descWeather: this.descWeather,
       icon: this.icon,
-      dateTime: this.dateTime
+      dateTime: this.dateTime,
+      timeZone: this.timeZone
     };
   }
 }

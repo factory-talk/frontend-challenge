@@ -2,30 +2,27 @@ import { WeatherDTO } from '@application/dtos/WeatherDTO';
 import { WeatherViewModel } from '@application/dtos/WeatherViewModel';
 import { WeatherConditions } from '@infrastructure/utils/definitions/WeatherConditions';
 import { Logger } from '@infrastructure/utils/Logger';
+import moment from 'moment-timezone';
 
 export class WeatherUseCases {
 
-  static convertToBangkokDateTime(utcTime: number): string {
-    return new Date(utcTime * 1000).toLocaleString('en-US', {
-      timeZone: 'Asia/Bangkok',
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
+
+  static convertToBangkokDateTime(unixTime: number, timeZone: number) {
+    Logger.log("unixTime: ",unixTime)
+    const timezoneOffsetInMinutes = timeZone / 60;
+    const formattedTime = moment.unix(unixTime).utcOffset(timezoneOffsetInMinutes).format('dddd, MMMM DD');
+    return formattedTime;
   }
 
-  static convertToBangkokTime(utcTime: number): string {
-    const convertedTime = new Date(utcTime * 1000).toLocaleString('en-US', {
-      timeZone: 'Asia/Bangkok',
-      hour: 'numeric',
-      minute: 'numeric',
-      hour12: true,
-    });
-    
-    Logger.log(`Converted UTC time ${utcTime} to Bangkok time: ${convertedTime}`);
-    return convertedTime;
+
+  static convertToBangkokTime(unixTime: number, timeZone: number) {
+    Logger.log("timezone: ",timeZone)
+    const timezoneOffsetInMinutes = timeZone / 60;
+
+    const time = moment.unix(unixTime).utcOffset(timezoneOffsetInMinutes).startOf('hour');
+    return time.format('hh:mm A');
   }
+  
   
   static getWeatherIcon(weatherId: number, weatherIcon: string): string {
     
@@ -48,8 +45,8 @@ export class WeatherUseCases {
   
     const mapSingleDTO = (weatherDTO: WeatherDTO): WeatherViewModel => {
       const weatherId = typeof weatherDTO.id === 'number' ? weatherDTO.id : parseInt(weatherDTO.id as string, 10) || 0;
-      const bangkokDateTime = WeatherUseCases.convertToBangkokDateTime(weatherDTO.dateTime || Date.now());
-      const bangkokTime = WeatherUseCases.convertToBangkokTime(weatherDTO.dateTime || Date.now());
+      const bangkokDateTime = WeatherUseCases.convertToBangkokDateTime(weatherDTO.dateTime || 0, weatherDTO.timeZone || 0);
+      const bangkokTime = WeatherUseCases.convertToBangkokTime(weatherDTO.dateTime || 0, weatherDTO.timeZone || 0);
       const weatherIcon = WeatherUseCases.getWeatherIcon(weatherId, weatherDTO.icon || '01d');
       
       return new WeatherViewModel(weatherDTO, bangkokDateTime, bangkokTime, weatherIcon);
