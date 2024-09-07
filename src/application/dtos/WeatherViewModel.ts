@@ -40,7 +40,7 @@ export class WeatherViewModel {
     
     const weatherDTO = WeatherDTO.deserializeWeatherDTO(data.weatherDTO);
     const bangkokDateTime = data.bangkokDateTime ?? '';
-    const bangkokTime = WeatherUseCases.convertToBangkokTime(weatherDTO.dateTime || Date.now());
+    const bangkokTime = WeatherUseCases.convertToBangkokTime(weatherDTO.dateTime || 0, weatherDTO.timeZone || 0);
     const weatherIcon = data.weatherIcon ?? '01d';
 
     Logger.log(`WeatherDTO after deserialized: ${JSON.stringify(weatherDTO)}`);
