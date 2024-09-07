@@ -23,7 +23,7 @@ export class OpenWeatherGeocodingService implements IOpenWeatherGeocoding {
     }
   }
 
-  async searchByZip(zip: string): Promise<CityDTO> {
+  async searchByZip(zip: string): Promise<CityDTO[]> {
     try {
       Logger.log(`searchByZip called with zip: ${zip}`);
       const result = await this.geocodingAPI.searchByZip(zip);
