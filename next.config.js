@@ -12,6 +12,9 @@ const nextConfig = withTM({
   env: {
     NEXT_PUBLIC_OPEN_WEATHER_MAP_API_KEY: process.env.NEXT_PUBLIC_OPEN_WEATHER_MAP_API_KEY,
   },
+  images: {
+    unoptimized: true,
+  },
 });
 
 module.exports = nextConfig;
