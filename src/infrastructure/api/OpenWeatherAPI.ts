@@ -1,4 +1,4 @@
-import { HttpClient } from '@infrastructure/utils/HttpClient';
+import { HttpClient, APIError } from '@infrastructure/utils/HttpClient';
 import { appConfig } from '../config/appConfig';
 import { apiKeys } from '../config/apiKeys';
 import { CityDTO } from '@application/dtos/CityDTO';
@@ -17,7 +17,7 @@ export class OpenWeatherAPI {
 
   async searchCity(query: string): Promise<CityDTO[]> {
     const endpoint = '/direct';
-    const params = { q: query, limit: 5, appid: apiKeys.openWeatherMapApiKey };
+    const params = { q: query, limit: 10, appid: apiKeys.openWeatherMapApiKey };
 
     try {
       const data = await this.geoClient.get(endpoint, params);
@@ -33,12 +33,17 @@ export class OpenWeatherAPI {
         );
       });
     } catch (error) {
-      Logger.logError('Error searching city', error);
-      return [];
+      if (error instanceof APIError) {
+        Logger.logError(`API error in searchCity: API error`, error);
+        return [];
+      } else {
+        Logger.logError(`Error searching city: ${error.message || 'Unknown error'}`, error);
+        return [];
+      }
     }
   }
 
-  async searchByZip(zip: string): Promise<CityDTO> {
+  async searchByZip(zip: string): Promise<CityDTO[]> {
     const endpoint = '/zip';
     const params = { zip, appid: apiKeys.openWeatherMapApiKey };
 
@@ -46,22 +51,29 @@ export class OpenWeatherAPI {
       const data = await this.geoClient.get(endpoint, params);
       Logger.logAPIResponse(endpoint, data); 
 
-      return new CityDTO(
-        data.name,
-        data.country,
-        `${data.name}, ${data.country}`,
-        data.lat,
-        data.lon
-      );
+      return [
+        new CityDTO(
+          data.name,
+          data.country,
+          `${data.name}, ${data.country}`,
+          data.lat,
+          data.lon
+        )
+      ];
     } catch (error) {
-      Logger.logError('Error searching by zip', error);
-      throw new Error('Could not retrieve location by zip code');
+      if (error instanceof APIError) {
+        Logger.logError(`API error in searchByZip: API error`, error); 
+        return [];
+      } else {
+        Logger.logError(`Error searching by zip: ${error.message || 'Unknown error'}`, error);
+        return [];
+      }
     }
   }
 
   async getWeatherData(latitude: number, longitude: number): Promise<WeatherDTO> {
-  const state = store.getState();  
-  const unit = state.temperatureUnit.unit.toLowerCase();  
+  const state = store.getState();
+  const unit = state.temperatureUnit.unit.toLowerCase();
 
   const endpoint = '/weather';
   const params: any = { lat: latitude, lon: longitude, appid: apiKeys.openWeatherMapApiKey };
@@ -76,35 +88,37 @@ export class OpenWeatherAPI {
 
   try {
     const data = await this.weatherClient.get(endpoint, params);
-    Logger.logAPIResponse(endpoint, data); 
+    Logger.logAPIResponse(endpoint, data);
 
     const { name, main, weather, wind, dt, rain, timezone } = data;
 
-    const wto = new WeatherDTO(
-      weather && weather[0] ? weather[0].main : "Unknown Main",
-      name || "Unknown Location",
+    return new WeatherDTO(
+      weather && weather[0] ? weather[0].main : 'Unknown Main',
+      name || 'Unknown Location',
       rain && rain['3h'] !== undefined ? rain['3h'] : 0,
-      main && main.temp != null ? main.temp : 0,  
-      main && main.temp_min != null ? main.temp_min : 0, 
-      main && main.temp_max != null ? main.temp_max : 0, 
+      main && main.temp != null ? main.temp : 0,
+      main && main.temp_min != null ? main.temp_min : 0,
+      main && main.temp_max != null ? main.temp_max : 0,
       main && main.humidity !== undefined ? main.humidity : 0,
       wind && wind.speed !== undefined ? wind.speed : 0,
       main && main.pressure !== undefined ? main.pressure : 0,
-      weather && weather[0] ? weather[0].main : "Unknown Main",
-      weather && weather[0] ? weather[0].description : "No description available",
-      weather && weather[0] ? weather[0].icon : "01d",
+      weather && weather[0] ? weather[0].main : 'Unknown Main',
+      weather && weather[0] ? weather[0].description : 'No description available',
+      weather && weather[0] ? weather[0].icon : '01d',
       dt || 0,
       timezone || 0
     );
-    
-    Logger.log("weatherData:", wto)
-    return wto;
   } catch (error) {
-    Logger.logError('Error fetching weather data', error);
-    throw new Error('Could not retrieve weather data: ' + (error instanceof Error ? error.message : String(error)));
+    if (error instanceof APIError) {
+      Logger.logError(`API error in getWeatherData: ${error.message || 'Unknown error'}`, error);
+    } else {
+      Logger.logError(`Error fetching weather data: ${error.message || 'Unknown error'}`, error);
+    }
+    throw error;  // Ensure the error is rethrown
   }
 }
 
+  
 
 async getHourlyForecast(latitude: number, longitude: number): Promise<WeatherDTO[]> {
   const state = store.getState();
@@ -157,6 +171,7 @@ async getHourlyForecast(latitude: number, longitude: number): Promise<WeatherDTO
     throw new Error('No forecast data received from API');
   }
 }
+
   
   
 }
