@@ -36,7 +36,7 @@
 .forecastDetails {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center; 
     margin-bottom: 1rem;
     font-size: 12px;
     color: #003a8c;
@@ -46,19 +46,21 @@
     width: 100%;
     max-width: 15rem; 
     height: auto;
+    margin-bottom: 1rem; 
 }
 
 .temp {
     font-size: 3rem; 
     font-weight: 500;
     margin-bottom: 0.5rem;
-    align-items: center;
+    text-align: center; 
     color: #003a8c;
 }
 
 .time {
     font-size: 2rem; 
-    color: #092e4a; 
+    color: #092e4a;
+    text-align: center;
     margin-top: 0.5rem;
 }
 
