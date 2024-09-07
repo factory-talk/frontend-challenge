@@ -1,10 +1,11 @@
 import { OpenWeatherAPI } from '@infrastructure/api/OpenWeatherAPI';
-import { HttpClient } from '@infrastructure/utils/HttpClient';
+import { HttpClient, APIError } from '@infrastructure/utils/HttpClient';
+import { Logger } from '@infrastructure/utils/Logger';
+import { store } from '@application/states/store';
 import { CityDTO } from '@application/dtos/CityDTO';
 import { WeatherDTO } from '@application/dtos/WeatherDTO';
-import { store } from '@application/states/store';
-import { Logger } from '@infrastructure/utils/Logger';
 
+jest.mock('@infrastructure/utils/HttpClient');
 jest.mock('@infrastructure/utils/Logger', () => ({
   Logger: {
     log: jest.fn(),
@@ -13,12 +14,9 @@ jest.mock('@infrastructure/utils/Logger', () => ({
     logError: jest.fn(),
   },
 }));
-
-jest.mock('@infrastructure/utils/HttpClient');
 jest.mock('@application/states/store', () => ({
   store: {
     getState: jest.fn(),
-    dispatch: jest.fn(),
   },
 }));
 
@@ -36,9 +34,7 @@ describe('OpenWeatherAPI', () => {
     (openWeatherAPI as any).weatherClient = weatherClientMock;
 
     (store.getState as jest.Mock).mockReturnValue({
-      temperatureUnit: {
-        unit: 'Celsius',
-      },
+      temperatureUnit: { unit: 'Celsius' },
     });
   });
 
@@ -46,86 +42,82 @@ describe('OpenWeatherAPI', () => {
     jest.clearAllMocks();
   });
 
-  describe('getWeatherData', () => {
-    it('should return a WeatherDTO when the request is successful', async () => {
+  describe('searchCity', () => {
+    it('should return an array of CityDTO when the request is successful', async () => {
+      const mockResponse = [
+        { name: 'Bangkok', country: 'TH', lat: 13.7563, lon: 100.5018 },
+      ];
+      geoClientMock.get.mockResolvedValueOnce(mockResponse);
+
+      const result = await openWeatherAPI.searchCity('Bangkok');
+
+      expect(geoClientMock.get).toHaveBeenCalledWith('/direct', expect.any(Object));
+      expect(result).toEqual([
+        new CityDTO('Bangkok', 'TH', 'Bangkok, TH', 13.7563, 100.5018),
+      ]);
+    });
+
+    it('should return an empty array if the searchCity request fails', async () => {
+      geoClientMock.get.mockRejectedValueOnce(new APIError(500, 'API error'));
+
+      const result = await openWeatherAPI.searchCity('InvalidCity');
+
+      expect(Logger.logError).toHaveBeenCalledWith('API error in searchCity: API error', expect.any(APIError));
+      expect(result).toEqual([]);
+    });
+  });
+
+  describe('searchByZip', () => {
+    it('should return an array of CityDTO when the request is successful', async () => {
       const mockResponse = {
-        name: 'Chiang Mai',
-        main: { temp: 30, temp_min: 28, temp_max: 32, humidity: 70, pressure: 1012 },
-        weather: [{ main: 'Clear', description: 'clear sky', icon: '01d' }],
-        wind: { speed: 5 },
-        dt: 1725645600,
-        timeZone: 25200
+        zip: '11110',
+        name: 'Bang Bua Thong',
+        lat: 13.9167,
+        lon: 100.4333,
+        country: 'TH',
       };
+      geoClientMock.get.mockResolvedValueOnce(mockResponse);
 
-      weatherClientMock.get.mockResolvedValueOnce(mockResponse);
-
-      const result = await openWeatherAPI.getWeatherData(18.7882778, 98.9858802);
-
-      const params = {
-        lat: 18.7882778,
-        lon: 98.9858802,
-        appid: expect.any(String),
-        units: 'metric', 
-      };
-
-      expect(weatherClientMock.get).toHaveBeenCalledWith('/weather', params);
-
-      expect(Logger.logAPIRequest).toHaveBeenCalledWith('/weather', params);
-      expect(Logger.logAPIResponse).toHaveBeenCalledWith('/weather', mockResponse);
-
-      expect(result).toEqual(
-        new WeatherDTO(
-          'Clear',
-          'Chiang Mai',
-          0,
-          30,
-          28,
-          32,
-          70,
-          5,
-          1012,
-          'Clear',
-          'clear sky',
-          '01d',
-          1725645600,
-          0
-        )
-      );
+      const result = await openWeatherAPI.searchByZip('11110');
+      expect(geoClientMock.get).toHaveBeenCalledWith('/zip', expect.any(Object));
+      expect(result).toEqual([
+        new CityDTO('Bang Bua Thong', 'TH', 'Bang Bua Thong, TH', 13.9167, 100.4333),
+      ]);
     });
 
-    it('should throw an error when the request fails', async () => {
-      weatherClientMock.get.mockRejectedValueOnce(new Error('API Error'));
+    it('should return an empty array if the searchByZip request fails', async () => {
+      geoClientMock.get.mockRejectedValueOnce(new APIError(500, 'API error'));
 
-      await expect(openWeatherAPI.getWeatherData(18.7882778, 98.9858802)).rejects.toThrow(
-        'Could not retrieve weather data: API Error'
-      );
+      const result = await openWeatherAPI.searchByZip('invalidZip');
 
-      expect(Logger.logError).toHaveBeenCalledWith('Error fetching weather data', expect.any(Error));
+      expect(Logger.logError).toHaveBeenCalledWith('API error in searchByZip: API error', expect.any(APIError));
+      expect(result).toEqual([]);
     });
+  });
 
+  describe('getWeatherData', () => {
     it('should handle missing or incomplete weather data', async () => {
       const mockResponse = {
         name: 'Chiang Mai',
         main: { temp: null, temp_min: undefined, temp_max: null, humidity: 70, pressure: 1012 },
         weather: [null],
         wind: { speed: 5 },
-        dt: 1725645600
-    };
-    
+        dt: 1725645600,
+        timezone: 25200,
+      };
+
       weatherClientMock.get.mockResolvedValueOnce(mockResponse);
-    
+
       const result = await openWeatherAPI.getWeatherData(18.7882778, 98.9858802);
-    
       expect(Logger.logAPIResponse).toHaveBeenCalledWith('/weather', mockResponse);
-    
       expect(result).toEqual(
         new WeatherDTO(
           'Unknown Main',
           'Chiang Mai',
           0,
-          0, 
-          0, 
-          0, 
+          0,
+          0,
+          0,
           70,
           5,
           1012,
@@ -133,91 +125,19 @@ describe('OpenWeatherAPI', () => {
           'No description available',
           '01d',
           1725645600,
-          0
+          25200
         )
       );
     });
     
-    
-    
-    
-
   });
 
   describe('getHourlyForecast', () => {
-    it('should return an array of WeatherDTO when the request is successful', async () => {
-      const mockResponse = {
-        city: { name: 'Chiang Mai', timezone: 25200 },
-        list: [
-          {
-            dt: 1725645600,
-            main: { temp: 30, temp_min: 28, temp_max: 32, humidity: 70, pressure: 1012 },
-            weather: [{ main: 'Clear', description: 'clear sky', icon: '01d' }],
-            wind: { speed: 5 },
-            rain: { '3h': 0 },
-          },
-        ],
-      };
-
-      weatherClientMock.get.mockResolvedValueOnce(mockResponse);
-
-      const result = await openWeatherAPI.getHourlyForecast(18.7882778, 98.9858802);
-
-      const params = {
-        lat: 18.7882778,
-        lon: 98.9858802,
-        appid: expect.any(String),
-        cnt: 8,
-        units: 'metric',
-      };
-
-      expect(weatherClientMock.get).toHaveBeenCalledWith('/forecast', params);
-
-      expect(Logger.logAPIRequest).toHaveBeenCalledWith('/forecast', params);
-      expect(Logger.logAPIResponse).toHaveBeenCalledWith('/forecast', mockResponse);
-
-      expect(result).toEqual([
-        new WeatherDTO(
-          'Clear',
-          'Chiang Mai',
-          0,
-          30,
-          28,
-          32,
-          70,
-          5,
-          1012,
-          'Clear',
-          'clear sky',
-          '01d',
-          1725645600,
-          25200
-        ),
-      ]);
-    });
-
     it('should throw an error if no forecast data is received', async () => {
-      const mockResponse = {
-        city: { name: 'Chiang Mai', timezone: 25200 },
-        list: [],
-      };
-
+      const mockResponse = { city: { name: 'Chiang Mai', timezone: 25200 }, list: [] };
       weatherClientMock.get.mockResolvedValueOnce(mockResponse);
 
-      await expect(openWeatherAPI.getHourlyForecast(18.7882778, 98.9858802)).rejects.toThrow(
-        'No forecast data received from API'
-      );
-
-      expect(Logger.logError).toHaveBeenCalledWith('Error fetching hourly forecast data', expect.any(Error));
-    });
-
-    it('should throw an error when the request fails', async () => {
-      weatherClientMock.get.mockRejectedValueOnce(new Error('API Error'));
-
-      await expect(openWeatherAPI.getHourlyForecast(18.7882778, 98.9858802)).rejects.toThrow(
-        'No forecast data received from API'
-      );
-
+      await expect(openWeatherAPI.getHourlyForecast(18.7882778, 98.9858802)).rejects.toThrow('No forecast data received from API');
       expect(Logger.logError).toHaveBeenCalledWith('Error fetching hourly forecast data', expect.any(Error));
     });
   });

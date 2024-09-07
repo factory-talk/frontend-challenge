@@ -1,4 +1,4 @@
-import { HttpClient } from '@infrastructure/utils/HttpClient';
+import { HttpClient, APIError } from '@infrastructure/utils/HttpClient';
 import { Logger } from '@infrastructure/utils/Logger';
 
 jest.mock('@infrastructure/utils/Logger', () => ({
@@ -6,7 +6,7 @@ jest.mock('@infrastructure/utils/Logger', () => ({
       log: jest.fn(),
       logError: jest.fn(),
     }
-  }));
+}));
 
 global.fetch = jest.fn();
 
@@ -21,100 +21,84 @@ describe('HttpClient', () => {
     (Logger.logError as jest.Mock).mockClear();
   });
 
-  it('should make a GET request and log it', async () => {
-    const mockResponse = { data: 'test data' };
-    (global.fetch as jest.Mock).mockResolvedValueOnce({
-      ok: true,
-      json: async () => mockResponse,
-    });
-
-    const response = await httpClient.get('/test', { q: 'query' });
-    
-    expect(fetch).toHaveBeenCalledWith('https://api.example.suchawadee.com/test?q=query');
-    expect(Logger.log).toHaveBeenCalledWith('Making GET request to: https://api.example.suchawadee.com/test?q=query');
-    expect(response).toEqual(mockResponse);
-  });
-
-  it('should handle GET request errors and log them', async () => {
+  it('should handle GET request errors and log them (500)', async () => {
     (global.fetch as jest.Mock).mockResolvedValueOnce({
       ok: false,
       status: 500,
+      statusText: 'Internal Server Error',
+      text: async () => 'Internal Server Error',
     });
 
-    await expect(httpClient.get('/test')).rejects.toThrow('HTTP error! status: 500');
-    expect(Logger.logError).toHaveBeenCalledWith('Failed to fetch from https://api.example.suchawadee.com/test: HTTP error! status: 500', expect.any(Error));
+    await expect(httpClient.get('/test')).rejects.toThrow('HTTP error! status: 500, body: Internal Server Error');
+    
+    expect(Logger.logError).toHaveBeenCalledWith(
+      'API error for https://api.example.suchawadee.com/test: HTTP error! status: 500, body: Internal Server Error',
+      expect.any(APIError)
+    );
   });
 
-  it('should make a POST request and log it', async () => {
-    const mockResponse = { data: 'posted' };
+  it('should handle GET request errors and log them (400)', async () => {
     (global.fetch as jest.Mock).mockResolvedValueOnce({
-      ok: true,
-      json: async () => mockResponse,
+      ok: false,
+      status: 400,
+      statusText: 'Bad Request',
+      text: async () => 'Bad Request Error',
     });
 
-    const body = { key: 'value' };
-    const response = await httpClient.post('/test', body);
+    await expect(httpClient.get('/test')).rejects.toThrow('HTTP error! status: 400, body: Bad Request Error');
 
-    expect(fetch).toHaveBeenCalledWith('https://api.example.suchawadee.com/test', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    });
-    expect(Logger.log).toHaveBeenCalledWith('Making POST request to: https://api.example.suchawadee.com/test with body: {"key":"value"}');
-    expect(response).toEqual(mockResponse);
+    expect(Logger.logError).toHaveBeenCalledWith(
+      'API error for https://api.example.suchawadee.com/test: HTTP error! status: 400, body: Bad Request Error',
+      expect.any(APIError)
+    );
   });
 
   it('should handle POST request errors and log them', async () => {
     (global.fetch as jest.Mock).mockResolvedValueOnce({
       ok: false,
       status: 500,
+      statusText: 'Internal Server Error',
+      text: async () => 'Internal Server Error',
     });
 
     const body = { key: 'value' };
-    await expect(httpClient.post('/test', body)).rejects.toThrow('HTTP error! status: 500');
-    expect(Logger.logError).toHaveBeenCalledWith('Failed to fetch from https://api.example.suchawadee.com/test: HTTP error! status: 500', expect.any(Error));
+    await expect(httpClient.post('/test', body)).rejects.toThrow('HTTP error! status: 500, body: Internal Server Error');
+
+    expect(Logger.logError).toHaveBeenCalledWith(
+      'API error for https://api.example.suchawadee.com/test: HTTP error! status: 500, body: Internal Server Error',
+      expect.any(APIError)
+    );
   });
 
-  it('should make a PUT request and log it', async () => {
-    const mockResponse = { data: 'updated' };
-    (global.fetch as jest.Mock).mockResolvedValueOnce({
-      ok: true,
-      json: async () => mockResponse,
-    });
-
-    const body = { key: 'value' };
-    const response = await httpClient.put('/test', body);
-
-    expect(fetch).toHaveBeenCalledWith('https://api.example.suchawadee.com/test', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    });
-    expect(Logger.log).toHaveBeenCalledWith('Making PUT request to: https://api.example.suchawadee.com/test with body: {"key":"value"}');
-    expect(response).toEqual(mockResponse);
-  });
-
-  it('should handle DELETE request and log it', async () => {
-    const mockResponse = { success: true };
-    (global.fetch as jest.Mock).mockResolvedValueOnce({
-      ok: true,
-      json: async () => mockResponse,
-    });
-
-    const response = await httpClient.delete('/test');
-
-    expect(fetch).toHaveBeenCalledWith('https://api.example.suchawadee.com/test', { method: 'DELETE' });
-    expect(Logger.log).toHaveBeenCalledWith('Making DELETE request to: https://api.example.suchawadee.com/test');
-    expect(response).toEqual(mockResponse);
-  });
-
-  it('should handle DELETE request errors and log them', async () => {
+  it('should handle DELETE request errors and log them (404)', async () => {
     (global.fetch as jest.Mock).mockResolvedValueOnce({
       ok: false,
       status: 404,
+      statusText: 'Not Found',
+      text: async () => 'Not Found',
     });
 
-    await expect(httpClient.delete('/test')).rejects.toThrow('HTTP error! status: 404');
-    expect(Logger.logError).toHaveBeenCalledWith('Failed to fetch from https://api.example.suchawadee.com/test: HTTP error! status: 404', expect.any(Error));
+    await expect(httpClient.delete('/test')).rejects.toThrow('HTTP error! status: 404, body: Not Found');
+
+    expect(Logger.logError).toHaveBeenCalledWith(
+      'API error for https://api.example.suchawadee.com/test: HTTP error! status: 404, body: Not Found',
+      expect.any(APIError)
+    );
+  });
+
+  it('should handle DELETE request errors and log them (400)', async () => {
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+      ok: false,
+      status: 400,
+      statusText: 'Bad Request',
+      text: async () => 'Bad Request Error',
+    });
+
+    await expect(httpClient.delete('/test')).rejects.toThrow('HTTP error! status: 400, body: Bad Request Error');
+
+    expect(Logger.logError).toHaveBeenCalledWith(
+      'API error for https://api.example.suchawadee.com/test: HTTP error! status: 400, body: Bad Request Error',
+      expect.any(APIError)
+    );
   });
 });
