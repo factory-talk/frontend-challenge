@@ -57,12 +57,22 @@ describe('OpenWeatherAPI', () => {
       ]);
     });
 
-    it('should return an empty array if the searchCity request fails', async () => {
+    it('should return an empty array if the searchCity request fails with an API error', async () => {
       geoClientMock.get.mockRejectedValueOnce(new APIError(500, 'API error'));
 
       const result = await openWeatherAPI.searchCity('InvalidCity');
 
       expect(Logger.logError).toHaveBeenCalledWith('API error in searchCity: API error', expect.any(APIError));
+      expect(result).toEqual([]);
+    });
+
+    it('should log a non-API error and return an empty array', async () => {
+      const mockError = new Error('Some non-API error');
+      geoClientMock.get.mockRejectedValueOnce(mockError);
+
+      const result = await openWeatherAPI.searchCity('InvalidCity');
+
+      expect(Logger.logError).toHaveBeenCalledWith('Error searching city: Some non-API error', mockError);
       expect(result).toEqual([]);
     });
   });
@@ -85,12 +95,22 @@ describe('OpenWeatherAPI', () => {
       ]);
     });
 
-    it('should return an empty array if the searchByZip request fails', async () => {
+    it('should return an empty array if the searchByZip request fails with an API error', async () => {
       geoClientMock.get.mockRejectedValueOnce(new APIError(500, 'API error'));
 
       const result = await openWeatherAPI.searchByZip('invalidZip');
 
       expect(Logger.logError).toHaveBeenCalledWith('API error in searchByZip: API error', expect.any(APIError));
+      expect(result).toEqual([]);
+    });
+
+    it('should log a non-API error and return an empty array', async () => {
+      const mockError = new Error('Some non-API error');
+      geoClientMock.get.mockRejectedValueOnce(mockError);
+
+      const result = await openWeatherAPI.searchByZip('invalidZip');
+
+      expect(Logger.logError).toHaveBeenCalledWith('Error searching by zip: Some non-API error', mockError);
       expect(result).toEqual([]);
     });
   });
@@ -129,7 +149,15 @@ describe('OpenWeatherAPI', () => {
         )
       );
     });
-    
+
+    it('should log an error if an exception occurs during the weather data request', async () => {
+      const mockError = new Error('Weather data error');
+      weatherClientMock.get.mockRejectedValueOnce(mockError);
+
+      await expect(openWeatherAPI.getWeatherData(18.7882778, 98.9858802)).rejects.toThrow(mockError);
+
+      expect(Logger.logError).toHaveBeenCalledWith('Error fetching weather data: Weather data error', mockError);
+    });
   });
 
   describe('getHourlyForecast', () => {
@@ -139,6 +167,75 @@ describe('OpenWeatherAPI', () => {
 
       await expect(openWeatherAPI.getHourlyForecast(18.7882778, 98.9858802)).rejects.toThrow('No forecast data received from API');
       expect(Logger.logError).toHaveBeenCalledWith('Error fetching hourly forecast data', expect.any(Error));
+    });
+
+    it('should log an error if an exception occurs during the forecast data request', async () => {
+      const mockError = new Error('Forecast data error');
+      weatherClientMock.get.mockRejectedValueOnce(mockError);
+
+      await expect(openWeatherAPI.getHourlyForecast(18.7882778, 98.9858802)).rejects.toThrow('No forecast data received from API');
+
+      expect(Logger.logError).toHaveBeenCalledWith('Error fetching hourly forecast data', mockError);
+    });
+
+    it('should map forecast data to WeatherDTO objects', async () => {
+      const mockResponse = {
+        city: { name: 'Chiang Mai', timezone: 25200 },
+        list: [
+          {
+            weather: [{ main: 'Clear', description: 'clear sky', icon: '01d' }],
+            main: { temp: 28.3, temp_min: 25, temp_max: 30, humidity: 60, pressure: 1010 },
+            wind: { speed: 5 },
+            dt: 1725645600,
+            rain: { '3h': 0.1 },
+          },
+          {
+            weather: [{ main: 'Rain', description: 'light rain', icon: '09d' }],
+            main: { temp: 26.3, temp_min: 24, temp_max: 28, humidity: 80, pressure: 1005 },
+            wind: { speed: 3 },
+            dt: 1725655600,
+            rain: { '3h': 2.5 },
+          }
+        ]
+      };
+      weatherClientMock.get.mockResolvedValueOnce(mockResponse);
+
+      const result = await openWeatherAPI.getHourlyForecast(18.7882778, 98.9858802);
+
+      expect(result).toEqual([
+        new WeatherDTO(
+          'Clear',
+          'Chiang Mai',
+          0.1,
+          28.3,
+          25,
+          30,
+          60,
+          5,
+          1010,
+          'Clear',
+          'clear sky',
+          '01d',
+          1725645600,
+          25200
+        ),
+        new WeatherDTO(
+          'Rain',
+          'Chiang Mai',
+          2.5,
+          26.3,
+          24,
+          28,
+          80,
+          3,
+          1005,
+          'Rain',
+          'light rain',
+          '09d',
+          1725655600,
+          25200
+        ),
+      ]);
     });
   });
 });

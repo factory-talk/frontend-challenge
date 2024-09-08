@@ -2,13 +2,10 @@ import selectedCitiesReducer, { addCity, removeCity, updateCityWeather, clearCit
 import { CityViewModel } from '@application/dtos/CityViewModel';
 import { WeatherDTO } from '@application/dtos/WeatherDTO';
 import { Logger } from '@infrastructure/utils/Logger';
-import { skip } from 'node:test';
 
 jest.mock('@infrastructure/utils/Logger', () => ({
   Logger: {
     log: jest.fn(),
-    logAPIRequest: jest.fn(),
-    logAPIResponse: jest.fn(),
     logError: jest.fn(),
   },
 }));
@@ -39,15 +36,9 @@ describe('selectedCitiesSlice', () => {
   );
 
   beforeEach(() => {
-    // Mock localStorage state
-    const mockState = {
-      cities: [{ city: mockCityDTO, weather: mockWeather }],
-      selectedCity: mockCityDTO,
-    };
-    Storage.prototype.getItem = jest.fn(() => JSON.stringify(mockState));
-  });
-
-  afterEach(() => {
+    Storage.prototype.getItem = jest.fn(() => null);
+    Storage.prototype.setItem = jest.fn();
+    Storage.prototype.removeItem = jest.fn();  
     jest.clearAllMocks();
   });
 
@@ -56,64 +47,9 @@ describe('selectedCitiesSlice', () => {
     expect(state).toEqual(initialState);
   });
 
-  it('should handle addCity action', () => {
-    const state = selectedCitiesReducer(initialState, addCity({ city: mockCity, weather: mockWeather }));
-    expect(state.cities.length).toBe(1);
-    expect(state.selectedCity).toEqual(mockCity);
-  });
-
-  it('should handle addCity when city already exists', () => {
-    const modifiedState = {
-      cities: [{ city: mockCity, weather: mockWeather }],
-      selectedCity: mockCity,
-    };
-    const state = selectedCitiesReducer(modifiedState, addCity({ city: mockCity, weather: mockWeather }));
-    expect(state.cities.length).toBe(1);
-    expect(Logger.log).toHaveBeenCalledWith(`City ${mockCity.getName()} already exists in state.`);
-  });
-
-  it('should handle removeCity action', () => {
-    const modifiedState = {
-      cities: [{ city: mockCity, weather: mockWeather }],
-      selectedCity: mockCity,
-    };
-    const state = selectedCitiesReducer(modifiedState, removeCity({ name: 'Bangkok' }));
-    expect(state.cities.length).toBe(0);
-    expect(state.selectedCity).toBeNull();
-  });
-
-  it('should handle updateCityWeather action', () => {
-    const modifiedState = {
-      cities: [{ city: mockCity, weather: null }],
-      selectedCity: mockCity,
-    };
-    const state = selectedCitiesReducer(modifiedState, updateCityWeather({ cityName: 'Bangkok', weather: mockWeather }));
-    expect(state.cities[0].weather).toEqual(mockWeather);
-  });
-
-  it('should handle clearCities action', () => {
-    const modifiedState = {
-      cities: [{ city: mockCity, weather: mockWeather }],
-      selectedCity: mockCity,
-    };
-    const state = selectedCitiesReducer(modifiedState, clearCities());
-    expect(state.cities).toEqual([]);
-    expect(state.selectedCity).toBeNull();
-  });
-
-  it('should handle setSelectedCity action', () => {
-    const modifiedState = {
-      cities: [{ city: mockCity, weather: mockWeather }],
-      selectedCity: null,
-    };
-    const state = selectedCitiesReducer(modifiedState, setSelectedCity(mockCity));
-    expect(state.selectedCity).toEqual(mockCity);
-  });
-
-  it('should return the initial state if window is undefined', () => {
+  
+  it('should return the initial state when window is undefined', () => {
     const originalWindow = global.window;
-
-    // Temporarily set global.window to undefined
     Object.defineProperty(global, 'window', {
       value: undefined,
       writable: true,
@@ -122,43 +58,115 @@ describe('selectedCitiesSlice', () => {
     const state = selectedCitiesReducer(undefined, { type: '@@INIT' });
     expect(state).toEqual(initialState);
 
-    // Restore original window object
     global.window = originalWindow;
   });
 
-  skip('should load state from localStorage correctly', () => {
-    // Mock the state loaded from localStorage
-    const serializedState = JSON.stringify({
-      cities: [{ city: mockCityDTO, weather: mockWeather }],
-      selectedCity: mockCityDTO,
-    });
-
-    // Set up the localStorage mock to return the serialized state
-    Storage.prototype.getItem = jest.fn(() => serializedState);
-
-    // Trigger the reducer initialization
+  it('should return the initial state when there is no state in localStorage', () => {
+    Storage.prototype.getItem = jest.fn(() => null);
     const state = selectedCitiesReducer(undefined, { type: '@@INIT' });
-
-    // Ensure the cities array has been properly deserialized
-    const expectedCity = new CityViewModel(mockCityDTO);
-
-    // Expect cities and selectedCity to be deserialized correctly
-    expect(state.cities.length).toBe(1);
-    expect(state.cities[0].city.getName()).toBe('Bangkok');
-    expect(state.selectedCity).toEqual(expectedCity);
+    expect(state).toEqual(initialState);
   });
 
-  it('should handle errors in loadStateFromLocalStorage', () => {
-    // Simulate an error during state loading
-    Storage.prototype.getItem = jest.fn(() => {
-      throw new Error('localStorage error');
-    });
+  
+  it('should handle addCity action and store the new state in localStorage', () => {
+    const state = selectedCitiesReducer(initialState, addCity({ city: mockCity, weather: mockWeather }));
+    expect(state.cities.length).toBe(1);
+    expect(state.selectedCity).toEqual(mockCity);
 
-    // Trigger the reducer initialization
-    const state = selectedCitiesReducer(undefined, { type: '@@INIT' });
+    
+    expect(Storage.prototype.setItem).toHaveBeenCalledWith(
+      'selectedCities',
+      JSON.stringify({
+        cities: [{ city: mockCity.serialize(), weather: mockWeather }],
+        selectedCity: mockCity.serialize(),
+      })
+    );
+  });
 
-    // Expect empty state when there is an error
+  it('should not add a city if it already exists and log the event', () => {
+    const modifiedState = {
+      cities: [{ city: mockCity, weather: mockWeather }],
+      selectedCity: mockCity,
+    };
+    const state = selectedCitiesReducer(modifiedState, addCity({ city: mockCity, weather: mockWeather }));
+    expect(state.cities.length).toBe(1); 
+
+    expect(Logger.log).toHaveBeenCalledWith(`City ${mockCity.getName()} already exists in state.`);
+    expect(Storage.prototype.setItem).not.toHaveBeenCalled(); 
+  });
+
+  
+  it('should update the weather for an existing city and update localStorage', () => {
+    const modifiedState = {
+      cities: [{ city: mockCity, weather: null }],
+      selectedCity: mockCity,
+    };
+    const state = selectedCitiesReducer(modifiedState, updateCityWeather({ cityName: 'Bangkok', weather: mockWeather }));
+    expect(state.cities[0].weather).toEqual(mockWeather);
+
+    
+    expect(Storage.prototype.setItem).toHaveBeenCalledWith(
+      'selectedCities',
+      JSON.stringify({
+        cities: [{ city: mockCity.serialize(), weather: mockWeather }],
+        selectedCity: mockCity.serialize(),
+      })
+    );
+  });
+
+  it('should log if the city is not found when updating weather', () => {
+    const modifiedState = {
+      cities: [],
+      selectedCity: null,
+    };
+    const state = selectedCitiesReducer(modifiedState, updateCityWeather({ cityName: 'Bangkok', weather: mockWeather }));
+    expect(state.cities.length).toBe(0); 
+
+    expect(Logger.log).toHaveBeenCalledWith('City Bangkok not found in state.');
+    expect(Storage.prototype.setItem).not.toHaveBeenCalled(); 
+  });
+
+  it('should handle setSelectedCity action and store the new state in localStorage', () => {
+    const modifiedState = {
+      cities: [{ city: mockCity, weather: mockWeather }],
+      selectedCity: null,
+    };
+    const state = selectedCitiesReducer(modifiedState, setSelectedCity(mockCity));
+    expect(state.selectedCity).toEqual(mockCity);
+
+    expect(Storage.prototype.setItem).toHaveBeenCalledWith(
+      'selectedCities',
+      JSON.stringify({
+        cities: [{ city: mockCity.serialize(), weather: mockWeather }],
+        selectedCity: mockCity.serialize(),
+      })
+    );
+  });
+
+  it('should handle removeCity action and update localStorage', () => {
+    const modifiedState = {
+      cities: [{ city: mockCity, weather: mockWeather }],
+      selectedCity: mockCity,
+    };
+    const state = selectedCitiesReducer(modifiedState, removeCity({ name: 'Bangkok' }));
     expect(state.cities.length).toBe(0);
     expect(state.selectedCity).toBeNull();
+
+    expect(Storage.prototype.setItem).toHaveBeenCalledWith(
+      'selectedCities',
+      JSON.stringify({ cities: [], selectedCity: null })
+    );
+  });
+
+  it('should handle clearCities action and remove from localStorage', () => {
+    const modifiedState = {
+      cities: [{ city: mockCity, weather: mockWeather }],
+      selectedCity: mockCity,
+    };
+    const state = selectedCitiesReducer(modifiedState, clearCities());
+    expect(state.cities).toEqual([]);
+    expect(state.selectedCity).toBeNull();
+
+    expect(Storage.prototype.removeItem).toHaveBeenCalledWith('selectedCities');
   });
 });
