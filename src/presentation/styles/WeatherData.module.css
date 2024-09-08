@@ -1,0 +1,207 @@
+.container {
+  background-color: #95B9C7;
+  color: #123456;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+.tempSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+  .tempSection {
+    flex-direction: row;
+  }
+}
+
+.icon {
+  width: 8rem;
+  height: 8rem;
+  margin-right: 0;
+}
+
+@media (min-width: 768px) {
+  .icon {
+    width: 10rem;
+    height: 10rem;
+    margin-right: 1rem;
+  }
+}
+
+.temp {
+  color: #355069;
+  font-size: 4rem;
+  font-weight: bold;
+}
+
+@media (min-width: 768px) {
+  .temp {
+    font-size: 6rem;
+  }
+}
+
+.minmax {
+  color: #355069;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  font-size: 1.5rem;
+  margin-top: 0.25rem;
+}
+
+@media (min-width: 768px) {
+  .minmax {
+    font-size: 1.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .minmax {
+    font-size: 1.25rem;
+  }
+}
+
+.mainWeather {
+  color: #2B547E;
+  font-size: 1.125rem;
+  margin-top: 0.5rem;
+}
+
+.futureSection {
+  align-items: center;
+  justify-content: center;
+  background-color: #43607c;
+  border-color: #0b344d;
+  border-width: 1px;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+}
+
+.currentDetails {
+  background-color: white;
+  color: #123456;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.cityName {
+  color: #123456;
+  font-size: 1.875rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .cityName {
+    font-size: 3rem;
+  }
+}
+
+.time {
+  color: #2B547E;
+  font-size: 1.125rem;
+  text-align: center;
+}
+
+.detailsTable {
+  width: 100%;
+}
+
+.detailsRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.detailsLabel {
+  color: #2B547E;
+  text-align: left;
+  font-size: 1rem;
+}
+
+@media (min-width: 768px) {
+  .detailsLabel {
+    font-size: 1.125rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .detailsLabel {
+    font-size: 1.25rem;
+  }
+}
+
+.detailsValue {
+  color: #123456;
+  text-align: right;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+@media (min-width: 768px) {
+  .detailsValue {
+    font-size: 1.125rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .detailsValue {
+    font-size: 1.25rem;
+  }
+}
+
+.mainWeather {
+  color: #123456;
+  text-align: center;
+  font-weight: bold;
+  margin-top: 0.5rem;
+  font-size: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .mainWeather {
+    font-size: 1.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .mainWeather {
+    font-size: 1.25rem;
+  }
+}
+
+.redirectButton {
+  position: fixed;
+  top: 120px;
+  left: 20px;
+  padding: 10px 15px;
+  background-color: #ebeef1;
+  color: rgb(22, 19, 191);
+  border: 1px solid #bec3c9;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 20px;
+  z-index: 1000;
+}
+
+.redirectButton:hover {
+  background-color: #6288ae;
+}

@@ -1,0 +1,87 @@
+.forecastContainer {
+  background-color: var(--blue-primary);
+  color: white;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(176, 171, 171, 0.1);
+}
+
+.forecastTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1rem;
+  color: var(--white-primary);
+}
+
+.forecastItems {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  flex-grow: 1;
+  gap: 1rem;
+  padding: 0 2rem;
+}
+
+.forecastItem {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  min-width: calc(100% / 8);
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out;
+}
+
+.forecastItem:hover {
+  transform: translateY(-5px);
+  background-color: rgba(159, 126, 50, 0.2);
+}
+
+.forecastTime {
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+  color: var(--white-secondary);
+}
+
+.forecastIcon {
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.forecastTemp {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.scrollButton {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 0.75rem;
+  z-index: 1;
+  width: 3rem; 
+  height: 100%; 
+}
+
+.scrollButtonLeft {
+  left: 0;
+}
+
+.scrollButtonRight {
+  right: 0;
+}

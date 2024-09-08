@@ -1,0 +1,99 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.headerContainer {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.inputContainer {
+  border-color: #63afc2; 
+  width: 100%;
+  max-width: 100%; 
+  margin-top: 20px;
+  padding: 0 1rem; 
+  position: relative;
+  z-index: 10;
+}
+
+.inputContainer input:focus {
+  border-color: #63afc2; 
+  box-shadow: 0 0 5px rgba(99, 175, 194, 0.5); 
+}
+
+.citiesListContainer {
+  width: 100%;
+  max-width: 100%; 
+  transition: filter 0.3s ease, opacity 0.3s ease;
+}
+
+.blurred {
+  filter: blur(2px);
+  opacity: 0.8; 
+}
+
+.searchResultsPlane {
+  background-color: #63afc2;
+  align-items: center;
+  justify-content: center;
+}
+
+.searchResultsContainer {
+  width: 100%;
+  max-width: 100%; 
+  margin-top: 20px;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  transition: all 0.3s ease;
+  z-index: 9;
+  align-items: center;
+  justify-content: center;
+}
+
+.fullScreen {
+  position: fixed;
+  top: calc(100px + 20px); 
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  max-width: 100%;
+  background-color: rgb(221, 224, 202);
+  padding: 16px;
+  overflow-y: auto;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.searchResultItem {
+  padding: 10px;
+  border-bottom: 1px solid #3f726d;
+}
+
+.searchResultItem:hover {
+  background-color: #f0f0f0;
+}
+
+.mt4 {
+  margin-top: 16px;
+}
+
+.hamburgerButton {
+  display: flex;
+  align-items: center;
+}
+
+.ant-dropdown-menu-item:hover {
+  background-color: #63afc2;
+}
+.activeMenuTempUnitItem {
+  background-color: #e6f7ff; 
+  font-weight: bold; 
+}
