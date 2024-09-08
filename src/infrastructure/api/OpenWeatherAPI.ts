@@ -114,7 +114,7 @@ export class OpenWeatherAPI {
     } else {
       Logger.logError(`Error fetching weather data: ${error.message || 'Unknown error'}`, error);
     }
-    throw error;  // Ensure the error is rethrown
+    throw error;  
   }
 }
 
