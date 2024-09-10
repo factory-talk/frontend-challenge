@@ -26,6 +26,15 @@
     /* rgb(var(--background-start-rgb)); */
 /* } */
 
+body.dimmed-background {
+  background-color: rgba(0, 0, 0, 0.5);
+  transition: background-color 0.3s ease;
+}
+
+/* body.dimmed-background * {
+  pointer-events: none;
+} */
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

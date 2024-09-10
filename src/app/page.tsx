@@ -1,12 +1,12 @@
 import SearchBar from "src/components/SearchBar";
-import WeatherItem from "src/components/WeatherItem";
+import WeatherItemList from "src/components/WeatherItemList";
 
 
 export default function Home() {
   return (
     <>
       <SearchBar />
-      <WeatherItem />
+      <WeatherItemList />
     </>
   );
 }
