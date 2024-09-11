@@ -1,5 +1,5 @@
 import React from "react"
-import ForecastItemProps from "../../interfaces/ForecastItemProps"
+import ForecastItemProps from "../../interfaces/ForecastItemProp"
 
 const ForecastItem = (forecastItemProps : ForecastItemProps) => {
     return (

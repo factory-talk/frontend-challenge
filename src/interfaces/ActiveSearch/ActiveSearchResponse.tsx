@@ -1,10 +1,10 @@
-interface ActiveSearch {
+interface ActiveSearchResponse {
     name: string
     local_name:Map<string, string>
     lat: number
-    long: number
+    lon: number
     country: string
     state: string
 }
 
-export default ActiveSearch
+export default ActiveSearchResponse

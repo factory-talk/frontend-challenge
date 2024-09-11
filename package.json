@@ -10,6 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@types/lodash.debounce": "^4.0.9",
     "next": "14.2.3",
     "react": "^18",
     "react-dom": "^18"

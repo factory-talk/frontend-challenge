@@ -1,5 +1,5 @@
 import ForecastItem from "../ForecastItem"
-import ForecastItemProps from "../../interfaces/ForecastItemProps"
+import ForecastItemProps from "../../interfaces/ForecastItemProp"
 
 const mock: ForecastItemProps[] = [
     {

@@ -1,7 +1,7 @@
-import ActiveSearch from "./ActiveSearch";
+import ActiveSearchResponse from "./ActiveSearch/ActiveSearchResponse";
 
-interface SearchBarProps {
-    setSelectedActiveSearch: (search: ActiveSearch) => void
+interface SearchBarProp {
+    setSelectedActiveSearch: (search: ActiveSearchResponse) => void
 }
 
-export default SearchBarProps
+export default SearchBarProp

@@ -1,12 +1,13 @@
 "use client"
-import React, { useState, useEffect } from "react"
-import ActiveSearch from "src/interfaces/ActiveSearch"
-import SearchBarProps from "src/interfaces/SearchBarProps"
+import React, { useState, useEffect, useCallback } from "react"
+import ActiveSearchResponse from "src/interfaces/ActiveSearch/ActiveSearchResponse"
+import SearchBarProp from "src/interfaces/SearchBarProps"
+import { debounce } from "lodash"
 
-const SearchBar: React.FC<SearchBarProps> = ({ setSelectedActiveSearch }) => {
+const SearchBar: React.FC<SearchBarProp> = ({ setSelectedActiveSearch }) => {
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [searchKeyword, setSearchKeyword] = useState<string>('')
-  const [activeSearches, setActiveSearches] = useState<ActiveSearch[]>([])
+  const [activeSearches, setActiveSearches] = useState<ActiveSearchResponse[]>([])
 
   useEffect(() => {
     if (isFocused) {
@@ -19,10 +20,8 @@ const SearchBar: React.FC<SearchBarProps> = ({ setSelectedActiveSearch }) => {
     };
   }, [isFocused]);
 
-  const handleSelect = (activeSearch: ActiveSearch): void => {
-    console.log("handle select early: " + activeSearch)
+  const handleSelect = (activeSearch: ActiveSearchResponse): void => {
     setSelectedActiveSearch(activeSearch)
-    console.log("handle select: " + activeSearch)
   }
 
   const handleFocus = (): void => {
@@ -33,6 +32,11 @@ const SearchBar: React.FC<SearchBarProps> = ({ setSelectedActiveSearch }) => {
     setIsFocused(false)
   }
 
+  const debouncedFetchLocations = useCallback(
+    debounce((keyword: string) => fetchLocations(keyword), 500),
+    []
+  );
+
   const fetchLocations = async (keyword: string): Promise<void> => {
     if (!keyword) {
       setActiveSearches([]);
@@ -41,14 +45,14 @@ const SearchBar: React.FC<SearchBarProps> = ({ setSelectedActiveSearch }) => {
     const locationRes = await fetch(
       `http://api.openweathermap.org/geo/1.0/direct?q=${keyword}&limit=5&appid=${process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY}`
     );
-    const locations: ActiveSearch[] = await locationRes.json();
+    const locations: ActiveSearchResponse[] = await locationRes.json();
     setActiveSearches(locations);
   };
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const keyword: string = event.target.value
     setSearchKeyword(keyword)
-    setTimeout(() => fetchLocations(keyword), 500)
+    debouncedFetchLocations(keyword)
   }
 
   return (
@@ -77,7 +81,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ setSelectedActiveSearch }) => {
         </div>
       </div>
       {
-        //seperate these active search with new component
         activeSearches.length > 0 && isFocused && (
           <div className="absolute top-18 bg-white text-black w-full flex flex-col rounded">
             {
@@ -85,16 +88,14 @@ const SearchBar: React.FC<SearchBarProps> = ({ setSelectedActiveSearch }) => {
                 <div
                   className="flex flex-row p-4 border-b border-slate-600 hover:bg-gray-100 cursor-pointer"
                   key={index}
-                  onClick={(event) => {
-                    event.stopPropagation()
-                    console.log("click on: " + activeSearch)
+                  onMouseDown={() => {
                     handleSelect(activeSearch)
                   }}>
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
                   </svg>
-                  {activeSearch.name}
+                  {activeSearch.name}, {activeSearch.country}
                 </div>
               ))
             }
