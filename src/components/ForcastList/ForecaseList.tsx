@@ -1,47 +1,33 @@
 import ForecastItem from "../ForecastItem"
-import ForecastItemProps from "../../interfaces/ForecastItemProp"
+import { useEffect, useState } from "react"
+import Coordinate from "src/interfaces/Common/Coordinate"
+import ForecastItemProp from "src/interfaces/WeatherForecast/ForecastItemProp"
+import ForecastResponse from "src/interfaces/WeatherForecast/ForecastResponse"
 
-const mock: ForecastItemProps[] = [
-    {
-        dateTime: new Date(),
-        icon: "asdl",
-        temp: 2
-    },
-    {
-        dateTime: new Date(),
-        icon: "adadasdas",
-        temp: 5
-    },
-    {
-        dateTime: new Date(),
-        icon: "asdl",
-        temp: 2
-    },
-    {
-        dateTime: new Date(),
-        icon: "adadasdas",
-        temp: 5
-    },
-    {
-        dateTime: new Date(),
-        icon: "asdl",
-        temp: 2
-    },
-    {
-        dateTime: new Date(),
-        icon: "adadasdas",
-        temp: 5
+const ForecastList = (coord: Coordinate) => {
+
+    const [forecasts, setForecasts] = useState<ForecastItemProp[]>([])
+
+    useEffect( () => {
+        setForecasts([])
+        fetchForecast(coord.lat, coord.lon, 6)
+    }, [coord])
+
+    const fetchForecast = async (lat: number, lon: number, cnt: number): Promise<void> => {
+        const forecastListRes = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&cnt=${cnt}&units=metric&appid=282135a6d4fac07bf00741f384ae42b8`)
+        const forecastList: ForecastResponse = await forecastListRes.json()
+        forecastList.list.forEach( forecast => {
+            setForecasts((prevForecast) => [...prevForecast, new ForecastItemProp(forecast, forecastList.timezone)])
+        })
     }
-]
 
-const ForecastList = () => {
     return (
         <>
             <div className="text-xs m-4 text-gray-500">24 Hours Forecast</div>
             <div className="grid grid-cols-6 xs:gap-2 sm:gap-3 md:gap-4 lg:gap-5 text-center">
                 {
-                    mock.map((props, index) => (
-                        <ForecastItem key={index} dateTime={props.dateTime} temp={props.temp} icon={props.icon}  />
+                    forecasts.length > 0 && forecasts.slice(0, 6).map((props, index) => (
+                        <ForecastItem key={index} {...props}  />
                     ))
                 }
             </div>
