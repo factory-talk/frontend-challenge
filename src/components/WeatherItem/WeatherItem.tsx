@@ -1,5 +1,6 @@
 import Link from "next/link"
 import React from "react"
+import { IMAGE_API } from "src/config/api"
 import WeatherProp from "src/interfaces/Common/WeatherProp"
 import WeatherDetailQueryParam from "src/interfaces/WeatherDetail/WeatherDetailQueryParam"
 import WeatherItemProp from "src/interfaces/WeatherList/WeatherItemProp"
@@ -26,7 +27,7 @@ const WeatherItem: React.FC<WeatherItemProp> = ({ removeWeatherItemProp, weather
                         <div className="px-4 flex">{weatherProp.getFormattedTime()}</div>
                     </div>
                     <div className="w-4/12 sm:w-1/12">
-                        <img className="max-h-none items-center justify-center" src={`https://openweathermap.org/img/wn/${weatherProp.weather[0].icon}@2x.png`} />
+                        <img className="max-h-none items-center justify-center" src={`${IMAGE_API}/img/wn/${weatherProp.weather[0].icon}@2x.png`} />
                     </div>
                     <div className="w-1/12 sm:w-1/12">
                         <span className="text-3xl min-h-full flex items-center justify-center">{Math.ceil(weatherProp.main.temp)}°C</span>

@@ -4,12 +4,13 @@ import CurrentWeatherResponse from "../../interfaces/CurrentWeather/CurrentWeath
 import ActiveSearchResponse from "src/interfaces/ActiveSearch/ActiveSearchResponse"
 import WeatherItemListProp from "src/interfaces/WeatherList/WeatherItemListProp"
 import WeatherProp from "src/interfaces/Common/WeatherProp"
+import { API_BASE_URL, DEFAULT_UNITS, OPENWEATHER_API_KEY } from "src/config/api"
 
 const WeatherItemList: React.FC<WeatherItemListProp> = ({ activeSearch }) => {
     const [weatherItems, setWeatherItems] = useState<WeatherProp[]>([])
 
     const fetchWeatherItem = async (activeSearch: ActiveSearchResponse): Promise<void> => {
-        const weatherRes = await fetch("https://api.openweathermap.org/data/2.5/weather?lat=" + activeSearch.lat + "&lon=" + activeSearch.lon + "&units=metric&appid=282135a6d4fac07bf00741f384ae42b8")
+        const weatherRes = await fetch(`${API_BASE_URL}/data/2.5/weather?lat=${activeSearch.lat}&lon=${activeSearch.lon}&units=${DEFAULT_UNITS}&appid=${OPENWEATHER_API_KEY}`)
         const weather: CurrentWeatherResponse = await weatherRes.json()
         saveWeatherItems(activeSearch.name, weather)
     }

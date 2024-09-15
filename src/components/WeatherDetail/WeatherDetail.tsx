@@ -6,6 +6,7 @@ import CurrentWeatherResponse from "src/interfaces/CurrentWeather/CurrentWeather
 import WeatherProp from "src/interfaces/Common/WeatherProp"
 import { useEffect, useState } from "react"
 import Link from "next/link"
+import { API_BASE_URL, DEFAULT_UNITS, OPENWEATHER_API_KEY } from "src/config/api"
 
 const WeatherDetail = () => {
     const searchParams = useSearchParams()
@@ -17,7 +18,7 @@ const WeatherDetail = () => {
     }, [])
 
     const fetchCurrentWeather = async (lat: number, lon: number, cityDisplayName: string): Promise<void> => {
-        const weatherRes = await fetch("https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&units=metric&appid=282135a6d4fac07bf00741f384ae42b8")
+        const weatherRes = await fetch(`${API_BASE_URL}/data/2.5/weather?lat=${lat}&lon=${lon}&units=${DEFAULT_UNITS}&appid=${OPENWEATHER_API_KEY}`)
         const weather: CurrentWeatherResponse = await weatherRes.json()
         setCurrentWeather(new WeatherProp(cityDisplayName, weather))
     }

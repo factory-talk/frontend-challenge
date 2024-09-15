@@ -1,3 +1,4 @@
+import { API_BASE_URL, DEFAULT_UNITS, OPENWEATHER_API_KEY } from "src/config/api"
 import ForecastItem from "../ForecastItem"
 import { useEffect, useState } from "react"
 import Coordinate from "src/interfaces/Common/Coordinate"
@@ -14,7 +15,7 @@ const ForecastList = (coord: Coordinate) => {
     }, [coord])
 
     const fetchForecast = async (lat: number, lon: number, cnt: number): Promise<void> => {
-        const forecastListRes = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&cnt=${cnt}&units=metric&appid=282135a6d4fac07bf00741f384ae42b8`)
+        const forecastListRes = await fetch(`${API_BASE_URL}/data/2.5/forecast?lat=${lat}&lon=${lon}&cnt=${cnt}&units=${DEFAULT_UNITS}&appid=${OPENWEATHER_API_KEY}`)
         const forecastList: ForecastResponse = await forecastListRes.json()
         forecastList.list.forEach( forecast => {
             setForecasts((prevForecast) => [...prevForecast, new ForecastItemProp(forecast, forecastList.timezone)])

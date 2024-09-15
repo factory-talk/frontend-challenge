@@ -3,6 +3,7 @@ import React, { useState, useEffect, useCallback } from "react"
 import ActiveSearchResponse from "src/interfaces/ActiveSearch/ActiveSearchResponse"
 import SearchBarProp from "src/interfaces/SearchBarProps"
 import { debounce } from "lodash"
+import { API_BASE_URL, SEARCH_LIMIT } from "src/config/api"
 
 const SearchBar: React.FC<SearchBarProp> = ({ setSelectedActiveSearch }) => {
   const [isFocused, setIsFocused] = useState<boolean>(false);
@@ -43,7 +44,7 @@ const SearchBar: React.FC<SearchBarProp> = ({ setSelectedActiveSearch }) => {
       return;
     }
     const locationRes = await fetch(
-      `http://api.openweathermap.org/geo/1.0/direct?q=${keyword}&limit=5&appid=${process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY}`
+      `${API_BASE_URL}/geo/1.0/direct?q=${keyword}&limit=${SEARCH_LIMIT}&appid=${process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY}`
     );
     const locations: ActiveSearchResponse[] = await locationRes.json();
     setActiveSearches(locations);
