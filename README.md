@@ -3,6 +3,13 @@
 ## Overview
 Create a responsive weather application that allows users to search for cities and view current weather conditions. The app should feature a search box with suggestions, a list of selected cities with current temperatures, and detailed weather information for each city. Users should be able to configure the temperature unit system (Kelvin, Fahrenheit, Celsius).
 
+# Setting up project
+- Get your [Open Weather api key](https://home.openweathermap.org/api_keys).
+- Replace `{YOUR_OPEN_WEATHER_API_KEY}` with your api key in example.env.local file.
+- Rename example.env.local file to .env.local
+- Open terminal and install dependencies (in this case I used `npm install`)
+- Run command `npm run dev`
+
 # Design Guideline
 This is just a guideline. You can adjust or totally redesign it as you see fit.
 
