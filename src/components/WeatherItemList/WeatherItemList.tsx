@@ -11,8 +11,16 @@ const WeatherItemList: React.FC<WeatherItemListProp> = ({ activeSearch }) => {
     const fetchWeatherItem = async (activeSearch: ActiveSearchResponse): Promise<void> => {
         const weatherRes = await fetch("https://api.openweathermap.org/data/2.5/weather?lat=" + activeSearch.lat + "&lon=" + activeSearch.lon + "&units=metric&appid=282135a6d4fac07bf00741f384ae42b8")
         const weather: CurrentWeatherResponse = await weatherRes.json()
-        setWeatherItems((prevWeatherItems) => [...prevWeatherItems, new WeatherProp(activeSearch.name, weather)])
+        saveWeatherItems(activeSearch.name, weather)
     }
+
+    useEffect(() => {
+        const sessionWeatherItems: string = sessionStorage.getItem("weatherItems") || "[]";
+        const parsedWeatherItems: WeatherProp[] = JSON.parse(sessionWeatherItems).map(
+            (item: any) => WeatherProp.fromJson(item)
+        );
+        setWeatherItems(parsedWeatherItems);
+    }, [])
 
     useEffect(() => {
         if (activeSearch) {
@@ -20,11 +28,37 @@ const WeatherItemList: React.FC<WeatherItemListProp> = ({ activeSearch }) => {
         }
     }, [activeSearch])
 
+    const saveWeatherItems = (cityDisplayName: string, weather: CurrentWeatherResponse) => {
+        const newWeatherItem = new WeatherProp(cityDisplayName, weather)
+        setWeatherItems((prevWeatherItems) => [...prevWeatherItems, newWeatherItem])
+        saveToSessionStorage([...weatherItems, newWeatherItem])
+    }
+
+    const removeWeatherItem = (openWeatherName: string) => {
+        const sessionWeatherItems: string = sessionStorage.getItem("weatherItems") || "[]";
+        const filteredWeatherItems: WeatherProp[] = parseWeatherProp(sessionWeatherItems).filter((item) => item.name !== openWeatherName)
+        saveToSessionStorage(filteredWeatherItems)
+        setWeatherItems(filteredWeatherItems)
+    }
+
+    const parseWeatherProp = (s: string): WeatherProp[] => {
+        return JSON.parse(s).map(
+            (item: any) => WeatherProp.fromJson(item)
+        )
+    }
+
+    const saveToSessionStorage = (weatherProps: WeatherProp[]): void => {
+        const stringWeatherProps = weatherProps.map(weatherItem => {
+            return weatherItem.toJson()
+        })
+        sessionStorage.setItem("weatherItems", JSON.stringify(stringWeatherProps))
+    }
+
     return (
         <>
-        {
-            weatherItems.map((item, index) => (<WeatherItem key={index} {...item}/>))
-        }
+            {
+                weatherItems.length > 0 && weatherItems.map((item, index) => (<WeatherItem key={index} removeWeatherItemProp={removeWeatherItem} weatherProp={item} />))
+            }
         </>
     )
 }

@@ -86,7 +86,7 @@ const SearchBar: React.FC<SearchBarProp> = ({ setSelectedActiveSearch }) => {
             {
               activeSearches.map((activeSearch, index) => (
                 <div
-                  className="flex flex-row p-4 border-b border-slate-600 hover:bg-gray-100 cursor-pointer"
+                  className="flex flex-row p-4 border-b border-slate-600 hover:bg-gray-100 cursor-pointer z-index-50"
                   key={index}
                   onMouseDown={() => {
                     handleSelect(activeSearch)

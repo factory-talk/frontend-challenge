@@ -33,7 +33,7 @@ class WeatherProp {
             this.cityDisplayName = cityDisplayName
             this.zonedDateTime = moment(currentWeather.dt * 1000).utcOffset(currentWeather.timezone / 60)
             this.wind = currentWeather.wind
-            this.rain = currentWeather.rain
+            this.rain = currentWeather.rain || { "1h": 0, "3h": 0 }
         } else {
             this.coord = { lat: 0, lon: 0 }
             this.dt = moment(new Date())
@@ -56,6 +56,30 @@ class WeatherProp {
     getFormattedTime = (): string => {
         return this.zonedDateTime
             .format('hh:mm A')
+    }
+
+    toJson = () => {
+        return {
+            ...this,
+            dt: this.dt.unix(),
+            zonedDateTime: this.zonedDateTime.unix()
+        }
+    }
+
+    static fromJson(json: any): WeatherProp {
+        const weatherProp = new WeatherProp(json.cityDisplayName);
+        weatherProp.coord = json.coord;
+        weatherProp.weather = json.weather;
+        weatherProp.main = json.main;
+        weatherProp.timezone = json.timezone;
+        weatherProp.name = json.name;
+        weatherProp.sys = json.sys;
+        weatherProp.dt = moment.unix(json.dt);
+        weatherProp.zonedDateTime = moment.unix(json.zonedDateTime).utcOffset(json.timezone / 60);
+        weatherProp.wind = json.wind;
+        weatherProp.rain = json.rain || { "1h": 0, "3h": 0 };
+
+        return weatherProp;
     }
 }
 
