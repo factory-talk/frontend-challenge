@@ -10,9 +10,12 @@
     "test": "jest"
   },
   "dependencies": {
+    "axios": "^1.7.7",
     "next": "14.2.3",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-select": "^5.8.0",
+    "react-select-async-paginate": "^0.7.5"
   },
   "devDependencies": {
     "@testing-library/dom": "^10.1.0",
