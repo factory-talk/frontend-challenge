@@ -1,7 +1,7 @@
 import type { AxiosResponse } from 'axios';
 import axios from 'axios';
 
-type LocationData = {
+export type LocationData = {
   place_id: string;
   osm_id: string;
   osm_type: string;

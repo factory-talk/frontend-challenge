@@ -1,9 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
-import { QUERY_KEY } from "@/libs/react-query/hooks/query-key";
-import { getOpenWeatherData, getLocationIqData } from "@/libs/react-query/services/public-api";
+import { QUERY_KEY } from "@/hooks/api/query-key";
+import type { LocationData, WeatherData } from "@/services/public-api";
+import { getOpenWeatherData, getLocationIqData } from "@/services/public-api";
+
+export type GetWeatherDataFromLocationSearch = {
+  location: LocationData;
+  weather: WeatherData;
+};
 
 export const useGetWeatherDataFromLocationSearch = (query: string) => {
-  return useQuery({
+  return useQuery<GetWeatherDataFromLocationSearch[]>({
     queryFn: async () => {
       // Fetch location data from LocationIQ
       const locationResponse = await getLocationIqData(query);

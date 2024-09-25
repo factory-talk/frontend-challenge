@@ -3,7 +3,7 @@ import type { AxiosResponse } from 'axios';
 import axios from 'axios';
 // OR import axios from '@libs/axios';
 
-type WeatherData = {
+export type WeatherData = {
   coord: {
     lon: number;
     lat: number;
