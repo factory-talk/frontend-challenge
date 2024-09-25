@@ -20,15 +20,8 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@/components/*": [
-        "components/*"
-      ],
-      "@/pages/*": [
-        "pages/*"
-      ],
-      "@/styles/*": [
-        "styles/*"
-      ]
+      "@/*": ["./src/*"],
+      "@/assets/*": ["./public/assets/*"]
     },
     "types": [
       "@types/jest",
