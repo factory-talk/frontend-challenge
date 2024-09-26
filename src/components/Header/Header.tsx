@@ -1,5 +1,5 @@
 
-import Logo from '@/assets/svg/logo.svg';
+import Logo from '../../assets/svg/logo.svg';
 
 export const Header = (): JSX.Element => {
   return (

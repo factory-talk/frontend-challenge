@@ -1,3 +1,3 @@
-export * from './AutocompleteSearchBar';
-export * from './CustomButton';
-export * from './LocationCard';
+export * from './AutocompleteSearchBar/AutocompleteSearchBar';
+export * from './CustomButton/CustomButton';
+export * from './LocationCard/LocationCard';

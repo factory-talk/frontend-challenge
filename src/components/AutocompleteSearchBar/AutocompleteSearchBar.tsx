@@ -69,7 +69,7 @@ export const AutocompleteSearchBar: React.FC<SearchInputWithPopoverProps> = ({
     <div className='relative w-full flex flex-col'>
       <input
         className='w-full p-3 rounded-lg bg-white/10 placeholder-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400 transition'
-        placeholder='Enter location... (*at least 2 letters)'
+        placeholder='Enter location... *at least 2 letters'
         value={search}
         onChange={handleSearchChange}
         onFocus={handleFocus}  // Show popover on input focus
@@ -92,9 +92,9 @@ export const AutocompleteSearchBar: React.FC<SearchInputWithPopoverProps> = ({
                 <div>
                   <div className='relative min-w-12 h-12'>
                     <Image
+                      fill
                       alt='weather-icon'
-                      layout='fill'
-                      objectFit='contain'
+                      className='object-contain w-full h-full'
                       src={`https://openweathermap.org/img/wn/${extendedLocation.weather.weather[0].icon}@4x.png`}
                     />
                   </div>

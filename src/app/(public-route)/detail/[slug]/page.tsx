@@ -60,9 +60,9 @@ const DetailPage = ({ params }: { params: { slug: string } }) => {
         <div className='flex flex-col h-full justify-evenly'>
           <div className='relative w-full h-32'>
             <Image
+              fill
               alt='weather-icon'
-              layout='fill'
-              objectFit='contain'
+              className='object-contain w-full h-full'
               src={`https://openweathermap.org/img/wn/${data?.weather[0].icon}@4x.png`}
             />
           </div>

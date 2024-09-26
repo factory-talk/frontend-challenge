@@ -36,6 +36,7 @@ export const LocationCard = ({
       <div className='absolute top-3 right-3 flex space-x-1'>
         <button
           className='p-1 hover:text-blue-200 transition'
+          data-testid='refresh-button'
           type='button'
           onClick={(e) => {
             e.stopPropagation();
@@ -46,6 +47,7 @@ export const LocationCard = ({
         </button>
         <button
           className='p-1 hover:text-red-400 transition'
+          data-testid='delete-button'
           type='button'
           onClick={(e) => {
             e.stopPropagation();
@@ -72,9 +74,9 @@ export const LocationCard = ({
       ) : (
         <div className='relative w-full h-24'>
           <Image
+            fill
             alt='weather-icon'
-            layout='fill'
-            objectFit='contain'
+            className='object-contain w-full h-full fill'
             src={`https://openweathermap.org/img/wn/${weatherData?.weather[0].icon}@4x.png`}
           />
         </div>
