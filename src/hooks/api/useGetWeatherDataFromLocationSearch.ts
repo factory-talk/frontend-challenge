@@ -2,13 +2,14 @@ import { useQuery } from "@tanstack/react-query";
 import { QUERY_KEY } from "@/hooks/api/query-key";
 import type { LocationData, WeatherData } from "@/services/public-api";
 import { getOpenWeatherData, getLocationIqData } from "@/services/public-api";
+import type { TemperatureUnit } from "@/stores/useTemperatureUnitStore";
 
 export type GetWeatherDataFromLocationSearch = {
   location: LocationData;
   weather: WeatherData;
 };
 
-export const useGetWeatherDataFromLocationSearch = (query: string) => {
+export const useGetWeatherDataFromLocationSearch = (query: string, unit: TemperatureUnit) => {
   return useQuery<GetWeatherDataFromLocationSearch[]>({
     queryFn: async () => {
       // Fetch location data from LocationIQ
@@ -18,7 +19,7 @@ export const useGetWeatherDataFromLocationSearch = (query: string) => {
       // Create an array of promises to fetch weather data for each location
       const weatherPromises = locations.map(async (location) => {
         const { lat, lon } = location;
-        const weatherResponse = await getOpenWeatherData({ lat, lon });
+        const weatherResponse = await getOpenWeatherData({ lat, lon, unit });
 
         // Return merged data for each location
         return {

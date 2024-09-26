@@ -1,38 +1,47 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
-export type LocationCard = {
+export type Location = {
   id: string;
-  displayName: string;
+  displayPlace: string;
+  displayAddress: string;
   lat: string;
   lon: string;
 };
 
 type LocationStore = {
-  locationCards: LocationCard[];
-  addLocationCard: (newCard: LocationCard) => void;
-  removeLocationCard: (id: string) => void;
-  updateLocationCard: (updatedCard: LocationCard) => void;
+  location: Location[];
+  addLocation: (newCard: Location) => void;
+  removeLocation: (id: string) => void;
+  updateLocation: (updatedCard: Location) => void;
 };
 
-const useLocationStore = create<LocationStore>((set) => ({
-  locationCards: [],
+const useLocationStore = create<LocationStore>()(
+  persist(
+    (set) => ({
+      location: [],
 
-  addLocationCard: (newCard) =>
-    set((state) => ({
-      locationCards: [...state.locationCards, newCard],
-    })),
+      addLocation: (newCard) =>
+        set((state) => ({
+          location: [...state.location, newCard],
+        })),
 
-  removeLocationCard: (id) =>
-    set((state) => ({
-      locationCards: state.locationCards.filter((card) => card.id !== id),
-    })),
+      removeLocation: (id) =>
+        set((state) => ({
+          location: state.location.filter((card) => card.id !== id),
+        })),
 
-  updateLocationCard: (updatedCard) =>
-    set((state) => ({
-      locationCards: state.locationCards.map((card) =>
-        (card.id === updatedCard.id ? updatedCard : card)
-      ),
-    })),
-}));
+      updateLocation: (updatedCard) =>
+        set((state) => ({
+          location: state.location.map((card) =>
+            (card.id === updatedCard.id ? updatedCard : card)
+          ),
+        })),
+    }),
+    {
+      name: 'location-store', // Name of the item in localStorage
+    }
+  )
+);
 
 export default useLocationStore;

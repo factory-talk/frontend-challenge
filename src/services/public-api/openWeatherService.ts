@@ -1,4 +1,5 @@
 // Convention: The file name should follow 'somethingServices
+import type { TemperatureUnit } from '@/stores/useTemperatureUnitStore';
 import type { AxiosResponse } from 'axios';
 import axios from 'axios';
 // OR import axios from '@libs/axios';
@@ -51,9 +52,10 @@ export type WeatherData = {
 export type GetOpenWeatherDataParams = {
   lat: string;
   lon: string;
+  unit: TemperatureUnit;
 }
 
-export async function getOpenWeatherData({ lat, lon }: GetOpenWeatherDataParams): Promise<AxiosResponse<WeatherData>> {
+export async function getOpenWeatherData({ lat, lon, unit }: GetOpenWeatherDataParams): Promise<AxiosResponse<WeatherData>> {
   const servicePath = 'https://api.openweathermap.org/data/2.5/weather';
 
   // DEFAULT: FREE PLAN API KEY
@@ -65,6 +67,7 @@ export async function getOpenWeatherData({ lat, lon }: GetOpenWeatherDataParams)
     params: {
       lat,
       lon,
+      units: unit.type,
       appid: apiKey,
     },
   });
