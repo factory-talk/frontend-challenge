@@ -26,18 +26,18 @@ export const LocationCard = ({
   });
 
   return (
-    <div className='relative flex flex-col justify-between max-w-xs gap-2 p-4 rounded-xl bg-white/10 shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl min-h-[400px]'>
+    <div className='relative flex flex-col justify-between max-w-xs gap-2 p-6 rounded-xl bg-white/10 shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl min-h-[400px]'>
       {/* Refresh and Delete Icons */}
-      <div className='absolute top-2 right-2 flex space-x-2'>
+      <div className='absolute top-3 right-3 flex space-x-1'>
         <button
-          className='p-1 text-white hover:text-blue-400 transition'
+          className='p-1 hover:text-blue-400 transition'
           type='button'
           onClick={() => refetch()}
         >
           <RefreshCcw className='h-5 w-5' />
         </button>
         <button
-          className='p-1 text-white hover:text-red-400 transition'
+          className='p-1 hover:text-red-400 transition'
           type='button'
           onClick={onDelete}
         >
@@ -46,10 +46,10 @@ export const LocationCard = ({
       </div>
       {/* Card Header */}
       <div className='h-32'>
-        <h3 className='text-2xl font-bold text-white line-clamp-2'>
+        <h3 className='text-2xl font-bold line-clamp-2'>
           {location.displayPlace}
         </h3>
-        <h4 className='text-lg text-gray-300 line-clamp-2'>
+        <h4 className='text-lg text-gray-100 line-clamp-2'>
           {location.displayAddress}
         </h4>
       </div>
@@ -69,7 +69,7 @@ export const LocationCard = ({
         </div>
       )}
       {/* Temperature Info */}
-      <div className='p-4 text-md text-white'>
+      <div className='p-4 text-md'>
         {isFetching ? (
           ['Temperature', 'Feels Like', 'Min', 'Max'].map((label) => (
             <p key={label}>

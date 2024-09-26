@@ -20,7 +20,11 @@ const RootLayout = ({
     <html lang='en'>
       <body className={inter.className}>
         <ServerProvider>
-          <ClientProvider>{children}</ClientProvider>
+          <ClientProvider>
+            <main className='flex min-h-screen min-w-screen flex-col items-center justify-center bg-gradient-to-br from-[#42A6FB] to-[#5A4DFD] text-white'>
+              {children}
+            </main>
+          </ClientProvider>
         </ServerProvider>
       </body>
     </html>
