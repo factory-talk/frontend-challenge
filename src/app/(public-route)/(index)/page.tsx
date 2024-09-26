@@ -9,8 +9,8 @@ import {
   CustomButton,
   AutocompleteSearchBar,
 } from '@/components';
-import type { ExtendedLocationData } from '@/hooks/api/useGetWeatherDataFromLocationSearch';
-import { useGetWeatherDataFromLocationSearch } from '@/hooks/api/useGetWeatherDataFromLocationSearch';
+import type { ExtendedLocationData } from '@/hooks/api/useGetWeatherDataFromLocationSearch/useGetWeatherDataFromLocationSearch';
+import { useGetWeatherDataFromLocationSearch } from '@/hooks/api/useGetWeatherDataFromLocationSearch/useGetWeatherDataFromLocationSearch';
 import { QUERY_KEY } from '@/hooks/api/query-key';
 import useLocationStore from '@/stores/useLocationStore';
 import { useDebounce } from '@/utils/hooks/useDebounce';
@@ -80,12 +80,14 @@ const IndexPage = () => {
           {/* Unit Change Button */}
           <CustomButton
             className='min-w-[160px]'
+            data-testid='unit-button'
             label={`Unit: ${unit.label}`}
             title='Change Unit'
             onClick={handleToggleUnit}
           />
           {/* Refresh Button */}
           <CustomButton
+            data-testid='refresh-button'
             icon={RefreshCcw}
             label='Refresh All'
             title='Refresh Weather Data'

@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { useGetOpenWeatherData } from '@/hooks/api/useGetOpenWeatherData';
+import { useGetOpenWeatherData } from '@/hooks/api/useGetOpenWeatherData/useGetOpenWeatherData';
 import { RefreshCcw, Trash, Loader } from 'lucide-react';
 import type { Location } from '@/stores/useLocationStore';
 import type { TemperatureUnit } from '@/stores/useTemperatureUnitStore';

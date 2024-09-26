@@ -1,6 +1,6 @@
 'use client';
 
-import { useGetOpenWeatherData } from '@/hooks/api/useGetOpenWeatherData';
+import { useGetOpenWeatherData } from '@/hooks/api/useGetOpenWeatherData/useGetOpenWeatherData';
 import { ROUTE } from '@/routes';
 import useLocationStore from '@/stores/useLocationStore';
 import useTemperatureUnitStore from '@/stores/useTemperatureUnitStore';

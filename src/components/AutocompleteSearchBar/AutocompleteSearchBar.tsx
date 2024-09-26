@@ -3,7 +3,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import type { ExtendedLocationData } from '@/hooks/api/useGetWeatherDataFromLocationSearch';
+import type { ExtendedLocationData } from '@/hooks/api/useGetWeatherDataFromLocationSearch/useGetWeatherDataFromLocationSearch';
 import type { TemperatureUnit } from '@/stores/useTemperatureUnitStore';
 import type { Location } from '@/stores/useLocationStore';
 

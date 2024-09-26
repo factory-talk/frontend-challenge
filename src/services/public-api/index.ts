@@ -1,2 +1,2 @@
-export * from "./locationIqService"
-export * from "./openWeatherService"
+export * from "./getLocationIqData/getLocationIqData"
+export * from "./getOpenWeatherData/getOpenWeatherData"

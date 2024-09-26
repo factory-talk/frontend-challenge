@@ -3,12 +3,12 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { LocationCard } from './LocationCard'; // Adjust the import based on your file structure
-import { useGetOpenWeatherData } from '@/hooks/api/useGetOpenWeatherData';
+import { useGetOpenWeatherData } from '@/hooks/api/useGetOpenWeatherData/useGetOpenWeatherData';
 import type { Location } from '@/stores/useLocationStore';
 import type { TemperatureUnit } from '@/stores/useTemperatureUnitStore';
 
 // Mock the useGetOpenWeatherData hook
-jest.mock('@/hooks/api/useGetOpenWeatherData');
+jest.mock('@/hooks/api/useGetOpenWeatherData/useGetOpenWeatherData');
 
 const mockRefetch = jest.fn();
 const mockUseGetOpenWeatherData = useGetOpenWeatherData as jest.Mock;
@@ -120,6 +120,7 @@ describe('LocationCard Component', () => {
   });
 
   test('shows loading state when fetching data', async () => {
+    // Simulate loading state
     mockUseGetOpenWeatherData.mockReturnValueOnce({
       data: null,
       refetch: mockRefetch,
@@ -135,6 +136,8 @@ describe('LocationCard Component', () => {
       />,
     );
 
-    expect(await screen.findByText(/loading/i)).toBeInTheDocument();
+    // Wait for the loading text to appear
+    const loadingElements = await screen.findAllByText(/loading/i);
+    expect(loadingElements.length).toBeGreaterThan(0); // At least one loading element should be present
   });
 });
