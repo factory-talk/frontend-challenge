@@ -1,66 +1,87 @@
-# Frontend Challenge
+# Weather Application
 
 ## Overview
-Create a responsive weather application that allows users to search for cities and view current weather conditions. The app should feature a search box with suggestions, a list of selected cities with current temperatures, and detailed weather information for each city. Users should be able to configure the temperature unit system (Kelvin, Fahrenheit, Celsius).
+Create a responsive weather application that allows users to search for cities and view current weather conditions. The app features a search box with suggestions, a list of selected cities with current temperatures, and detailed weather information for each city. Users can configure the temperature unit system (Kelvin, Fahrenheit, Celsius).
 
-# Design Guideline
-This is just a guideline. You can adjust or totally redesign it as you see fit.
+## Screenshots
+![screenshot-1727354938866](https://github.com/user-attachments/assets/cef07ca8-2229-4296-a86c-44c5e69b4537)
+![screenshot-1727354949490](https://github.com/user-attachments/assets/a1747430-6d79-44d9-a164-e29dd7608faa)
+![screenshot-1727374848942](https://github.com/user-attachments/assets/cef0b952-4796-44d4-98d6-83393198f507)
+![screenshot-1727374864121](https://github.com/user-attachments/assets/b0fbc1fe-6bd5-4a35-9b75-56b9b21f33b1)
 
-![example](https://github.com/factory-talk/frontend-challenge/assets/120702073/d937815c-b452-4e9c-8a7f-a6fcf1daab0d)
+## Features
+### Index Page
+- **Search Box:** Allows users to search for cities by name or ZIP code with a suggestion list.
+- **City List:** Displays a list of selected cities with the current time and average temperature, enabling users to manage the list.
 
-# Features
-## Index Page
-- Search Box: Allows users to search for cities by name or ZIP code
-    - Provides a suggestion list as the user types.
-- City List: Display a list of cities selected by the user alont with the current time and average temperature.
-    - User can manage the list by adding or removing cities.
+### Search Bar
+- **Auto-Suggestions:** Provides a list of suggested cities based on the user’s input.
+- **City Selection:** Allows users to select a city from the suggestion list to add to their index.
 
-## Search Page
-- Auto-Suggestions: When typing in the search box, display a list of suggested cities based on the input.
-- City Selection: Allows user to select a city from the suggestion list to add to their index.
-
-## Detail Page
-- City Weather Details: Display detailed weather information for the selected city, including:
-    - Average Temperature
-    - Minimum and Maximum Temperature
+### Detail Page
+- **City Weather Details:** Displays detailed weather information, including:
+    - Average, Minimum, and Maximum Temperature
     - Weather Icon
     - Main Weather (e.g., Rain, Snow, Sunny)
     - Weather Description
-    - Wind Speed
-    - Humidity
-    - Pressure
-    - Rain Volume
-- 24-Hour Forecast: Show a forecast for the next 24 hours, including temperature and weather conditions.
+    - Wind Speed, Humidity, Pressure, and Rain Volume
+- **24-Hour Forecast:** Shows a forecast for the next 24 hours.
 
-## Additional Features
-- Temperature Unit Configuration: Allow users to select their preferred temperature unit (Kelvin, Fahrenheit, Celsius).
-- Responsive Design: Ensure the application is responsive and works well on various device sizes.
-- Current Date and Time: Display the current date and time for each city in the list.
-
+### Additional Features
+- **Temperature Unit Configuration:** Users can select their preferred temperature unit.
+- **Responsive Design:** Ensures usability on various devices.
+  
 ## Technology Stack
-- Use Next.js or React.js for building the user interface.
-- Utilize CSS-in-JS solutions (e.g., Styled-Components, Emotion) or CSS frameworks (e.g., Bootstrap, Tailwind CSS) for styling.
-- Implement unit tests using a testing framework (e.g., Jest, React Testing Library) to ensure code reliability and quality.
-- Use TypeScript to provide static type checking and improve code quality and maintainability.
-- Follow best practices for user experience.
+- **Framework:** Next.js or React.js
+- **Styling:** CSS-in-JS solutions (Styled-Components, Emotion) or CSS frameworks (Bootstrap, Tailwind CSS)
+- **Testing:** Unit tests with Jest and React Testing Library
+- **Type Checking:** TypeScript for static type checking
+- **Best Practices:** Follow best practices for user experience
 
 ## Data Source
-### OpenWeather API
-https://openweathermap.org/api
-### Weather icons
-https://openweathermap.org/weather-conditions
-### Places API
-https://geoawesomeness.com/google-maps-api-alternatives-best-cheap-affordable/
+- **OpenWeather API:** [OpenWeather API](https://openweathermap.org/api)
+- **Places API:** [LocationIQ](https://locationiq.com/)
 
-You can choose any Places API as your datasource.
+## How to Run the Project
 
+### Prerequisites
+Ensure you have the following installed on your machine:
+- Node.js (v14 or higher)
+- npm or yarn
 
-## Submission
-- Fork this repository, make a pull request to this repo. when you're done an assignment.
-- Ensure the code follows best practices and includes comprehensive unit tests.
-- Ensure that the project can be run successfully with the provided instructions or setup. We should be able to execute and test your code without any issues.
-- Focus on demonstrating your programming skills rather than aiming for a perfect solution. We are more interested in your approach, thought process, and coding practices.
+### Setup
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-repo/weather-app.git
+   cd weather-app
+   ```
 
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
+3. Create a `.env` file in the root directory and add your API keys (Optional):
+   ```env
+   NEXT_PUBLIC_OPENWEATHER_API_KEY=your_openweather_api_key
+   NEXT_PUBLIC_LOCATIONIQ_API_KEY=your_locationiq_api_key
+   ```
 
+### Running the Application
+Start the development server:
+```bash
+npm run dev
+```
+Open your browser and navigate to [http://localhost:3000](http://localhost:3000).
 
+### Running Tests
+To run the unit tests:
+```bash
+npm run test
+```
+
+## License
+This project is licensed under the MIT License.
+
+## Acknowledgments
+- Thank you to the OpenWeather API and LocationIQ for providing the weather and location data.
