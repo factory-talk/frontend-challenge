@@ -1,7 +1,6 @@
-// temperatureStore.ts
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
-// Updated TemperatureUnit type
 export type TemperatureUnit =
   | { unit: 'kelvin'; type: 'standard'; label: 'Kelvin'; symbol: 'K' }
   | { unit: 'celsius'; type: 'metric'; label: 'Celsius'; symbol: '°C' }
@@ -10,7 +9,7 @@ export type TemperatureUnit =
 type TemperatureStore = {
   unit: TemperatureUnit;
   setUnit: (unit: 'kelvin' | 'celsius' | 'fahrenheit') => void;
-  toggleUnit: () => void;
+  toggleUnit: (onSuccess?: () => void) => void;
 };
 
 // Map of unit details
@@ -23,15 +22,28 @@ const unitDetailsMap: Record<string, TemperatureUnit> = {
 // Array of unit keys for cycling
 const unitKeys = Object.keys(unitDetailsMap) as Array<'kelvin' | 'celsius' | 'fahrenheit'>;
 
-const useTemperatureUnitStore = create<TemperatureStore>((set) => ({
-  unit: unitDetailsMap.celsius, // Default state
-  setUnit: (unit) => set({ unit: unitDetailsMap[unit] }),
-  toggleUnit: () => set((state) => {
-    const currentIndex = unitKeys.indexOf(state.unit.unit);
-    const nextIndex = (currentIndex + 1) % unitKeys.length; // Cycle through units
+const useTemperatureUnitStore = create<TemperatureStore>()(
+  persist((set) => ({
+    unit: unitDetailsMap.celsius, // Default state
+    setUnit: (unit) => set({ unit: unitDetailsMap[unit] }),
+    toggleUnit: (onSuccess) => set((state) => {
+      const currentIndex = unitKeys.indexOf(state.unit.unit);
+      const nextIndex = (currentIndex + 1) % unitKeys.length;
 
-    return { unit: unitDetailsMap[unitKeys[nextIndex]] };
+      // Update the state
+      const updatedState = { unit: unitDetailsMap[unitKeys[nextIndex]] };
+
+      if (onSuccess) {
+        setTimeout(() => onSuccess(), 0);
+      }
+
+      return updatedState;
+    })
   }),
-}));
+    {
+      name: 'location-store', // Name of the item in localStorage
+    })
+
+);
 
 export default useTemperatureUnitStore;

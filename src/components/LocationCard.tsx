@@ -15,6 +15,7 @@ export const LocationCard = ({
   unit,
   onDelete,
 }: LocationCardProps): JSX.Element => {
+
   const {
     data: weatherData,
     refetch,
@@ -26,7 +27,7 @@ export const LocationCard = ({
   });
 
   return (
-    <div className='relative flex flex-col justify-between max-w-xs gap-2 p-6 rounded-xl bg-white/10 shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl min-h-[400px]'>
+    <div className='relative flex flex-col justify-between max-w-xs p-6 rounded-xl bg-white/10 shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl min-h-[400px]'>
       {/* Refresh and Delete Icons */}
       <div className='absolute top-3 right-3 flex space-x-1'>
         <button
@@ -59,7 +60,7 @@ export const LocationCard = ({
           <Loader />
         </div>
       ) : (
-        <div className='relative w-full h-16'>
+        <div className='relative w-full h-24'>
           <Image
             alt='weather-icon'
             layout='fill'

@@ -4,13 +4,13 @@ import type { LocationData, WeatherData } from "@/services/public-api";
 import { getOpenWeatherData, getLocationIqData } from "@/services/public-api";
 import type { TemperatureUnit } from "@/stores/useTemperatureUnitStore";
 
-export type GetWeatherDataFromLocationSearch = {
+export type ExtendedLocationData = {
   location: LocationData;
   weather: WeatherData;
 };
 
 export const useGetWeatherDataFromLocationSearch = (query: string, unit: TemperatureUnit) => {
-  return useQuery<GetWeatherDataFromLocationSearch[]>({
+  return useQuery<ExtendedLocationData[]>({
     queryFn: async () => {
       // Fetch location data from LocationIQ
       const locationResponse = await getLocationIqData(query);

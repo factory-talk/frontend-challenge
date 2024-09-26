@@ -37,7 +37,7 @@ export async function getLocationIqData(query: string): Promise<AxiosResponse<Lo
     params: {
       key: apiKey,
       q: query,
-      limit: 5,
+      limit: 10,
       dedupe: 1,
     },
   });

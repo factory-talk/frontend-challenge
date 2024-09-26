@@ -12,7 +12,7 @@ type CustomButtonProps = {
 export const CustomButton = ({ className, icon: Icon, label, title, onClick }: CustomButtonProps) => {
   return (
     <button
-      className={cn("flex justify-center items-center w-full md:w-auto p-3 rounded-lg bg-white/10 text-white hover:bg-white/20 transition text-nowrap", className)}
+      className={cn("flex justify-center items-center w-full lg:w-auto p-3 rounded-lg bg-white/10 text-white hover:bg-white/20 transition text-nowrap", className)}
       title={title}
       type="button"
       onClick={onClick}
