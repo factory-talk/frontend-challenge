@@ -59,7 +59,7 @@ export async function getOpenWeatherData({ lat, lon, unit }: GetOpenWeatherDataP
   const servicePath = 'https://api.openweathermap.org/data/2.5/weather';
 
   // DEFAULT: FREE PLAN API KEY
-  const apiKey = process.env.OPEN_WEATHER_API_KEY || '46f2a250d973903d403c8f49d22eb40f';
+  const apiKey = process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY || '46f2a250d973903d403c8f49d22eb40f';
 
   return axios({
     method: 'GET',

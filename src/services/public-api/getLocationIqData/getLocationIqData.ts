@@ -29,7 +29,7 @@ export async function getLocationIqData(query: string): Promise<AxiosResponse<Lo
   const apiUrl = 'https://api.locationiq.com/v1/autocomplete';
 
   // DEFAULT: FREE PLAN API KEY
-  const apiKey = process.env.LOCATION_IQ_API_KEY || 'pk.f3f7ce60e9e49234360e96bba791fc2c';
+  const apiKey = process.env.NEXT_PUBLIC_LOCATIONIQ_API_KEY || 'pk.f3f7ce60e9e49234360e96bba791fc2c';
 
   return axios({
     method: 'GET',
