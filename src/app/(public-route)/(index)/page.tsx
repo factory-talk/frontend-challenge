@@ -1,10 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { RefreshCcw, SquareMenu } from 'lucide-react';
+import { RefreshCcw } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { LocationCard, CustomButton , AutocompleteSearchBar } from '@/components';
+import {
+  LocationCard,
+  CustomButton,
+  AutocompleteSearchBar,
+} from '@/components';
 import type { ExtendedLocationData } from '@/hooks/api/useGetWeatherDataFromLocationSearch';
 import { useGetWeatherDataFromLocationSearch } from '@/hooks/api/useGetWeatherDataFromLocationSearch';
 import { QUERY_KEY } from '@/hooks/api/query-key';
@@ -12,7 +16,6 @@ import useLocationStore from '@/stores/useLocationStore';
 import { useDebounce } from '@/utils/hooks/useDebounce';
 import { ROUTE } from '@/routes';
 import useTemperatureUnitStore from '@/stores/useTemperatureUnitStore';
-import Logo from '@/assets/svg/logo.svg';
 
 const IndexPage = () => {
   const [search, setSearch] = useState('');
@@ -33,9 +36,7 @@ const IndexPage = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
 
-  const handleSearchClickAdd = (
-    searchData: ExtendedLocationData,
-  ) => {
+  const handleClickAddSearch = (searchData: ExtendedLocationData) => {
     addLocation({
       id: searchData.location.place_id,
       displayPlace: searchData.location.display_place,
@@ -45,11 +46,11 @@ const IndexPage = () => {
     });
   };
 
-  // BUTTON LOGIC HANDLERS
-  const handleDetailSearch = () => {
-    router.push(ROUTE.SEARCH);
+  const handleClickCard = (id: string) => {
+    router.push(`${ROUTE.DETAIL}/${id}`);
   };
 
+  // BUTTON LOGIC HANDLERS
   const handleToggleUnit = () => {
     toggleUnit(() =>
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY.OPEN_WEATHER] }),
@@ -60,39 +61,22 @@ const IndexPage = () => {
     queryClient.invalidateQueries({ queryKey: [QUERY_KEY.OPEN_WEATHER] });
   };
 
-
   return (
-    <div className='container flex flex-col items-center justify-center gap-12 p-4'>
-      <div className='flex flex-col justify-center text-center text-3xl sm:text-5xl font-extrabold tracking-tight'>
-        <div className='self-center w-32 h-32 sm:w-[200px] sm:h-[200px] '>
-          <Logo />
-        </div>
-        <div>
-          D² <span className='text-blue-200'>Weather Watch</span>
-        </div>
-      </div>
-
+    <>
       {/* Input with popover and buttons */}
       <div className='relative max-w-[800px] w-full flex flex-col gap-2 items-center'>
-          {/* Search Input Section */}
-          <AutocompleteSearchBar
+        {/* Search Input Section */}
+        <AutocompleteSearchBar
+          existingLocations={storedLocation}
           extendedLocationData={extendedLocationData}
           search={search}
           setSearch={setSearch}
           unit={unit}
-          onSearchClickAdd={handleSearchClickAdd}
+          onSearchClickAdd={handleClickAddSearch}
         />
 
         {/* Button Section */}
         <div className='flex flex-col flex-grow lg:flex-row gap-2 w-full lg:w-auto '>
-          {/* Detail Search Button */}
-          <CustomButton
-            icon={SquareMenu}
-            label='Detailed Search'
-            title='Detailed Search'
-            onClick={handleDetailSearch}
-          />
-
           {/* Unit Change Button */}
           <CustomButton
             className='min-w-[160px]'
@@ -100,7 +84,6 @@ const IndexPage = () => {
             title='Change Unit'
             onClick={handleToggleUnit}
           />
-
           {/* Refresh Button */}
           <CustomButton
             icon={RefreshCcw}
@@ -118,11 +101,12 @@ const IndexPage = () => {
             key={location.id}
             location={location}
             unit={unit}
+            onClick={() => handleClickCard(location.id)}
             onDelete={() => removeLocation(location.id)}
           />
         ))}
       </div>
-    </div>
+    </>
   );
 };
 

@@ -22,9 +22,22 @@ const useLocationStore = create<LocationStore>()(
       location: [],
 
       addLocation: (newCard) =>
-        set((state) => ({
-          location: [...state.location, newCard],
-        })),
+        set((state) => {
+          // Check if an item with the same ID already exists
+          const locationExists = state.location.some(
+            (location) => location.id === newCard.id
+          );
+
+          // If it doesn't exist, add the new card, otherwise return the existing state
+          if (!locationExists) {
+            return {
+              location: [...state.location, newCard],
+            };
+          }
+
+          // If the card already exists, do nothing
+          return state;
+        }),
 
       removeLocation: (id) =>
         set((state) => ({

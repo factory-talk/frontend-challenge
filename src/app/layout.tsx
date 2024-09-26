@@ -11,7 +11,6 @@ const poppins = Poppins({
   style: ['normal', 'italic'], // Specify styles (optional)
   display: 'swap', // Optional: use swap display mode for faster font rendering
   variable: '--font-poppins',
-
 });
 
 export const metadata: Metadata = {
@@ -26,13 +25,9 @@ const RootLayout = ({
 }>) => {
   return (
     <html lang='en'>
-      <body className={cn("antialiased", poppins.className, poppins.variable)}>
+      <body className={cn('antialiased', poppins.className, poppins.variable)}>
         <ServerProvider>
-          <ClientProvider>
-            <main className='flex min-h-screen min-w-screen flex-col items-center justify-center bg-gradient-to-br from-[#42A6FB] to-[#5A4DFD] text-white'>
-              {children}
-            </main>
-          </ClientProvider>
+          <ClientProvider>{children}</ClientProvider>
         </ServerProvider>
       </body>
     </html>

@@ -7,15 +7,16 @@ import type { TemperatureUnit } from '@/stores/useTemperatureUnitStore';
 type LocationCardProps = {
   location: Location;
   unit: TemperatureUnit;
+  onClick: () => void;
   onDelete: () => void;
 };
 
 export const LocationCard = ({
   location,
   unit,
+  onClick,
   onDelete,
 }: LocationCardProps): JSX.Element => {
-
   const {
     data: weatherData,
     refetch,
@@ -23,24 +24,33 @@ export const LocationCard = ({
   } = useGetOpenWeatherData({
     lat: location.lat,
     lon: location.lon,
-    unit
+    unit,
   });
 
   return (
-    <div className='relative flex flex-col justify-between max-w-xs p-6 rounded-xl bg-white/10 shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl min-h-[400px]'>
+    <div
+      className='relative flex flex-col justify-between max-w-xs p-6 rounded-xl bg-white/10 shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl min-h-[400px]'
+      onClick={onClick}
+    >
       {/* Refresh and Delete Icons */}
       <div className='absolute top-3 right-3 flex space-x-1'>
         <button
-          className='p-1 hover:text-blue-400 transition'
+          className='p-1 hover:text-blue-200 transition'
           type='button'
-          onClick={() => refetch()}
+          onClick={(e) => {
+            e.stopPropagation();
+            refetch();
+          }}
         >
           <RefreshCcw className='h-5 w-5' />
         </button>
         <button
           className='p-1 hover:text-red-400 transition'
           type='button'
-          onClick={onDelete}
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete();
+          }}
         >
           <Trash className='h-5 w-5' />
         </button>
@@ -81,7 +91,9 @@ export const LocationCard = ({
           <>
             <p>
               Temperature:{' '}
-              <span className='font-semibold'>{weatherData?.main.temp} {unit.symbol}</span>
+              <span className='font-semibold'>
+                {weatherData?.main.temp} {unit.symbol}
+              </span>
             </p>
             <p>
               Feels Like:{' '}
