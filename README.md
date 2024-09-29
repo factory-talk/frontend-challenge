@@ -1,5 +1,10 @@
 # Weather Application
 
+> [!Important]  
+> I have developed a more comprehensive version of this assignment, which extends far beyond the original assignment requirements.
+>
+> To keep things organized, I have separated it into its own repository. You can explore the code [here](https://gitlab.com/korawit.ch605/weather-app-full-stack-nextjs), or even visit the live deployed site at [https://weather.devviantex.com/](https://weather.devviantex.com/).
+
 ## Overview
 Create a responsive weather application that allows users to search for cities and view current weather conditions. The app features a search box with suggestions, a list of selected cities with current temperatures, and detailed weather information for each city. Users can configure the temperature unit system (Kelvin, Fahrenheit, Celsius).
 
