@@ -1,112 +1,198 @@
-import Image from "next/image";
+"use client";
+import { useEffect, useState } from "react";
+import Navbar from "src/components/Navbar";
+import Link from "next/link";
+import TemperatureDisplay from "src/components/TemperatureDisplay";
+import TemperatureUnitSelector from "src/components/TemperatureUnitSelector";
+import { FaTrash } from "react-icons/fa";
 
 export default function Home() {
+  const [location, setLocation] = useState<{ lat: number; lon: number } | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [weatherData, setWeatherData] = useState<any>(null);
+  const [unit, setUnit] = useState<"metric" | "imperial">("metric");
+  const [temperatureUnit, setTemperatureUnit] = useState<"C" | "F" | "K">("C");
+  const [favoriteCities, setFavoriteCities] = useState<string[]>([]);
+  const [favoriteWeatherData, setFavoriteWeatherData] = useState<any>({});
+
+  useEffect(() => {
+    const storedFavorites = JSON.parse(localStorage.getItem("favoriteCities") || "[]");
+    setFavoriteCities(storedFavorites);
+
+    const handleFavoritesUpdated = () => {
+      const updatedFavorites = JSON.parse(localStorage.getItem("favoriteCities") || "[]");
+      setFavoriteCities(updatedFavorites);
+    };
+
+    window.addEventListener("favoritesUpdated", handleFavoritesUpdated);
+
+    return () => {
+      window.removeEventListener("favoritesUpdated", handleFavoritesUpdated);
+    };
+  }, []);
+
+  useEffect(() => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setLocation({
+            lat: position.coords.latitude,
+            lon: position.coords.longitude,
+          });
+        },
+        (err) => {
+          setError("Location permission denied.");
+        }
+      );
+    } else {
+      setError("Geolocation not available.");
+    }
+  }, []);
+
+  useEffect(() => {
+    const fetchWeatherData = async () => {
+      if (location) {
+        try {
+          const response = await fetch(
+            `https://api.openweathermap.org/data/2.5/weather?lat=${location.lat}&lon=${location.lon}&units=${unit}&appid=${process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY}`
+          );
+          if (!response.ok) throw new Error("Failed to fetch weather data");
+          const data = await response.json();
+          setWeatherData({
+            city: data.name,
+            temperature: data.main.temp,
+            icon: `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`,
+            timezoneOffset: data.timezone,
+          });
+        } catch (error) {
+          setError("Could not fetch weather data.");
+        }
+      }
+    };
+    fetchWeatherData();
+  }, [location, unit]);
+
+  useEffect(() => {
+    const fetchFavoriteWeatherData = async () => {
+      const updatedData: any = {};
+      for (const city of favoriteCities) {
+        try {
+          const response = await fetch(
+            `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&units=${unit}&appid=${process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY}`
+          );
+          if (response.ok) {
+            const data = await response.json();
+            updatedData[city] = {
+              city: data.name,
+              temperature: data.main.temp,
+              icon: `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`,
+              timezoneOffset: data.timezone,
+            };
+          }
+        } catch (error) {
+          console.error("Could not fetch weather data for", city);
+        }
+      }
+      setFavoriteWeatherData(updatedData);
+    };
+
+    if (favoriteCities.length > 0) {
+      fetchFavoriteWeatherData();
+    }
+  }, [favoriteCities, unit]);
+
+  const getLocalTime = (timezoneOffset: number) => {
+    const utcTime = new Date();
+    const utcTimestamp = utcTime.getTime() + utcTime.getTimezoneOffset() * 60000;
+    const localTime = new Date(utcTimestamp + timezoneOffset * 1000);
+    return localTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: true });
+  };
+
+  const toggleUnit = () => {
+    setUnit((prevUnit) => (prevUnit === "metric" ? "imperial" : "metric"));
+  };
+
+  const deleteCity = (city: string) => {
+    const updatedCities = favoriteCities.filter((c) => c !== city);
+    setFavoriteCities(updatedCities);
+    localStorage.setItem("favoriteCities", JSON.stringify(updatedCities));
+  };
+
+  const deleteAllCities = () => {
+    setFavoriteCities([]);
+    localStorage.removeItem("favoriteCities");
+  };
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <main>
+      <div>
+        <Navbar />
+        <div className="container mx-auto mt-6">
+          <TemperatureUnitSelector selectedUnit={temperatureUnit} onUnitChange={setTemperatureUnit} />
+      
+
+          {weatherData?.city ? (
+            <Link href={`/details/${weatherData.city}`}>
+              <div className="card-city">
+                <div className="card-left">
+                  <h1 className="text-2xl font-bold">{weatherData.city}</h1>
+                  <h6 className="text-gray-600 text-1l">{getLocalTime(weatherData.timezoneOffset)}</h6>
+                </div>
+                <div className="card-right">
+                  {weatherData.icon ? (
+                    <img src={weatherData.icon} alt="Weather Icon" className="w-10 h-10 rounded-full" />
+                  ) : (
+                    <div className="w-10 h-10 bg-gray-400 rounded-full circle-city"></div>
+                  )}
+                  <h1 className="text-2xl font-bold">
+                    <TemperatureDisplay temperature={Math.round(weatherData.temperature) ?? "--"} unit={temperatureUnit} />
+                  </h1>
+                </div>
+              </div>
+            </Link>
+          ) : (
+            <p>Loading weather data...</p>
+          )}
+
+          {favoriteCities.length > 0 && (
+            <div className="mt-6">
+              <h1>Favorite Place</h1>
+              {favoriteCities.map((city, index) => (
+                <div key={index} className="card-city flex justify-between items-center">
+                  <Link href={`/details/${city}`}>
+                    <div className="card-left">
+                      <h1 className="text-2xl font-bold">{city}</h1>
+                      <h6 className="text-gray-600 text-1l">
+                        {favoriteWeatherData[city] ? getLocalTime(favoriteWeatherData[city].timezoneOffset) : "Unknown Time"}
+                      </h6>
+                    </div>
+                  </Link>
+                  <div className="card-right">
+                    {favoriteWeatherData[city]?.icon ? (
+                      <img src={favoriteWeatherData[city].icon} alt="Weather Icon" className="w-10 h-10 rounded-full" />
+                    ) : (
+                      <div className="w-10 h-10 bg-gray-400 rounded-full circle-city"></div>
+                    )}
+                    <h1 className="text-2xl font-bold ml-4">
+                      <TemperatureDisplay temperature={Math.round(favoriteWeatherData[city]?.temperature) ?? "--"} unit={temperatureUnit} />
+                    </h1>
+                    <button onClick={() => deleteCity(city)} className="text-red-500 hover:text-red-700 ml-2">
+                     ❌
+                  </button>
+                  </div>
+                 
+                </div>
+              ))}
+            </div>
+          )}
+    
+          <hr />
+          <button  onClick={deleteAllCities} className="mb-4 p-2 text-red-400 rounded delete-btn">
+          <FaTrash /> Delete all
+
+          </button>
+          {error && <p className="text-red-500 mt-4">{error}</p>}
         </div>
-      </div>
-
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
       </div>
     </main>
   );
