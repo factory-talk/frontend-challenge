@@ -2,7 +2,6 @@ import Image from "next/image";
 import { GroupWeatherData } from "../../types/weather";
 import { motion } from "framer-motion";
 import {
-  pageVariants,
   tableContainerVariants,
   tableItemVariants,
 } from "../../lib/animations/motionConfig";

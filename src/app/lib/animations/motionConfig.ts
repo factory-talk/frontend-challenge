@@ -1,3 +1,4 @@
+// Index Page
 export const tableContainerVariants = {
   animate: {
     transition: {
@@ -20,6 +21,7 @@ export const tableItemVariants = {
   },
 };
 
+// Detail Page
 export const pageVariants = {
   initial: {
     opacity: 0,
@@ -50,4 +52,30 @@ export const fadeInUp = {
     y: 0,
     transition: { delay: i * 0.2, duration: 0.5 },
   }),
+};
+
+// Confirm Popup
+export const transition = {
+  duration: 0.35,
+  ease: [0.59, 0, 0.35, 1],
+};
+
+export const enteringState = {
+  rotateX: 0,
+  skewY: 0,
+  scaleY: 1,
+  scaleX: 1,
+  y: 0,
+  transition: {
+    ...transition,
+    y: { type: "spring", visualDuration: 0.7, bounce: 0.2 },
+  },
+};
+
+export const exitingState = {
+  rotateX: -5,
+  skewY: -1.5,
+  scaleY: 2,
+  scaleX: 0.4,
+  y: 100,
 };
