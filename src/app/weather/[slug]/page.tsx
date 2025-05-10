@@ -10,6 +10,7 @@ import { useFetchDetailWeatherData } from "../../hooks/useWeatherData";
 import { motion } from "framer-motion";
 import { pageVariants, fadeInUp } from "../../lib/animations/motionConfig";
 import { useState } from "react";
+import { useDeleteCityData } from "../../hooks/useCityData";
 
 type Props = {
   params: { slug: string };
@@ -20,7 +21,8 @@ export default function WeatherPage({ params }: Props) {
 
   const { slug } = params;
   const { weatherData, loading, error } = useFetchDetailWeatherData(slug);
-  
+  const { deleteCityData, loading: deleting, error: deleteError } = useDeleteCityData();
+
   const decodedSlug = decodeURIComponent(slug);
   const router = useRouter();
 
@@ -38,9 +40,17 @@ export default function WeatherPage({ params }: Props) {
     }
   };
 
-  const handleConfirmDelete = () => {
-    // handle delete logic
-    setShowConfirmPopup({ visible : false, width: 0, height: 0 });
+  const handleConfirmDelete = async () => {
+    if (!weatherData?.id) return;
+    setShowConfirmPopup({ visible: false, width: 0, height: 0 });
+
+    try {
+      await deleteCityData(weatherData.id);
+      router.push(`/`);
+    } catch (error) {
+      console.error("Delete failed:", error);
+      console.error(deleteError);
+    }
   };
 
   const handleCancelDelete = () => {
@@ -49,9 +59,10 @@ export default function WeatherPage({ params }: Props) {
 
   return (
     <>
+      {deleting && <Loading />}
       <ConfirmPopup
         title="Confirm Delete"
-        message="Are you sure you want to delete these entries? You can't undo this action."
+        message={`Are you sure you want to delete city ${weatherData?.name} ? You can't undo this action.`}
         showConfirmPopup={showConfirmPopup}
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}
@@ -93,12 +104,14 @@ export default function WeatherPage({ params }: Props) {
             </motion.h2>
 
             <motion.div className="mb-4" custom={2} variants={fadeInUp}>
-              <Image
-                src={`https://openweathermap.org/img/wn/${weatherData?.weather[0].icon}@2x.png`}
-                alt="weather icon"
-                width={150}
-                height={150}
-              />
+              {weatherData?.weather?.[0]?.icon && (
+                <Image
+                  src={`https://openweathermap.org/img/wn/${weatherData?.weather[0].icon}@2x.png`}
+                  alt="weather icon"
+                  width={150}
+                  height={150}
+                />
+              )}
             </motion.div>
 
             <motion.div
