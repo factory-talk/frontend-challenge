@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { GroupWeatherData, City, WeatherResponse } from "../types/weather";
+import { GroupWeatherData, WeatherResponse } from "../types/weather";
+import { CityResponse } from "../types/city";
 import { fetchGroupedWeather, fetchDetailWeather } from "../lib/fetchWeather";
 
 export function useFetchGroupedWeatherData(
-  cities: City[],
+  cities: CityResponse[],
   currentPage: number,
   itemsPerPage: number,
   searchQuery: string

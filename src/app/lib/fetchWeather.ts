@@ -7,9 +7,7 @@ export const fetchGroupedWeather = async (
   if (!API_URL || !API_KEY) {
     throw new Error("Missing API configuration.");
   }
-  const url = `${API_URL}/group?id=${cityIds.join(
-    ","
-  )}&appid=${API_KEY}&units=metric`;
+  const url = `${API_URL}/group?id=${cityIds.join(",")}&appid=${API_KEY}&units=metric`;
   const res = await fetch(url);
   if (!res.ok) throw new Error(`Failed to fetch data: ${res.statusText}`);
   const data = await res.json();
