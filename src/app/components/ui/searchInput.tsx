@@ -33,7 +33,7 @@ export default function SearchInput({ onSearch }: SearchInputProps) {
         />
         <button
           type="submit"
-          className="absolute right-1 top-1/2 transform -translate-y-1/2 flex h-9 w-9 items-center justify-center rounded-full p-0"
+          className="absolute right-1 top-1/2 transform -translate-y-1/2 flex h-9 w-9 items-center justify-center rounded-full p-0 text-gray-500 hover:text-primary-light transition-colors"
         >
           <svg
             width="16"
@@ -47,13 +47,13 @@ export default function SearchInput({ onSearch }: SearchInputProps) {
               cy="11.5"
               r="9.5"
               stroke="currentColor"
-              strokeWidth="1.5"
+              strokeWidth="2.5"
               opacity="0.5"
             ></circle>
             <path
               d="M18.5 18.5L22 22"
               stroke="currentColor"
-              strokeWidth="1.5"
+              strokeWidth="2.5"
               strokeLinecap="round"
             ></path>
           </svg>

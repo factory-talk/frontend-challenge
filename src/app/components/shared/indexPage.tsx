@@ -6,11 +6,11 @@ import Loading from "../ui/loading";
 import SkeletonTable from "../ui/skeletonTable";
 import rawCities from "../../data/city.list.json";
 import { useRouter } from "next/navigation";
-import { City } from "../../types/weather";
+import { CityResponse } from "../../types/city";
 import { useFetchGroupedWeatherData } from "../../hooks/useWeatherData";
 
 export default function IndexPage() {
-  const cities: City[] = rawCities as City[];
+  const cities: CityResponse[] = rawCities as CityResponse[];
   const [currentPage, setCurrentPage] = useState(1);
   const [currentSearch, setCurrentSearch] = useState("");
   const [itemsPerPage] = useState(10);
@@ -38,7 +38,7 @@ export default function IndexPage() {
   };
 
   return (
-    <div className="w-full flex flex-col items-center">
+    <div className="w-full">
       <SearchInput onSearch={handleSearch} />
       {error && <p className="text-red-700 font-bold mt-2 mb-5">{error}</p>}
       {loading ? (
