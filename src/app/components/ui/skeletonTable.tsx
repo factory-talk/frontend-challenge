@@ -1,5 +1,4 @@
-
-export default function App() {
+export default function SkeletonTable() {
   const skeletonArray = Array.from({ length: 10 });
 
   return skeletonArray.map((_, index) => (

@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { GroupWeatherData, City } from "../types/weather";
-import { fetchGroupedWeatherData } from "../lib/fetchWeather";
+import { GroupWeatherData, City, WeatherResponse } from "../types/weather";
+import { fetchGroupedWeather, fetchDetailWeather } from "../lib/fetchWeather";
 
-export function useWeatherData(
+export function useFetchGroupedWeatherData(
   cities: City[],
   currentPage: number,
   itemsPerPage: number,
@@ -14,7 +14,7 @@ export function useWeatherData(
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const useFetchGroupedWeather = async () => {
       setLoading(true);
       try {
         const filtered = searchQuery
@@ -28,8 +28,8 @@ export function useWeatherData(
         const pageCities = filtered.slice(indexOfFirst, indexOfLast);
         const cityIds = pageCities.map((c) => c.id);
 
-        const data = await fetchGroupedWeatherData(cityIds);
-        setWeatherData(data);
+        const data = await fetchGroupedWeather(cityIds);
+        setWeatherData(data.list);
         setTotalPages(Math.ceil(filtered.length / itemsPerPage));
         setError(null);
       } catch (err) {
@@ -39,8 +39,35 @@ export function useWeatherData(
       }
     };
 
-    fetchData();
+    useFetchGroupedWeather();
   }, [cities, currentPage, itemsPerPage, searchQuery]);
 
   return { weatherData, loading, error, totalPages };
+}
+
+export function useFetchDetailWeatherData(
+  cityName: string
+) {
+  const [weatherData, setWeatherData] = useState<WeatherResponse>();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const useFetchDetailWeather = async () => {
+      setLoading(true);
+      try {
+        const data = await fetchDetailWeather(cityName);
+        setWeatherData(data);
+        setError(null);
+      } catch (err) {
+        setError((err as Error).message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    useFetchDetailWeather();
+  }, [cityName]);
+
+  return { weatherData, loading, error };
 }

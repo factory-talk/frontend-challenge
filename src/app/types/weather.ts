@@ -34,6 +34,7 @@ export type WeatherResponse = {
   main: Main;
   visibility: number;
   wind: Wind;
+  rain: Rain;
   clouds: Clouds;
   dt: number;
   sys: Sys;
@@ -79,6 +80,10 @@ export interface Wind {
   speed: number;
   deg: number;
   gust: number | null;
+}
+
+export interface Rain {
+  '1h': number;
 }
 
 export interface Clouds {

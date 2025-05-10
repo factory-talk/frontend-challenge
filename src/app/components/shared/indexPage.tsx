@@ -5,8 +5,9 @@ import CityTable from "../ui/cityTable";
 import Loading from "../ui/loading";
 import SkeletonTable from "../ui/skeletonTable";
 import rawCities from "../../data/city.list.json";
+import { useRouter } from "next/navigation";
 import { City } from "../../types/weather";
-import { useWeatherData } from "../../hooks/useWeatherData";
+import { useFetchGroupedWeatherData } from "../../hooks/useWeatherData";
 
 export default function IndexPage() {
   const cities: City[] = rawCities as City[];
@@ -14,7 +15,7 @@ export default function IndexPage() {
   const [currentSearch, setCurrentSearch] = useState("");
   const [itemsPerPage] = useState(10);
 
-  const { weatherData, loading, error, totalPages } = useWeatherData(
+  const { weatherData, loading, error, totalPages } = useFetchGroupedWeatherData(
     cities,
     currentPage,
     itemsPerPage,
@@ -24,6 +25,12 @@ export default function IndexPage() {
   const paginate = (pageNumber: number, searchInput?: string) => {
     setCurrentSearch(searchInput ?? currentSearch);
     setCurrentPage(pageNumber);
+  };
+
+  const router = useRouter();
+
+  const clickCity = (city: string) => {
+    router.push(`/weather/${city}`);
   };
 
   const handleSearch = (query: string) => {
@@ -45,6 +52,7 @@ export default function IndexPage() {
           currentPage={currentPage}
           totalPages={totalPages}
           onPaginate={paginate}
+          handleClick={clickCity}
         />
       )}
     </div>

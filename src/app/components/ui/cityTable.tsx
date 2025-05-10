@@ -1,4 +1,3 @@
-"use client";
 import Image from "next/image";
 import { GroupWeatherData } from "../../types/weather";
 
@@ -7,6 +6,7 @@ interface CityTableProps {
   currentPage: number;
   totalPages: number;
   onPaginate: (page: number) => void;
+  handleClick: (city: string) => void;
 }
 
 export default function CityTable({
@@ -14,6 +14,7 @@ export default function CityTable({
   currentPage,
   totalPages,
   onPaginate,
+  handleClick,
 }: CityTableProps) {
   const formatLocalTime = (timezoneOffsetInSeconds: number): string => {
     const nowUTC = new Date();
@@ -36,7 +37,8 @@ export default function CityTable({
             {cities.map((city) => (
               <li
                 key={city.id}
-                className="p-2 mb-2 bg-white/50 rounded-lg shadow-lg"
+                onClick={() => handleClick(city.name)}
+                className="p-2 mb-2 bg-white/50 rounded-lg shadow-lg cursor-pointer hover:bg-white/70 transition"
               >
                 <div className="flex items-center">
                   <Image
