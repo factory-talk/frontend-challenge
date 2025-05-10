@@ -58,6 +58,10 @@ export default function WeatherPage({ params }: Props) {
     setShowConfirmPopup({ visible: false, width: 0, height: 0 });
   };
 
+  const handleEditClick = () => {
+    console.log("edit logic here.");
+  };
+  
   return (
     <>
       {deleting && <Loading />}
@@ -189,6 +193,7 @@ export default function WeatherPage({ params }: Props) {
               <button
                 type="button"
                 className="flex h-12 w-12 items-center justify-center rounded-full bg-white/80 p-0 hover:bg-primary-light transition-all"
+                onClick={handleEditClick}
               >
                 <svg
                   width="20"

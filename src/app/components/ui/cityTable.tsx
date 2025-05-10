@@ -36,7 +36,7 @@ export default function CityTable({
 
   return (
     <>
-      <div className="w-full shadow-sm dark:bg-gray-800 dark:border-gray-700 max-w-md mx-auto">
+      <div className="w-full shadow-sm dark:bg-gray-800 dark:border-gray-700">
         <div className="flow-root">
           <motion.ul
             className="divide-y divide-gray-200 dark:divide-gray-700"

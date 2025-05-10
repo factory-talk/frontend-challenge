@@ -4,6 +4,7 @@ import SearchInput from "../ui/searchInput";
 import CityTable from "../ui/cityTable";
 import Loading from "../ui/loading";
 import SkeletonTable from "../ui/skeletonTable";
+import AppHeader from "../ui/appHeader";
 import rawCities from "../../data/city.list.json";
 import { useRouter } from "next/navigation";
 import { CityResponse } from "../../types/city";
@@ -36,13 +37,18 @@ export default function IndexPage() {
   const handleSearch = (query: string) => {
     paginate(1, query);
   };
+  
+  const handleAdd = () => {
+    console.log("add logic here.");
+  };
 
   return (
-    <div className="w-full">
+    <div className="w-full max-w-md mx-auto">
+      <AppHeader onClickAdd={handleAdd} />
       <SearchInput onSearch={handleSearch} />
       {error && <p className="text-red-700 font-bold mt-2 mb-5">{error}</p>}
       {loading ? (
-        <div className="w-full max-w-md">
+        <div className="w-full">
           <Loading />
           <SkeletonTable />
         </div>
