@@ -6,6 +6,8 @@ import ErrorBox from "../../components/ui/errorBox";
 import Loading from "../../components/ui/loading";
 import { useRouter } from "next/navigation";
 import { useFetchDetailWeatherData } from "../../hooks/useWeatherData";
+import { motion } from "framer-motion";
+import { pageVariants, fadeInUp } from "../../lib/animations/motionConfig";
 
 type Props = {
   params: { slug: string };
@@ -23,7 +25,13 @@ export default function WeatherPage({ params }: Props) {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-start p-8 text-gray-800">
+    <motion.main
+      className="flex min-h-screen flex-col items-center justify-start p-8 text-gray-800"
+      initial="hidden"
+      animate="visible"
+      exit="exit"
+      variants={pageVariants}
+    >
       <TopNavigator onClickBack={handleBack} />
       {loading ? (
         <div className="w-full max-w-xs">
@@ -33,24 +41,44 @@ export default function WeatherPage({ params }: Props) {
       ) : error ? (
         <ErrorBox Title={decodedSlug} Detail={error} />
       ) : (
-        <div className="flex flex-col items-center justify-center">
-          <h1 className="text-white text-3xl font-bold mt-8 mb-2">
+        <motion.div
+          className="flex flex-col items-center justify-center"
+          initial="hidden"
+          animate="visible"
+        >
+          <motion.h1
+            className="text-white text-3xl font-bold mt-8 mb-2"
+            custom={0}
+            variants={fadeInUp}
+          >
             {weatherData?.name}
-          </h1>
-          <h2 className="text-white text-xl mb-4">
+          </motion.h1>
+          <motion.h2
+            className="text-white text-xl mb-4"
+            custom={1}
+            variants={fadeInUp}
+          >
             {weatherData && (weatherData.main.temp - 273.15).toFixed(1)}°C
-          </h2>
+          </motion.h2>
 
-          <div className="mb-4">
+          <motion.div 
+            className="mb-4" 
+            custom={2} 
+            variants={fadeInUp}
+          >
             <Image
               src={`https://openweathermap.org/img/wn/${weatherData?.weather[0].icon}@2x.png`}
               alt="weather icon"
               width={150}
               height={150}
             />
-          </div>
+          </motion.div>
 
-          <div className="w-full max-w-xl overflow-x-auto rounded-lg">
+          <motion.div
+            className="w-full max-w-xl overflow-x-auto rounded-lg"
+            custom={3}
+            variants={fadeInUp}
+          >
             <table className="w-full table-auto border-collapse border border-gray-300 bg-white shadow-md rounded">
               <thead className="bg-gray-200 text-gray-700">
                 <tr>
@@ -103,9 +131,9 @@ export default function WeatherPage({ params }: Props) {
                 </tr>
               </tbody>
             </table>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       )}
-    </main>
+    </motion.main>
   );
 }

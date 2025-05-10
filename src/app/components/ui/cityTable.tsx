@@ -1,5 +1,11 @@
 import Image from "next/image";
 import { GroupWeatherData } from "../../types/weather";
+import { motion } from "framer-motion";
+import {
+  pageVariants,
+  tableContainerVariants,
+  tableItemVariants,
+} from "../../lib/animations/motionConfig";
 
 interface CityTableProps {
   cities: GroupWeatherData[];
@@ -33,12 +39,18 @@ export default function CityTable({
     <>
       <div className="w-full shadow-sm dark:bg-gray-800 dark:border-gray-700 max-w-md mx-auto">
         <div className="flow-root">
-          <ul className="divide-y divide-gray-200 dark:divide-gray-700">
+          <motion.ul
+            className="divide-y divide-gray-200 dark:divide-gray-700"
+            variants={tableContainerVariants}
+            initial="initial"
+            animate="animate"
+          >
             {cities.map((city) => (
-              <li
+              <motion.li
                 key={city.id}
                 onClick={() => handleClick(city.name)}
                 className="p-2 mb-2 bg-white/50 rounded-lg shadow-lg cursor-pointer hover:bg-white/70 transition"
+                variants={tableItemVariants}
               >
                 <div className="flex items-center">
                   <Image
@@ -59,9 +71,9 @@ export default function CityTable({
                     {city.main.temp}°
                   </div>
                 </div>
-              </li>
+              </motion.li>
             ))}
-          </ul>
+          </motion.ul>
         </div>
       </div>
 
