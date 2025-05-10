@@ -1,4 +1,3 @@
-// ConfirmBox.tsx
 import { animate, motion, AnimatePresence, useIsPresent, useMotionValue } from "framer-motion";
 import { transition, enteringState, exitingState } from "../../lib/animations/motionConfig";
 import { useEffect } from "react";
@@ -61,10 +60,7 @@ export default function ConfirmBox({
                   <button onClick={onConfirm} className="delete">
                     {confirmText}
                   </button>
-                  <button
-                    onClick={onCancel}
-                    className="cancel text-white font-bold"
-                  >
+                  <button onClick={onCancel} className="cancel text-white font-bold">
                     {cancelText}
                   </button>
                 </div>
