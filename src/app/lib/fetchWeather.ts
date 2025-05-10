@@ -1,15 +1,31 @@
-import { GroupWeatherData } from "../types/weather";
+import { GroupWeatherResponse, WeatherResponse } from "../types/weather";
 import { API_URL, API_KEY } from "../utils/config";
 
-export const fetchGroupedWeatherData = async (
+export const fetchGroupedWeather = async (
   cityIds: number[]
-): Promise<GroupWeatherData[]> => {
+): Promise<GroupWeatherResponse> => {
   if (!API_URL || !API_KEY) {
     throw new Error("Missing API configuration.");
   }
-  const url = `${API_URL}/group?id=${cityIds.join(",")}&appid=${API_KEY}&units=metric`;
+  const url = `${API_URL}/group?id=${cityIds.join(
+    ","
+  )}&appid=${API_KEY}&units=metric`;
   const res = await fetch(url);
   if (!res.ok) throw new Error(`Failed to fetch data: ${res.statusText}`);
   const data = await res.json();
-  return data.list;
+  return data;
+};
+
+
+export const fetchDetailWeather = async (
+  cityName: string
+): Promise<WeatherResponse> => {
+  if (!API_URL || !API_KEY) {
+    throw new Error("Missing API configuration.");
+  }
+  const url = `${API_URL}/weather?q=${cityName}&appid=${API_KEY}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`Failed to fetch data: ${res.statusText}`);
+  const data = await res.json();
+  return data;
 };
