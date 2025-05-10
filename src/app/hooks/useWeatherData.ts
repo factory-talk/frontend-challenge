@@ -72,3 +72,23 @@ export function useFetchDetailWeatherData(
 
   return { weatherData, loading, error };
 }
+
+export function manualFetchDetailWeatherData() {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchWeather = async (cityName: string) => {
+    setLoading(true);
+    try {
+      const data = await fetchDetailWeather(cityName);
+      setError(null);
+      return data;
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { loading, error, fetchWeather };
+}

@@ -1,3 +1,4 @@
+// IndexPage.tsx
 "use client";
 import { useState } from "react";
 import SearchInput from "../ui/searchInput";
@@ -5,28 +6,35 @@ import CityTable from "../ui/cityTable";
 import Loading from "../ui/loading";
 import SkeletonTable from "../ui/skeletonTable";
 import AppHeader from "../ui/appHeader";
+import AddCityPopup from "../ui/addCityPopup";
 import rawCities from "../../data/city.list.json";
 import { useRouter } from "next/navigation";
 import { CityResponse } from "../../types/city";
 import { useFetchGroupedWeatherData } from "../../hooks/useWeatherData";
+import { useAddCityData } from "../../hooks/useCityData";
+import { toast } from "../../utils/toastHelper";
 
 export default function IndexPage() {
   const cities: CityResponse[] = rawCities as CityResponse[];
   const [currentPage, setCurrentPage] = useState(1);
   const [currentSearch, setCurrentSearch] = useState("");
+  const [showAddPopup, setShowAddPopup] = useState(false);
   const [itemsPerPage] = useState(10);
 
-  const { weatherData, loading, error, totalPages } = useFetchGroupedWeatherData(
-    cities,
-    currentPage,
-    itemsPerPage,
-    currentSearch
-  );
+  const { weatherData, loading, error, totalPages } =
+    useFetchGroupedWeatherData(
+      cities,
+      currentPage,
+      itemsPerPage,
+      currentSearch
+    );
 
   const paginate = (pageNumber: number, searchInput?: string) => {
     setCurrentSearch(searchInput ?? currentSearch);
     setCurrentPage(pageNumber);
   };
+
+  const { addCityData, loading: deleting, error: deleteError } = useAddCityData();
 
   const router = useRouter();
 
@@ -37,9 +45,23 @@ export default function IndexPage() {
   const handleSearch = (query: string) => {
     paginate(1, query);
   };
-  
+
   const handleAdd = () => {
-    console.log("add logic here.");
+    setShowAddPopup(true);
+  };
+
+  const handleAddConfirm = async (cityValue: CityResponse) => {
+    try {
+      await addCityData(cityValue);
+      toast.success("Successfully Added City.");
+    } catch {
+      toast.success(`Add failed: ${deleteError}`);
+    }
+    setShowAddPopup(false);
+  };
+
+  const handleClosePopup = () => {
+    setShowAddPopup(false);
   };
 
   return (
@@ -61,6 +83,12 @@ export default function IndexPage() {
           handleClick={clickCity}
         />
       )}
+
+      <AddCityPopup
+        showAddPopup={showAddPopup}
+        onClose={handleClosePopup}
+        onConfirm={handleAddConfirm}
+      />
     </div>
   );
 }

@@ -14,7 +14,7 @@ export const addCity = async (city: CityPayload): Promise<ApiResponse> => {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ city }),
+    body: JSON.stringify(city),
   });
 
   if (!res.ok) throw new Error(`Failed to add data: ${res.statusText}`);
@@ -29,7 +29,7 @@ export const updateCity = async (city: CityPayload): Promise<ApiResponse> => {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ city }),
+    body: JSON.stringify(city),
   });
 
   if (!res.ok) throw new Error(`Failed to update data: ${res.statusText}`);
