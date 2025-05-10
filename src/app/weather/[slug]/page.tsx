@@ -61,11 +61,7 @@ export default function WeatherPage({ params }: Props) {
             {weatherData && (weatherData.main.temp - 273.15).toFixed(1)}°C
           </motion.h2>
 
-          <motion.div 
-            className="mb-4" 
-            custom={2} 
-            variants={fadeInUp}
-          >
+          <motion.div className="mb-4" custom={2} variants={fadeInUp}>
             <Image
               src={`https://openweathermap.org/img/wn/${weatherData?.weather[0].icon}@2x.png`}
               alt="weather icon"
@@ -131,6 +127,53 @@ export default function WeatherPage({ params }: Props) {
                 </tr>
               </tbody>
             </table>
+          </motion.div>
+          <motion.div
+            className="flex justify-between p-5 w-full"
+            custom={4}
+            variants={fadeInUp}
+          >
+            <button
+              type="button"
+              className="flex h-12 w-12 items-center justify-center rounded-full bg-white/80 p-0 hover:bg-primary-light transition-all"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="text-primary"
+              >
+                <path
+                  d="M16.5 3.5L20.5 7.5C21.5 8.5 21.5 10.5 20.5 11.5L12 19L5 19L5 12L14.5 3.5C15.5 2.5 17.5 2.5 18.5 3.5Z"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                ></path>
+              </svg>
+            </button>
+
+            <button
+              type="button"
+              className="flex h-12 w-12 items-center justify-center rounded-full bg-white/80 p-0 hover:bg-red-200 transition-all"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                className="text-danger"
+              >
+                <path
+                  d="M19 6H5M19 6L18.25 19.5C18.15 20.3 17.56 21 16.74 21H7.26C6.44 21 5.85 20.3 5.75 19.5L5 6M10 6V4C10 3.44772 10.4477 3 11 3H13C13.5523 3 14 3.44772 14 4V6M9 6H15"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                ></path>
+              </svg>
+            </button>
           </motion.div>
         </motion.div>
       )}

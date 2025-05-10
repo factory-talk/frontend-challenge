@@ -82,7 +82,7 @@ export default function CityTable({
           className={`p-2 rounded-full shadow flex items-center justify-center ${
             currentPage === 1
               ? "bg-gray-300 cursor-not-allowed opacity-50"
-              : "bg-white/70"
+              : "bg-white/70 hover:bg-primary-light"
           }`}
           onClick={() => onPaginate(currentPage - 1)}
           disabled={currentPage === 1}
@@ -109,7 +109,7 @@ export default function CityTable({
           className={`p-2 rounded-full shadow flex items-center justify-center ${
             currentPage === totalPages
               ? "bg-gray-300 cursor-not-allowed opacity-50"
-              : "bg-white/70"
+              : "bg-white/70 hover:bg-primary-light"
           }`}
           onClick={() => onPaginate(currentPage + 1)}
           disabled={currentPage === totalPages}
