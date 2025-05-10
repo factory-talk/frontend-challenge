@@ -1,0 +1,52 @@
+"use client";
+import { useState } from "react";
+import SearchInput from "../ui/searchInput";
+import CityTable from "../ui/cityTable";
+import Loading from "../ui/loading";
+import SkeletonTable from "../ui/skeletonTable";
+import rawCities from "../../data/city.list.json";
+import { City } from "../../types/weather";
+import { useWeatherData } from "../../hooks/useWeatherData";
+
+export default function IndexPage() {
+  const cities: City[] = rawCities as City[];
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentSearch, setCurrentSearch] = useState("");
+  const [itemsPerPage] = useState(10);
+
+  const { weatherData, loading, error, totalPages } = useWeatherData(
+    cities,
+    currentPage,
+    itemsPerPage,
+    currentSearch
+  );
+
+  const paginate = (pageNumber: number, searchInput?: string) => {
+    setCurrentSearch(searchInput ?? currentSearch);
+    setCurrentPage(pageNumber);
+  };
+
+  const handleSearch = (query: string) => {
+    paginate(1, query);
+  };
+
+  return (
+    <div className="w-full flex flex-col items-center">
+      <SearchInput onSearch={handleSearch} />
+      {error && <p className="text-red-700 font-bold mt-2 mb-5">{error}</p>}
+      {loading ? (
+        <div className="w-full max-w-md">
+          <Loading />
+          <SkeletonTable />
+        </div>
+      ) : (
+        <CityTable
+          cities={weatherData}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPaginate={paginate}
+        />
+      )}
+    </div>
+  );
+}
