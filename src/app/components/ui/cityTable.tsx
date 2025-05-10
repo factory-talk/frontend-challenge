@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import {
   tableContainerVariants,
   tableItemVariants,
-} from "../../lib/animations/motionConfig";
+} from "../../utils/animations/motionConfig";
 
 interface CityTableProps {
   cities: GroupWeatherData[];

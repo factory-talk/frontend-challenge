@@ -1,5 +1,5 @@
 import { animate, motion, AnimatePresence, useIsPresent, useMotionValue } from "framer-motion";
-import { transition, enteringState, exitingState } from "../../lib/animations/motionConfig";
+import { transition, enteringState, exitingState } from "../../utils/animations/motionConfig";
 import { useEffect } from "react";
 
 interface ConfirmBoxProps {

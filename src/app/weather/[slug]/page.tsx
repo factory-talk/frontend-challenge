@@ -8,9 +8,10 @@ import ConfirmPopup from "../../components/ui/confirmPopup";
 import { useRouter } from "next/navigation";
 import { useFetchDetailWeatherData } from "../../hooks/useWeatherData";
 import { motion } from "framer-motion";
-import { pageVariants, fadeInUp } from "../../lib/animations/motionConfig";
+import { pageVariants, fadeInUp } from "../../utils/animations/motionConfig";
 import { useState } from "react";
 import { useDeleteCityData } from "../../hooks/useCityData";
+import { toast } from "../../utils/toastHelper";
 
 type Props = {
   params: { slug: string };
@@ -46,10 +47,10 @@ export default function WeatherPage({ params }: Props) {
 
     try {
       await deleteCityData(weatherData.id);
+      toast.success("Successfully Deleted.");
       router.push(`/`);
-    } catch (error) {
-      console.error("Delete failed:", error);
-      console.error(deleteError);
+    } catch {
+      toast.success(`Delete failed: ${deleteError}`);
     }
   };
 
