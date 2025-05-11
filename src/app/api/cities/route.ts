@@ -28,18 +28,6 @@ export async function POST(request: NextRequest) {
   return NextResponse.json({ message: 'City added', city: newCity });
 }
 
-export async function PUT(request: NextRequest) {
-  const updatedCity = await request.json();
-  let cities = await getCities();
-
-  cities = cities.map((city: any) =>
-    city.id === updatedCity.id ? { ...city, ...updatedCity } : city
-  );
-
-  await saveCities(cities);
-  return NextResponse.json({ message: 'City updated', city: updatedCity });
-}
-
 export async function DELETE(request: NextRequest) {
   const { id } = await request.json();
   let cities = await getCities();

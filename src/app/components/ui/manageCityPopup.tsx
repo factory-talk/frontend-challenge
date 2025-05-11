@@ -2,11 +2,14 @@ import { useState, useEffect, useRef } from "react";
 import rawCities from "../../data/city.list.json";
 import { manualFetchDetailWeatherData } from "../../hooks/useWeatherData";
 import { CityResponse } from "../../types/city";
+import { motion, AnimatePresence } from "framer-motion";
+import { initialCityPopup, exitCityPopup, animateCityPopup, transitionCityPopup } from "../../utils/animations/motionConfig";
 
 interface AddPopupProps {
   showAddPopup: boolean;
   onClose: () => void;
   onConfirm: (cityValue: CityResponse) => void;
+  deafultCity?: string;
 }
 
 const citySet = new Set(rawCities.map((city) => city.name.toLowerCase()));
@@ -15,6 +18,7 @@ export default function AddPopup({
   showAddPopup,
   onClose,
   onConfirm,
+  deafultCity,
 }: AddPopupProps) {
   const [inputValue, setInputValue] = useState("");
   const [cityValue, setCityValue] = useState({} as CityResponse);
@@ -34,6 +38,7 @@ export default function AddPopup({
   };
 
   useEffect(() => {
+    if (deafultCity) setInputValue(deafultCity);
     if (showAddPopup) {
       document.addEventListener("mousedown", handleClickCloseAdd);
     } else {
@@ -96,81 +101,85 @@ export default function AddPopup({
       errorMessage = "This city is already added.";
     } else if (!existsInWeather) {
       errorMessage = "City not found in weather data.";
-      
-}
-
-setValidationError(errorMessage);
+    }
+    setValidationError(errorMessage);
   };
-
-  if (!showAddPopup) return null;
-
+  
   return (
-    <div
-      ref={popupAddRef}
-      className="fixed top-5 right-5 w-60 p-4 bg-white border border-gray-300 rounded-lg shadow-lg z-50"
-    >
-      {validationError && (
-        <span className="text-sm text-red-500">{validationError}</span>
-      )}
-      <div className="flex justify-between items-center">
-        <input
-          type="text"
-          value={inputValue}
-          onChange={handleInputChange}
-          className="w-full p-2 border border-gray-300 rounded-md"
-          placeholder="Enter city name"
-        />
-        <button
-          onClick={handleValidate}
-          className={`p-2 rounded-md ${
-            isValid ? "bg-green-500" : "bg-danger"
-          } text-white`}
+    <AnimatePresence>
+      {showAddPopup && (
+        <motion.div
+          ref={popupAddRef}
+          className="w-60 p-4 bg-white border border-gray-300 rounded-lg shadow-lg z-50"
+          initial={initialCityPopup}
+          animate={animateCityPopup}
+          exit={exitCityPopup}
+          transition={transitionCityPopup}
         >
-          {isValid ? (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M5 13l4 4L19 7"
-              />
-            </svg>
-          ) : (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
+          {validationError && (
+            <span className="text-sm text-red-500">{validationError}</span>
           )}
-        </button>
-      </div>
+          <div className="flex justify-between items-center">
+            <input
+              type="text"
+              value={inputValue}
+              onChange={handleInputChange}
+              className="w-full p-2 border border-gray-300 rounded-md rounded-tr-none rounded-br-none"
+              placeholder="Enter city name"
+            />
+            <button
+              onClick={handleValidate}
+              className={`p-2 rounded-md rounded-tl-none rounded-bl-none ${
+                isValid ? "bg-green-500" : "bg-danger"
+              } text-white`}
+            >
+              {isValid ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              )}
+            </button>
+          </div>
 
-      <div className="flex justify-center mt-4">
-        <button
-          onClick={handleConfirm}
-          className={`px-4 py-2 rounded-md text-white ${
-            isValid ? "bg-blue-500" : "bg-gray-300 cursor-not-allowed"
-          }`}
-          disabled={!isValid}
-        >
-          Confirm
-        </button>
-      </div>
-    </div>
+          <div className="flex justify-center mt-4">
+            <button
+              onClick={handleConfirm}
+              className={`w-full px-4 py-2 rounded-md text-white ${
+                isValid ? "bg-blue-500" : "bg-gray-300 cursor-not-allowed"
+              }`}
+              disabled={!isValid}
+            >
+              Confirm
+            </button>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }

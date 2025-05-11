@@ -12,6 +12,9 @@ import { pageVariants, fadeInUp } from "../../utils/animations/motionConfig";
 import { useState } from "react";
 import { useDeleteCityData } from "../../hooks/useCityData";
 import { toast } from "../../utils/toastHelper";
+import ManageCityPopup from "../../components/ui/manageCityPopup";
+import { CityResponse } from "../../types/city";
+import { useUpdateCityData } from "../../hooks/useCityData";
 
 type Props = {
   params: { slug: string };
@@ -19,6 +22,8 @@ type Props = {
 
 export default function WeatherPage({ params }: Props) {
   const [showConfirmPopup, setShowConfirmPopup] = useState({ visible: false, width: 0, height: 0 });
+  const [showUpdatePopup, setShowUpdatePopup] = useState(false);
+  const { updateCityData, loading: updating, error: updateError } = useUpdateCityData();
 
   const { slug } = params;
   const { weatherData, loading, error } = useFetchDetailWeatherData(slug);
@@ -58,10 +63,27 @@ export default function WeatherPage({ params }: Props) {
     setShowConfirmPopup({ visible: false, width: 0, height: 0 });
   };
 
-  const handleEditClick = () => {
-    console.log("edit logic here.");
+  const handleOpenUpdatePopup = () => {
+    setShowUpdatePopup(true);
   };
   
+  const handleSubmitUpdatePopup = async (cityValue: CityResponse) => {
+    try {
+      if (!weatherData?.id) return;
+
+      await updateCityData(weatherData.id, cityValue);
+      toast.success("Successfully Updated City.");
+      router.push(`/`);
+    } catch {
+      toast.success(`Update failed: ${updateError}`);
+    }
+    setShowUpdatePopup(false);
+  };
+
+  const handleCloseUpdatePopup = () => {
+    setShowUpdatePopup(false);
+  };
+
   return (
     <>
       {deleting && <Loading />}
@@ -193,7 +215,7 @@ export default function WeatherPage({ params }: Props) {
               <button
                 type="button"
                 className="flex h-12 w-12 items-center justify-center rounded-full bg-white/80 p-0 hover:bg-primary-light transition-all"
-                onClick={handleEditClick}
+                onClick={handleOpenUpdatePopup}
               >
                 <svg
                   width="20"
@@ -236,6 +258,21 @@ export default function WeatherPage({ params }: Props) {
             </motion.div>
           </motion.div>
         )}
+
+        <div className="w-full flex items-center justify-center mb-5 relative">
+          <div className="relative">
+            <div className="fixed top-0 mt-2 left-1/2 transform -translate-x-1/2 w-[240px] bg-white shadow-lg">
+              <div className="absolute top-10">
+                <ManageCityPopup
+                  showAddPopup={showUpdatePopup}
+                  onClose={handleCloseUpdatePopup}
+                  onConfirm={handleSubmitUpdatePopup}
+                  deafultCity={weatherData?.name}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
       </motion.main>
     </>
   );

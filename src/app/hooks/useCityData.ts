@@ -50,10 +50,10 @@ export function useUpdateCityData() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const updateCityData = async (city: CityPayload) => {
+  const updateCityData = async (oldId: number, newCity: CityPayload) => {
     setLoading(true);
     try {
-      await updateCity(city);
+      await updateCity(oldId, newCity);
       setError(null);
     } catch (err) {
       setError((err as Error).message);

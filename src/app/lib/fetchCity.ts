@@ -23,13 +23,13 @@ export const addCity = async (city: CityPayload): Promise<ApiResponse> => {
   return data;
 };
 
-export const updateCity = async (city: CityPayload): Promise<ApiResponse> => {
-  const res = await fetch("/api/cities", {
+export const updateCity = async (oldId: number, newCity: CityPayload): Promise<ApiResponse> => {
+  const res = await fetch(`/api/cities/${oldId}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(city),
+    body: JSON.stringify(newCity),
   });
 
   if (!res.ok) throw new Error(`Failed to update data: ${res.statusText}`);

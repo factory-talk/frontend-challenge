@@ -6,7 +6,7 @@ import CityTable from "../ui/cityTable";
 import Loading from "../ui/loading";
 import SkeletonTable from "../ui/skeletonTable";
 import AppHeader from "../ui/appHeader";
-import AddCityPopup from "../ui/addCityPopup";
+import ManageCityPopup from "../ui/manageCityPopup";
 import rawCities from "../../data/city.list.json";
 import { useRouter } from "next/navigation";
 import { CityResponse } from "../../types/city";
@@ -34,7 +34,7 @@ export default function IndexPage() {
     setCurrentPage(pageNumber);
   };
 
-  const { addCityData, loading: deleting, error: deleteError } = useAddCityData();
+  const { addCityData, loading: adding, error: addError } = useAddCityData();
 
   const router = useRouter();
 
@@ -46,27 +46,27 @@ export default function IndexPage() {
     paginate(1, query);
   };
 
-  const handleAdd = () => {
+  const handleOpenAddPopup = () => {
     setShowAddPopup(true);
   };
 
-  const handleAddConfirm = async (cityValue: CityResponse) => {
+  const handleSubmitAddPopup = async (cityValue: CityResponse) => {
     try {
       await addCityData(cityValue);
       toast.success("Successfully Added City.");
     } catch {
-      toast.success(`Add failed: ${deleteError}`);
+      toast.success(`Add failed: ${addError}`);
     }
     setShowAddPopup(false);
   };
 
-  const handleClosePopup = () => {
+  const handleCloseAddPopup = () => {
     setShowAddPopup(false);
   };
 
   return (
     <div className="w-full max-w-md mx-auto">
-      <AppHeader onClickAdd={handleAdd} />
+      <AppHeader onClickAdd={handleOpenAddPopup} />
       <SearchInput onSearch={handleSearch} />
       {error && <p className="text-red-700 font-bold mt-2 mb-5">{error}</p>}
       {loading ? (
@@ -83,12 +83,19 @@ export default function IndexPage() {
           handleClick={clickCity}
         />
       )}
-
-      <AddCityPopup
-        showAddPopup={showAddPopup}
-        onClose={handleClosePopup}
-        onConfirm={handleAddConfirm}
-      />
+      <div className="w-full max-w-md flex items-center justify-end mb-5 relative">
+        <div className="relative">
+          <div className="fixed max-w-md top-0 mt-2 bg-white shadow-lg">
+            <div className="absolute top-5 right-0">
+              <ManageCityPopup
+                showAddPopup={showAddPopup}
+                onClose={handleCloseAddPopup}
+                onConfirm={handleSubmitAddPopup}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

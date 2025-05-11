@@ -79,3 +79,30 @@ export const exitingState = {
   scaleX: 0.4,
   y: 100,
 };
+
+//Add/Edit City Popup
+export const initialCityPopup = {
+  opacity: 0, 
+  scale: 0.8, 
+  x: 0, 
+  y: 0 
+}
+
+export const animateCityPopup = { 
+  opacity: 1, 
+  scale: 1, 
+  x: 0, 
+  y: 0 
+}
+
+export const exitCityPopup = { 
+  opacity: 0, 
+  scale: 0.8, 
+  x: 0, 
+  y: 0 
+}
+
+export const transitionCityPopup = { 
+  duration: 0.25, 
+  ease: "easeInOut" 
+}
