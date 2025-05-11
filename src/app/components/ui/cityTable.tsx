@@ -24,15 +24,17 @@ export default function CityTable({
   const formatLocalTime = (timezoneOffsetInSeconds: number): string => {
     const nowUTC = new Date();
     const localTime = new Date(
-      nowUTC.getTime() + timezoneOffsetInSeconds * 1000
+      nowUTC.getTime() + (timezoneOffsetInSeconds - 7 * 60 * 60) * 1000
     );
+
     return localTime.toLocaleString("en-US", {
-      timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      timeZone: "Asia/Bangkok",
       hour: "2-digit",
       minute: "2-digit",
       hour12: true,
     });
   };
+
 
   return (
     <>
