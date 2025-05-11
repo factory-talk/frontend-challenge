@@ -57,7 +57,7 @@ const config: Config = {
         },
       },
       fontFamily: {
-        nunito: ["Nunito", "sans-serif"],
+        playwrite: ["PlaywriteDeGrund", "sans-serif"],
       },
       spacing: {
         4.5: "18px",
