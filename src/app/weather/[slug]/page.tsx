@@ -7,6 +7,7 @@ import Loading from "../../components/ui/loading";
 import ConfirmPopup from "../../components/ui/confirmPopup";
 import { useRouter } from "next/navigation";
 import { useFetchDetailWeatherData } from "../../hooks/useWeatherData";
+import { useFetchForecastData } from "../../hooks/useForecastData";
 import { motion } from "framer-motion";
 import { pageVariants, fadeInUp } from "../../utils/animations/motionConfig";
 import { useState } from "react";
@@ -26,7 +27,8 @@ export default function WeatherPage({ params }: Props) {
   const { updateCityData, loading: updating, error: updateError } = useUpdateCityData();
 
   const { slug } = params;
-  const { weatherData, loading, error } = useFetchDetailWeatherData(slug);
+  const { weatherData, loading: loadingDetail, error: errorDetail } = useFetchDetailWeatherData(slug);
+  const { forecastData, loading: loadingForecast, error: errorForecast } = useFetchForecastData(slug);;
   const { deleteCityData, loading: deleting, error: deleteError } = useDeleteCityData();
 
   const decodedSlug = decodeURIComponent(slug);
@@ -64,6 +66,7 @@ export default function WeatherPage({ params }: Props) {
   };
 
   const handleOpenUpdatePopup = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
     setShowUpdatePopup(true);
   };
   
@@ -102,13 +105,15 @@ export default function WeatherPage({ params }: Props) {
         variants={pageVariants}
       >
         <TopNavigator onClickBack={handleBack} />
-        {loading ? (
+        {loadingDetail || loadingForecast ? (
           <div className="w-full max-w-xs">
             <Loading />
             <SkeletionDetail />
           </div>
-        ) : error ? (
-          <ErrorBox Title={decodedSlug} Detail={error} />
+        ) : errorDetail ? (
+          <ErrorBox Title={decodedSlug} Detail={errorDetail} />
+        ) : errorForecast ? (
+          <ErrorBox Title={decodedSlug} Detail={errorForecast} />
         ) : (
           <motion.div
             className="flex flex-col items-center justify-center"
@@ -127,7 +132,7 @@ export default function WeatherPage({ params }: Props) {
               custom={1}
               variants={fadeInUp}
             >
-              {weatherData && (weatherData.main.temp - 273.15).toFixed(1)}°C
+              {weatherData && (weatherData.main.temp - 273.15).toFixed(2)}°
             </motion.h2>
 
             <motion.div className="mb-4" custom={2} variants={fadeInUp}>
@@ -142,7 +147,7 @@ export default function WeatherPage({ params }: Props) {
             </motion.div>
 
             <motion.div
-              className="w-full max-w-xl overflow-x-auto rounded-lg"
+              className="w-full max-w-xs overflow-x-auto rounded-lg"
               custom={3}
               variants={fadeInUp}
             >
@@ -156,20 +161,30 @@ export default function WeatherPage({ params }: Props) {
                 <tbody>
                   <tr className="border-t">
                     <td className="px-4 py-2">Average Temperature</td>
-                    <td className="px-4 py-2">{weatherData?.main.temp} K</td>
+                    <td className="px-4 py-2">
+                      {((weatherData?.main.temp ?? 273.15) - 273.15).toFixed(2)}{" "}
+                      °
+                    </td>
                   </tr>
                   <tr className="bg-gray-50 border-t">
                     <td className="px-4 py-2">Min Temperature</td>
                     <td className="px-4 py-2">
-                      {weatherData?.main.temp_min} K
+                      {(
+                        (weatherData?.main.temp_min ?? 273.15) - 273.15
+                      ).toFixed(2)}{" "}
+                      °
                     </td>
                   </tr>
                   <tr className="border-t">
                     <td className="px-4 py-2">Max Temperature</td>
                     <td className="px-4 py-2">
-                      {weatherData?.main.temp_max} K
+                      {(
+                        (weatherData?.main.temp_max ?? 273.15) - 273.15
+                      ).toFixed(2)}{" "}
+                      °
                     </td>
                   </tr>
+
                   <tr className="bg-gray-50 border-t">
                     <td className="px-4 py-2">Weather</td>
                     <td className="px-4 py-2">
@@ -207,6 +222,102 @@ export default function WeatherPage({ params }: Props) {
                 </tbody>
               </table>
             </motion.div>
+
+            <motion.div
+              className="w-full max-w-xs mt-8"
+              custom={5}
+              variants={fadeInUp}
+            >
+              <h2 className="text-white text-xl font-semibold mb-4 text-center">
+                Next 24 Hour Forecast.
+                <br />
+                <span className="text-gray-300 text-lg font-normal">
+                  (3-hour intervals)
+                </span>
+              </h2>
+
+              {forecastData && forecastData.list?.length > 0 && (
+                <div className="overflow-x-auto rounded-lg">
+                  <table className="min-w-max table-auto border-collapse border border-gray-700 bg-gray-800 shadow-md rounded">
+                    <thead className="bg-gray-700 text-gray-300">
+                      <tr>
+                        {forecastData.list
+                          .slice(0, 6)
+                          .map((item: any, index: number) => (
+                            <th
+                              key={index}
+                              className="px-4 py-2 text-center whitespace-nowrap"
+                            >
+                              {new Date(item.dt * 1000).toLocaleString(
+                                undefined,
+                                {
+                                  hour: "2-digit",
+                                  day: "2-digit",
+                                  month: "short",
+                                }
+                              )}
+                            </th>
+                          ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr className="border-t border-gray-700">
+                        {forecastData.list
+                          .slice(0, 6)
+                          .map((item: any, index: number) => (
+                            <td
+                              key={index}
+                              className="px-4 py-2 text-center text-white"
+                            >
+                              {item.main.temp.toFixed(2)}°
+                            </td>
+                          ))}
+                      </tr>
+                      <tr className="border-t border-gray-700">
+                        {forecastData.list
+                          .slice(0, 6)
+                          .map((item: any, index: number) => (
+                            <td
+                              key={index}
+                              className="px-4 py-2 text-center text-white capitalize"
+                            >
+                              {item.weather[0].main}
+                            </td>
+                          ))}
+                      </tr>
+                      <tr className="border-t border-gray-700">
+                        {forecastData.list
+                          .slice(0, 6)
+                          .map((item: any, index: number) => (
+                            <td
+                              key={index}
+                              className="px-4 py-2 text-center text-gray-300 capitalize"
+                            >
+                              {item.weather[0].description}
+                            </td>
+                          ))}
+                      </tr>
+                      <tr className="border-t border-gray-700">
+                        {forecastData.list
+                          .slice(0, 6)
+                          .map((item: any, index: number) => (
+                            <td key={index} className="px-4 py-2 text-center">
+                              <Image
+                                src={`https://openweathermap.org/img/wn/${item.weather[0].icon}@2x.png`}
+                                alt="icon"
+                                width={50}
+                                height={50}
+                                className="mx-auto"
+                              />
+                            </td>
+                          ))}
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </motion.div>
+
             <motion.div
               className="flex justify-between p-5 w-full"
               custom={4}

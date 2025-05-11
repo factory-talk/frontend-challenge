@@ -25,47 +25,56 @@ export default function ConfirmBox({
     <>
       <AnimatePresence>
         {showConfirmPopup.visible && (
-          <div className="overlay-root" onClick={close}>
-            <GradientOverlay
-              size={{
-                width: showConfirmPopup.width,
-                height: showConfirmPopup.height,
-              }}
-            />
-            <motion.div
-              className="overlay-content bg-danger/60"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={transition}
-            >
-              <motion.div
-                className="modal-content"
-                onClick={(e) => e.stopPropagation()}
-                initial={exitingState}
-                animate={enteringState}
-                exit={exitingState}
-                transition={transition}
-                style={{
-                  transformPerspective: 1000,
-                  originX: 0.5,
-                  originY: 0,
+          <div
+            className={`fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-50 flex items-center justify-center z-50 ${
+              showConfirmPopup.visible ? "block" : "hidden"
+            }`}
+          >
+            <div className="overlay-root" onClick={close}>
+              <GradientOverlay
+                size={{
+                  width: showConfirmPopup.width,
+                  height: showConfirmPopup.height,
                 }}
+              />
+              <motion.div
+                className="overlay-content bg-danger/60"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={transition}
               >
-                <header>
-                  <h2 className="text-2xl text-white">{title}</h2>
-                  <p className="big">{message}</p>
-                </header>
-                <div className="controls">
-                  <button onClick={onConfirm} className="delete">
-                    {confirmText}
-                  </button>
-                  <button onClick={onCancel} className="cancel text-white font-bold">
-                    {cancelText}
-                  </button>
-                </div>
+                <motion.div
+                  className="modal-content"
+                  onClick={(e) => e.stopPropagation()}
+                  initial={exitingState}
+                  animate={enteringState}
+                  exit={exitingState}
+                  transition={transition}
+                  style={{
+                    transformPerspective: 1000,
+                    originX: 0.5,
+                    originY: 0,
+                  }}
+                >
+                  <header>
+                    <h2 className="text-2xl text-white">{title}</h2>
+                    <p className="big">{message}</p>
+                  </header>
+                  <div className="controls">
+                    <button onClick={onConfirm} className="delete">
+                      {confirmText}
+                    </button>
+                    <button
+                      onClick={onCancel}
+                      className="cancel text-white font-bold"
+                    >
+                      {cancelText}
+                    </button>
+                  </div>
+                </motion.div>
               </motion.div>
-            </motion.div>
+            </div>
           </div>
         )}
       </AnimatePresence>
