@@ -2,10 +2,9 @@ import Image from "next/image";
 import { GroupWeatherData } from "../../types/weather";
 import { motion } from "framer-motion";
 import {
-  pageVariants,
   tableContainerVariants,
   tableItemVariants,
-} from "../../lib/animations/motionConfig";
+} from "../../utils/animations/motionConfig";
 
 interface CityTableProps {
   cities: GroupWeatherData[];
@@ -37,7 +36,7 @@ export default function CityTable({
 
   return (
     <>
-      <div className="w-full shadow-sm dark:bg-gray-800 dark:border-gray-700 max-w-md mx-auto">
+      <div className="w-full shadow-sm dark:bg-gray-800 dark:border-gray-700">
         <div className="flow-root">
           <motion.ul
             className="divide-y divide-gray-200 dark:divide-gray-700"
@@ -82,7 +81,7 @@ export default function CityTable({
           className={`p-2 rounded-full shadow flex items-center justify-center ${
             currentPage === 1
               ? "bg-gray-300 cursor-not-allowed opacity-50"
-              : "bg-white/70"
+              : "bg-white/70 hover:bg-primary-light"
           }`}
           onClick={() => onPaginate(currentPage - 1)}
           disabled={currentPage === 1}
@@ -109,7 +108,7 @@ export default function CityTable({
           className={`p-2 rounded-full shadow flex items-center justify-center ${
             currentPage === totalPages
               ? "bg-gray-300 cursor-not-allowed opacity-50"
-              : "bg-white/70"
+              : "bg-white/70 hover:bg-primary-light"
           }`}
           onClick={() => onPaginate(currentPage + 1)}
           disabled={currentPage === totalPages}

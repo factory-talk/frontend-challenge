@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { GroupWeatherData, City, WeatherResponse } from "../types/weather";
+import { GroupWeatherData, WeatherResponse } from "../types/weather";
+import { CityResponse } from "../types/city";
 import { fetchGroupedWeather, fetchDetailWeather } from "../lib/fetchWeather";
 
 export function useFetchGroupedWeatherData(
-  cities: City[],
+  cities: CityResponse[],
   currentPage: number,
   itemsPerPage: number,
   searchQuery: string
@@ -70,4 +71,24 @@ export function useFetchDetailWeatherData(
   }, [cityName]);
 
   return { weatherData, loading, error };
+}
+
+export function manualFetchDetailWeatherData() {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchWeather = async (cityName: string) => {
+    setLoading(true);
+    try {
+      const data = await fetchDetailWeather(cityName);
+      setError(null);
+      return data;
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { loading, error, fetchWeather };
 }
