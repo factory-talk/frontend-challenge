@@ -5,9 +5,6 @@ interface AppHeaderProps {
 export default function AppHeader({ onClickAdd }: AppHeaderProps) {
   return (
     <div className="w-full flex items-center justify-between mb-5 relative">
-      <header className="font-playwrite absolute left-1/2 transform -translate-x-1/2 text-white text-2xl font-semibold tracking-wide drop-shadow-md">
-        Weather List
-      </header>
       <div className="flex justify-end ml-auto">
         <button
           type="button"
