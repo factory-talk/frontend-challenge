@@ -12,14 +12,15 @@ import { useRouter } from "next/navigation";
 import { CityResponse } from "../../types/city";
 import { useFetchGroupedWeatherData } from "../../hooks/useWeatherData";
 import { useAddCityData } from "../../hooks/useCityData";
-import { toast } from "../../utils/toastHelper";
+import { toast } from "../../utils/toast/toastHelper";
+import { TABLE_ITEM_PER_PAGE } from "../../utils/config";
 
 export default function IndexPage() {
   const cities: CityResponse[] = rawCities as CityResponse[];
   const [currentPage, setCurrentPage] = useState(1);
   const [currentSearch, setCurrentSearch] = useState("");
   const [showAddPopup, setShowAddPopup] = useState(false);
-  const [itemsPerPage] = useState(10);
+  const [itemsPerPage] = useState(TABLE_ITEM_PER_PAGE);
 
   const { weatherData, loading, error, totalPages } =
     useFetchGroupedWeatherData(

@@ -1,7 +1,8 @@
 import { showToast } from "nextjs-toast-notify";
+import { TOAST_DURATION } from "../config";
 
 const toastConfig = {
-  duration: 3000,
+  duration: TOAST_DURATION,
   progress: true,
   position: "top-right",
   transition: "fadeIn",

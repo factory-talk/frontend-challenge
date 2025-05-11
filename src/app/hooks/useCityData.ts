@@ -86,7 +86,7 @@ export function useDeleteCityData() {
 
 export function useSearchCityData() {
   const searchCityData = async (q: string) => {
-    return await searchCity(q); // <-- Return the data here
+    return await searchCity(q);
   };
 
   return { searchCityData };

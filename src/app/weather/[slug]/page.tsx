@@ -12,7 +12,7 @@ import { motion } from "framer-motion";
 import { pageVariants, fadeInUp } from "../../utils/animations/motionConfig";
 import { useState } from "react";
 import { useDeleteCityData } from "../../hooks/useCityData";
-import { toast } from "../../utils/toastHelper";
+import { toast } from "../../utils/toast/toastHelper";
 import ManageCityPopup from "../../components/ui/manageCityPopup";
 import { CityResponse } from "../../types/city";
 import { useUpdateCityData } from "../../hooks/useCityData";

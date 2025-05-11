@@ -1,5 +1,7 @@
+import { TABLE_ITEM_PER_PAGE } from "../../utils/config";
+
 export default function SkeletonTable() {
-  const skeletonArray = Array.from({ length: 10 });
+  const skeletonArray = Array.from({ length: TABLE_ITEM_PER_PAGE });
 
   return skeletonArray.map((_, index) => (
     <li key={index} className="list-none p-2 mb-2 bg-white/10 rounded-lg">
