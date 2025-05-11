@@ -106,3 +106,30 @@ export const transitionCityPopup = {
   duration: 0.25, 
   ease: "easeInOut" 
 }
+
+// Maintenance Popup
+export const initialMaintenancePopup = {
+  opacity: 0,
+  scale: 1,
+  x: 0,
+  y: 0,
+};
+
+export const animateMaintenancePopup = {
+  opacity: 1,
+  scale: 1,
+  x: 0,
+  y: 0,
+};
+
+export const exitMaintenancePopup = {
+  opacity: 0,
+  scale: 1,
+  x: 0,
+  y: 0,
+};
+
+export const transitionMaintenancePopup = {
+  duration: 0.5,
+  ease: "easeInOut",
+};
