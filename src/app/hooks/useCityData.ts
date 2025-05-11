@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { CityResponse, CityPayload } from "../types/city";
-import { fetchCity, addCity, updateCity, deleteCity } from "../lib/fetchCity";
+import { fetchCity, addCity, updateCity, deleteCity, searchCity } from "../lib/fetchCity";
 
 export function useFetchCityData() {
   const [cities, setCities] = useState<CityResponse | null>(null);
@@ -82,4 +82,12 @@ export function useDeleteCityData() {
   };
 
   return { deleteCityData, loading, error };
+}
+
+export function useSearchCityData() {
+  const searchCityData = async (q: string) => {
+    return await searchCity(q); // <-- Return the data here
+  };
+
+  return { searchCityData };
 }

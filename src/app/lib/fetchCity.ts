@@ -52,3 +52,12 @@ export const deleteCity = async (cityId: number): Promise<ApiResponse> => {
   const data: ApiResponse = await res.json();
   return data;
 };
+
+export const searchCity = async (q: string): Promise<CityResponse[]> => {
+  const res = await fetch(`/api/cities/search?q=${q}`);
+
+  if (!res.ok) throw new Error(`Failed to add data: ${res.statusText}`);
+
+  const data: CityResponse[] = await res.json();
+  return data;
+};
