@@ -25,31 +25,17 @@ export default function MaintenancePopup() {
   if (isMobile) return null;
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        top: "0",
-        left: "0",
-        right: "0",
-        bottom: "0",
-        backgroundColor: "rgba(0,0,0,0.5)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        zIndex: 9999,
-      }}
-    >
-      <div
-        style={{
-          backgroundColor: "#fff",
-          padding: "20px",
-          borderRadius: "8px",
-          textAlign: "center",
-          boxShadow: "0px 4px 6px rgba(0,0,0,0.1)",
-        }}
-      >
-        <h2 style={{ color: "#333" }}>Under Development</h2>
-        <p style={{ color: "#777" }}>
+    <div className="fixed inset-0 bg-black/80 flex justify-center items-center z-[9999]">
+      <div className="p-6 rounded-lg text-center shadow-md max-w-md mx-auto">
+        <img
+          src="/maintenance.png"
+          alt="Under Development"
+          className="w-100 h-100 mx-auto"
+        />
+        <h2 className="text-2xl text-white font-semibold mb-2">
+          Under Development
+        </h2>
+        <p className="text-md text-gray-400">
           This page is currently only functional on mobile devices. Please visit
           from your mobile.
         </p>
