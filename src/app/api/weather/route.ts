@@ -6,8 +6,8 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
   const q = searchParams.get('q') ?? ''
 console.log('heeeeeapi');
-  const appid = process.env.NEXT_PUBLIC_APP_ID || "43a236a5cc90fceafcc1e89dfefbb8fa"
-  const limit = process.env.NEXT_PUBLIC_LIMIT ?? '5'
+  const appid = process.env.APP_ID 
+  const limit = process.env.LIMIT
 
   try {
     const res = await axios.get('https://api.openweathermap.org/geo/1.0/direct', {
