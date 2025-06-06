@@ -1,7 +1,7 @@
 # Features
 ## Index Page
-[]- Search Box: Allows users to search for cities by name or ZIP code
-[]   - Provides a suggestion list as the user types.
+[x]- Search Box: Allows users to search for cities by name or ZIP code
+[x]   - Provides a suggestion list as the user types.
 []- City List: Display a list of cities selected by the user alont with the current time and average temperature.
 []    - User can manage the list by adding or removing cities.
 

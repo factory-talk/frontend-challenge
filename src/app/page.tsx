@@ -1,10 +1,10 @@
 'use client'
 
-import { Input } from '@/components/components/ui/input'
 import { SearchIcon } from 'lucide-react'
 import { useEffect, useState, useRef } from 'react'
 import useFetch from './hook/useFetch'
 import type { GeocodingResponse } from './type'
+import { Combobox } from '@/components/components/ui/custom/combobox' // update path accordingly
 
 export default function Home() {
   const [searchText, setSearchText] = useState('')
@@ -12,7 +12,7 @@ export default function Home() {
   const { data: weatherData, loading, error, refetchWithParams } =
     useFetch<GeocodingResponse>('/api/weather',{q:" "})
 
-  // Debounce input and trigger API only when valid
+  // Debounce and fetch only when input is valid and changed
   useEffect(() => {
     const timeout = setTimeout(() => {
       const trimmed = searchText.trim()
@@ -23,35 +23,31 @@ export default function Home() {
         lastFetchedText.current = trimmed
         refetchWithParams({ q: trimmed })
       }
-    }, 500) // ⏳ adjust delay as needed
+    }, 500)
 
     return () => clearTimeout(timeout)
   }, [searchText, refetchWithParams])
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="flex items-center w-full max-w-sm space-x-2 rounded-lg border border-gray-300 bg-gray-50 dark:bg-gray-900 px-3.5 py-2">
-        <SearchIcon className="h-4 w-4" />
-        <Input
-          type="search"
-          placeholder="Search"
-          className="w-full border-0 h-8 font-semibold"
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-        />
-      </div>
+      <div className="flex flex-col gap-4 w-full max-w-sm">
+        <div className="flex items-center space-x-2 rounded-lg border border-gray-300 bg-gray-50 dark:bg-gray-900 px-3.5 py-2">
+          <SearchIcon className="h-4 w-4" />
+          <Combobox onSearchChange={setSearchText} />
+        </div>
 
-      {loading && <p className="mt-4">Loading...</p>}
-      {error && <p className="mt-4 text-red-500">Error fetching data.</p>}
-      {weatherData && weatherData.length > 0 && (
-        <ul className="mt-6 space-y-2 text-left text-sm">
-          {weatherData.map((item, idx) => (
-            <li key={idx}>
-              📍 <strong>{item.name}</strong>, {item.country} — lat: {item.lat}, lon: {item.lon}
-            </li>
-          ))}
-        </ul>
-      )}
+        {loading && <p className="text-sm text-muted">Loading...</p>}
+        {error && <p className="text-sm text-red-500">Error fetching data.</p>}
+        {weatherData && weatherData.length > 0 && (
+          <ul className="space-y-2 text-left text-sm mt-4">
+            {weatherData.map((item, idx) => (
+              <li key={idx}>
+                📍 <strong>{item.name}</strong>, {item.country} — lat: {item.lat}, lon: {item.lon}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </main>
   )
 }
