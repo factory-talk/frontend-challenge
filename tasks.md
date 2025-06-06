@@ -6,7 +6,7 @@
 []    - User can manage the list by adding or removing cities.
 
 ## Search Page
-[]- Auto-Suggestions: When typing in the search box, display a list of suggested cities based on the input.
+[x]- Auto-Suggestions: When typing in the search box, display a list of suggested cities based on the input.
 []- City Selection: Allows user to select a city from the suggestion list to add to their index.
 
 ## Detail Page

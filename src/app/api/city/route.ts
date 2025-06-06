@@ -1,4 +1,4 @@
-// src/app/api/weather/route.ts
+// src/app/api/city/route.ts
 import { NextResponse } from 'next/server'
 import axios from 'axios'
 
@@ -8,9 +8,9 @@ export async function GET(req: Request) {
 console.log('heeeeeapi');
   const appid = process.env.APP_ID 
   const limit = process.env.LIMIT
-
+const url = process.env.API_CITY_URL || ""
   try {
-    const res = await axios.get('https://api.openweathermap.org/geo/1.0/direct', {
+    const res = await axios.get(url, {
       params: {
         q,
         appid,
@@ -20,7 +20,7 @@ console.log('heeeeeapi');
 
     return NextResponse.json(res.data)
   } catch (err) {
-    console.error('OpenWeatherMap error:', err)
-    return NextResponse.json({ error: 'Failed to fetch weather data' }, { status: 500 })
+    console.error('OpenCityMap error:', err)
+    return NextResponse.json({ error: 'Failed to fetch city data' }, { status: 500 })
   }
 }
