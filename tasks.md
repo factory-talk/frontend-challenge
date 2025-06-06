@@ -2,12 +2,12 @@
 ## Index Page
 [x]- Search Box: Allows users to search for cities by name or ZIP code
 [x]   - Provides a suggestion list as the user types.
-[]- City List: Display a list of cities selected by the user alont with the current time and average temperature.
-[]    - User can manage the list by adding or removing cities.
+[x]- City List: Display a list of cities selected by the user alont with the current time and average temperature.
+[x]    - User can manage the list by adding or removing cities.
 
 ## Search Page
 [x]- Auto-Suggestions: When typing in the search box, display a list of suggested cities based on the input.
-[]- City Selection: Allows user to select a city from the suggestion list to add to their index.
+[x]- City Selection: Allows user to select a city from the suggestion list to add to their index.
 
 ## Detail Page
 [] - City Weather Details: Display detailed weather information for the selected city, including:

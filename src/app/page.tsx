@@ -9,7 +9,7 @@ import { CityCard } from './(home)/components/CityCard'
 
 export default function Home() {
   const [searchText, setSearchText] = useState('')
-  const [selectedCity, setSelectedCity] = useState<GeocodingLocation | null>(null)
+   const [selectedCities, setSelectedCities] = useState<GeocodingLocation[]>([])
   const lastFetchedText = useRef('')
   const isZipCode = /^\d+$/.test(searchText.trim()) // check if numeric
 
@@ -36,26 +36,51 @@ export default function Home() {
     return () => clearTimeout(timeout)
   }, [searchText, refetchWithParams])
 
+  const handleAddCity = (city: GeocodingLocation) => {
+    const exists = selectedCities.some(
+      (c) => c.name === city.name && c.lat === city.lat && c.lon === city.lon
+    )
+    if (!exists) {
+      setSelectedCities((prev) => [...prev, city])
+    }else{
+      window.alert('City already added')
+    }
+  }
+
+  const handleRemoveCity = (city: GeocodingLocation) => {
+    setSelectedCities((prev) =>
+      prev.filter((c) => !(c.name === city.name && c.lat === city.lat && c.lon === city.lon))
+    )
+  }
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="flex flex-col gap-4 w-full max-w-sm">
         <div className="flex items-center space-x-2 rounded-lg border border-gray-300 bg-gray-50 dark:bg-gray-900 px-3.5 py-2">
           <SearchIcon className="h-4 w-4" />
-
-
-<Combobox<GeocodingLocation>
-  onSearchChange={setSearchText}
-  onSelectOption={(item) => setSelectedCity(item)}
-  options={weatherData ?? []}
-  getLabel={(item) => `${item.name}, ${item.country}`}
-  getKey={(item) => `${item.name}-${item.lat}-${item.lon}`}
-/>
-
-
-          
+          <Combobox<GeocodingLocation>
+            onSearchChange={setSearchText}
+            onSelectOption={handleAddCity}
+            options={weatherData ?? []}
+            getLabel={(item) => `${item.name}, ${item.country}`}
+            getKey={(item) => `${item.name}-${item.lat}-${item.lon}`}
+          />
         </div>
+      </div>
 
-        {/* {loading && <p className="text-sm text-muted">Loading...</p>}
+      <div className="mt-6 w-full max-w-sm space-y-4">
+        {selectedCities.map((city, idx) => (
+          <CityCard key={`${city.name}-${idx}`} item={city} onDelete={() => handleRemoveCity(city)} />
+        ))}
+      </div>
+    </main>
+  )
+}
+
+
+
+
+ {/* {loading && <p className="text-sm text-muted">Loading...</p>}
         {error && <p className="text-sm text-red-500">Error fetching data.</p>}
         {weatherData && weatherData.length > 0 && (
           <ul className="space-y-2 text-left text-sm mt-4">
@@ -71,9 +96,3 @@ export default function Home() {
             ))}
           </ul>
         )} */}
-      </div>
-
-      <CityCard  item={selectedCity}/>
-    </main>
-  )
-}
