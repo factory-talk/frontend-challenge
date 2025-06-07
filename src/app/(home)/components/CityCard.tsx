@@ -10,12 +10,16 @@ type City = {
 const CityCard = ({
   item,
   onDelete,
+  onClickCity,
 }: {
   item: City
   onDelete?: () => void
+  onClickCity?: () => void
 }) => {
   return (
-    <div className="relative p-4 border rounded-lg shadow bg-white dark:bg-gray-800">
+    <div className="relative p-4 border rounded-lg shadow bg-white dark:bg-gray-800"
+    onClick={onClickCity}
+    >
       <button
         onClick={onDelete}
         className="absolute top-1 right-1 text-gray-400 hover:text-red-500"

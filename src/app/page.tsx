@@ -6,8 +6,10 @@ import useFetch from './hook/useFetch'
 import type { GeocodingLocation, GeocodingResponse } from './type'
 import { Combobox } from '@/components/components/ui/custom/combobox'
 import { CityCard } from './(home)/components/CityCard'
+import { useRouter } from 'next/navigation'
 
 export default function Home() {
+  const router = useRouter()
   const [searchText, setSearchText] = useState('')
    const [selectedCities, setSelectedCities] = useState<GeocodingLocation[]>([])
   const lastFetchedText = useRef('')
@@ -53,6 +55,11 @@ export default function Home() {
     )
   }
 
+  const handleClickCity = (city: GeocodingLocation) => {
+    router.push(`/weather/${city.name}`)
+    console.log(city.name)
+  }
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="flex flex-col gap-4 w-full max-w-sm">
@@ -70,7 +77,12 @@ export default function Home() {
 
       <div className="mt-6 w-full max-w-sm space-y-4">
         {selectedCities.map((city, idx) => (
-          <CityCard key={`${city.name}-${idx}`} item={city} onDelete={() => handleRemoveCity(city)} />
+          <CityCard 
+          key={`${city.name}-${idx}`} 
+          item={city} 
+          onDelete={() => handleRemoveCity(city)} 
+          onClickCity={() => handleClickCity(city)}
+          />
         ))}
       </div>
     </main>
