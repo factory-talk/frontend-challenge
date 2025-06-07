@@ -26,3 +26,7 @@
 []- Temperature Unit Configuration: Allow users to select their preferred temperature unit (Kelvin, Fahrenheit, Celsius).
 [x]- Responsive Design: Ensure the application is responsive and works well on various device sizes.
 []- Current Date and Time: Display the current date and time for each city in the list.
+
+
+![alt text](<Screenshot 2568-06-07 at 17.07.39.png>) ![alt text](<Screenshot 2568-06-07 at 17.08.53.png>) ![alt text](<Screenshot 2568-06-07 at 17.10.41.png>)
+
