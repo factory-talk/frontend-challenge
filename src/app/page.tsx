@@ -1,14 +1,11 @@
 "use client";
 
-import { Loader, SearchIcon } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 import useFetch from "./hook/useFetch";
 import type { GeocodingLocation, GeocodingResponse } from "./type";
 import { Combobox } from "@/components/components/ui/custom/combobox";
-import { ComboboxDemo } from "@/components/components/ui/custom/comboboxDemo";
 import { CityCard } from "./(home)/components/CityCard";
 import { useRouter } from "next/navigation";
-import { Backdrop } from "@/components/components/ui/backdrop";
 
 export default function Home() {
   const router = useRouter();
@@ -21,7 +18,6 @@ export default function Home() {
   const weatherFetch = useFetch<GeocodingResponse>("/api/city", { q: " " });
   // #TODO find api to return array of zipcodes
   // const zipFetch = useFetch<ZipcodeResponse>('/api/zipcode', { zip: 90035 })
-
   // const activeFetch = isZipCode ? zipFetch : weatherFetch
   const activeFetch = weatherFetch;
   const { data: weatherData, loading, error, refetchWithParams } = activeFetch;
@@ -71,13 +67,6 @@ export default function Home() {
 
   return (
     <main className="min-h-screen w-full px-4 sm:px-6 md:px-8 py-8 bg-gradient-to-br from-muted to-background flex flex-col items-center">
-      {/* <Backdrop open={open} onClose={handleOpen} variant="blur">
-        <div className="animate-pulse">
-          <Loader className="h-12 w-12 animate-spin text-primary" />
-        </div>
-      </Backdrop> */}
-      {/* <h1 className="text-3xl font-bold bg-blue-200 p-4">Tailwind is working</h1> */}
-
       <div
         className=" w-full max-w-xs sm:max-w-sm md:max-w-md space-y-4 border-2 border-primary rounded-lg hover:border-accent"
         onClick={handleOpen}
@@ -107,26 +96,7 @@ export default function Home() {
           />
         ))}
       </div>
-      {/* <ComboboxDemo/> */}
     </main>
   );
 }
 
-{
-  /* {loading && <p className="text-sm text-muted">Loading...</p>}
-        {error && <p className="text-sm text-red-500">Error fetching data.</p>}
-        {weatherData && weatherData.length > 0 && (
-          <ul className="space-y-2 text-left text-sm mt-4">
-            {weatherData.map((item, idx) => (
-              <li
-              onClick={()=>{
-                setCityName(item.name)
-                console.log(item.name)}}
-              key={idx}>
-              
-                📍 <strong>{item.name}</strong>, {item.country} — lat: {item.lat}, lon: {item.lon}
-              </li>
-            ))}
-          </ul>
-        )} */
-}

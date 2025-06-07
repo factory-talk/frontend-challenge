@@ -1,11 +1,9 @@
 // src/app/api/city/route.ts
 import { NextResponse } from 'next/server'
 import axios from 'axios'
-
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
   const zip = searchParams.get('zip') ?? ''
-console.log('heeeeeapi_zip');
   const appid = process.env.APP_ID 
   const limit = process.env.LIMIT
 const url = process.env.API_ZIP_URL || ""

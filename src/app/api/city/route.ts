@@ -5,7 +5,6 @@ import axios from 'axios'
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
   const q = searchParams.get('q') ?? ''
-console.log('heeeeeapi');
   const appid = process.env.APP_ID 
   const limit = process.env.LIMIT
 const url = process.env.API_CITY_URL || ""
