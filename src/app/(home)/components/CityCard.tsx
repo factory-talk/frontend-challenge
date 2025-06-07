@@ -1,37 +1,46 @@
-import { X } from 'lucide-react'
+import { X } from "lucide-react";
 
 type City = {
-  name: string
-  lat: number
-  lon: number
-  country: string
-}
+  name: string;
+  lat: number;
+  lon: number;
+  country: string;
+};
 
 const CityCard = ({
   item,
   onDelete,
   onClickCity,
 }: {
-  item: City
-  onDelete?: () => void
-  onClickCity?: () => void
+  item: City;
+  onDelete?: () => void;
+  onClickCity?: () => void;
 }) => {
   return (
-    <div className="relative p-4 border rounded-lg shadow bg-white dark:bg-gray-800"
-    onClick={onClickCity}
-    >
-      <button
-        onClick={onDelete}
-        className="absolute top-1 right-1 text-gray-400 hover:text-red-500"
-        title="Remove"
-      >
-        <X size={16} />
-      </button>
-      <p>📍 <strong>{item.name}</strong>, {item.country}</p>
-      <p>🌐 Latitude: {item.lat}</p>
-      <p>🌐 Longitude: {item.lon}</p>
-    </div>
-  )
-}
+   <div
+  onClick={onClickCity}
+  className="relative cursor-pointer p-4 rounded-xl bg-card border shadow transition hover:shadow-lg hover:ring-1 hover:ring-primary/20"
+>
+  <button
+    onClick={(e) => {
+      e.stopPropagation()
+      onDelete?.()
+    }}
+    className="absolute top-2 right-2 text-muted-foreground hover:text-destructive transition"
+    title="Remove"
+  >
+    <X size={16} />
+  </button>
+  <div className="space-y-1 text-sm text-muted-foreground">
+    <p className="text-base text-foreground font-semibold">
+      📍 {item?.name}, {item?.country}
+    </p>
+    <p>🌐 Latitude: {item?.lat}</p>
+    <p>🌐 Longitude: {item?.lon}</p>
+  </div>
+</div>
 
-export { CityCard }
+  );
+};
+
+export { CityCard };

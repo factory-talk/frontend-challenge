@@ -24,5 +24,5 @@
 
 ## Additional Features
 []- Temperature Unit Configuration: Allow users to select their preferred temperature unit (Kelvin, Fahrenheit, Celsius).
-[]- Responsive Design: Ensure the application is responsive and works well on various device sizes.
+[x]- Responsive Design: Ensure the application is responsive and works well on various device sizes.
 []- Current Date and Time: Display the current date and time for each city in the list.

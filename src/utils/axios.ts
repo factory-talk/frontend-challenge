@@ -11,7 +11,7 @@ axiosInstance.interceptors.request.use(
     config.params = {
       ...config.params,
       appid: process.env.NEXT_PUBLIC_APP_ID  ,
-      limit: process.env.NEXT_PUBLIC_LIMIT || 5,
+      limit: process.env.NEXT_PUBLIC_LIMIT || 10,
     }
 
     config.headers['appid'] =  process.env.NEXT_PUBLIC_APP_ID  
