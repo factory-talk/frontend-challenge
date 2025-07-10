@@ -1,5 +1,5 @@
 declare namespace NodeJS {
   interface ProcessEnv {
-    WEATHER_API_KEY: string;
+    NEXT_PUBLIC_WEATHER_API_KEY: string;
   }
 }
