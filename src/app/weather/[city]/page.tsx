@@ -81,25 +81,62 @@ export default function WeatherDetail({ params }: { params: { city: string } }) 
 
     }, [params.city]);
 
-    // const localTime = moment
-    //     .unix(Math.floor(Date.now() / 1000) + timezoneOffset)
-    //     .utc()
-    //     .format("dddd, MMMM Do YYYY, HH:mm");
+    const localTime = moment
+        .unix(Math.floor(Date.now() / 1000) + timezone)
+        .utc()
+        .format("dddd, Do MMMM YYYY , HH:mm");
 
     return (
         <div className="bg-white p-6 rounded shadow">
-            {/* <h1 className="text-2xl font-bold mb-2">{weather.name}</h1>
-            <p> Temp: {weather.main.temp}°C</p>
-            <p> Humidity: {weather.main.humidity}%</p>
-            <p> {weather.weather[0].description}</p>
-            <img
-                src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
-                alt="icon"
-            />
 
+            <div className="flex flex-col leading-[0.5]">
+                <h1 className="text-2xl font-bold mb-2">&#128205; {weathers?.name}, {weathers?.sys?.country} ({weathers?.weather[0]?.main})</h1>
+                <h2>{localTime}</h2>
+            </div>
 
-            <h2 className="text-xl font-semibold mb-2">24-Hour Forecast</h2>
-            */}
+            <div className="flex items-center gap-3">
+                <div className="flex flex-col justify-start leading-[0.5]">
+                    <h2 className="text-2xl font-bold mt-5 mb-2">&#127777; {weathers?.main?.temp}°C</h2>
+                    <span>{weathers?.weather[0]?.description}</span>
+                </div>
+                <img src={`https://openweathermap.org/img/wn/${weathers?.weather[0]?.icon}@2x.png`} alt="icon" />
+            </div>
+
+            <div className="flex">
+                <h2 className="text-2xl font-bold mt-5 mb-2">Current Detail :</h2>
+            </div>
+
+            <div className="grid 2xl:grid-cols-6 xl:grid-col-3 md:grid-cols-2 grid-cols-1 gap-3">
+                <div className="bg-white rounded shadow-xl p-3 h-[150px] flex flex-col items-center justify-center border-t-8">
+                    <span className="font-bold">&#8595; {weathers?.main?.temp_min}°</span>
+                    <span>Min Temperature</span>
+                </div>
+                <div className="bg-white rounded shadow-xl p-3 h-[150px] flex flex-col items-center justify-center border-t-8">
+                    <span className="font-bold">&#8593; {weathers?.main?.temp_max}°</span>
+                    <span>Max Temperature</span>
+                </div>
+                <div className="bbg-white rounded shadow-xl p-3 h-[150px] flex flex-col items-center justify-center border-t-8">
+                        <span className="font-bold">&#128167; {weathers?.main?.humidity}%</span>
+                        <span>Humidity</span>
+                </div>
+                <div className="bbg-white rounded shadow-xl p-3 h-[150px] flex flex-col items-center justify-center border-t-8">
+                        <span className="font-bold">&#9202; {weathers?.main?.pressure}hPa</span>
+                        <span>Pressure</span>
+                </div>
+                <div className="bbg-white rounded shadow-xl p-3 h-[150px] flex flex-col items-center justify-center border-t-8">
+                    <div className="flex flex-col">
+                        <span className="font-bold">&#127811; {weathers?.wind?.speed}m/s</span>
+                        <span>Wind Speed</span>
+                    </div>
+                </div>
+                <div className="bbg-white rounded shadow-xl p-3 h-[150px] flex flex-col items-center justify-center border-t-8">
+                    <div className="flex flex-col">
+                        <span className="font-bold">&#9748; {weathers?.rain?.["1h"]}mm</span>
+                        <span>Rain Volume</span>
+                    </div>
+                </div>
+            </div>
+
 
         </div>
     );
