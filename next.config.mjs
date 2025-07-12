@@ -3,7 +3,9 @@ const nextConfig = {
     env: {
         NEXT_PUBLIC_FORECAST_URL: process.env.NEXT_PUBLIC_FORECAST_URL,
         NEXT_PUBLIC_LACATION_URL: process.env.NEXT_PUBLIC_LACATION_URL,
-        NEXT_PUBLIC_WEATHER_URL: process.env.NEXT_PUBLIC_WEATHER_URL
+        NEXT_PUBLIC_WEATHER_URL: process.env.NEXT_PUBLIC_WEATHER_URL,
+        NEXT_PUBLIC_APPID: process.env.NEXT_PUBLIC_APPID,
+        NEXT_PUBLIC_KEY: process.env.NEXT_PUBLIC_KEY
     },
     images: {
         remotePatterns: [
