@@ -2,6 +2,8 @@
 import axios from "axios";
 import moment from "moment";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import Forecast from "src/components/Forecast";
 
 type WeatherModel = {
     name: string;
@@ -45,9 +47,11 @@ export default function WeatherDetail({ params }: { params: { city: string } }) 
     const [weathers, setWeather] = useState<WeatherModel | null>(null);
     const [forecasts, setForecast] = useState<ForecastModel[]>([]);
     const [timezone, setTimezone] = useState<number>(0);
+    const router = useRouter();
 
     useEffect(() => {
         console.log("params.city:", params.city); // ตรวจว่าเปลี่ยนไหม
+
         const initWeather = async () => {
             try {
                 const weatherRespon = await axios.get("https://api.openweathermap.org/data/2.5/weather", {
@@ -74,6 +78,7 @@ export default function WeatherDetail({ params }: { params: { city: string } }) 
             }
             catch (err) {
                 console.log("init weather failed.", err)
+                router.push("/")
             }
 
         }
@@ -106,30 +111,30 @@ export default function WeatherDetail({ params }: { params: { city: string } }) 
                 <h2 className="text-2xl font-bold mt-5 mb-2">Current Detail :</h2>
             </div>
 
-            <div className="grid 2xl:grid-cols-6 xl:grid-col-3 md:grid-cols-2 grid-cols-1 gap-3">
-                <div className="bg-white rounded shadow-xl p-3 h-[150px] flex flex-col items-center justify-center border-t-8">
+            <div className="weather-content">
+                <div className="weather-item">
                     <span className="font-bold">&#8595; {weathers?.main?.temp_min}°</span>
                     <span>Min Temperature</span>
                 </div>
-                <div className="bg-white rounded shadow-xl p-3 h-[150px] flex flex-col items-center justify-center border-t-8">
+                <div className="weather-item">
                     <span className="font-bold">&#8593; {weathers?.main?.temp_max}°</span>
                     <span>Max Temperature</span>
                 </div>
-                <div className="bbg-white rounded shadow-xl p-3 h-[150px] flex flex-col items-center justify-center border-t-8">
+                <div className="weather-item">
                         <span className="font-bold">&#128167; {weathers?.main?.humidity}%</span>
                         <span>Humidity</span>
                 </div>
-                <div className="bbg-white rounded shadow-xl p-3 h-[150px] flex flex-col items-center justify-center border-t-8">
+                <div className="weather-item">
                         <span className="font-bold">&#9202; {weathers?.main?.pressure}hPa</span>
                         <span>Pressure</span>
                 </div>
-                <div className="bbg-white rounded shadow-xl p-3 h-[150px] flex flex-col items-center justify-center border-t-8">
+                <div className="weather-item">
                     <div className="flex flex-col">
                         <span className="font-bold">&#127811; {weathers?.wind?.speed}m/s</span>
                         <span>Wind Speed</span>
                     </div>
                 </div>
-                <div className="bbg-white rounded shadow-xl p-3 h-[150px] flex flex-col items-center justify-center border-t-8">
+                <div className="weather-item">
                     <div className="flex flex-col">
                         <span className="font-bold">&#9748; {weathers?.rain?.["1h"]}mm</span>
                         <span>Rain Volume</span>
@@ -137,6 +142,11 @@ export default function WeatherDetail({ params }: { params: { city: string } }) 
                 </div>
             </div>
 
+            <div className="flex">
+                <h2 className="text-2xl font-bold mt-5 mb-2">24-Hour Forecast :</h2>
+            </div>
+
+            <Forecast forecastList={forecasts} timezoneOffset={timezone} />
 
         </div>
     );
