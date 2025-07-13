@@ -1,10 +1,9 @@
-import { useValueStore } from "@/lib/store";
+import { ForecastData } from "@/interface/response/forecast-resp";
 import { convertTimeHour } from "@/util/convert-date";
 import Image from "next/image";
 
 
-const HourlyForecast = () => {
-    const forecastData = useValueStore((state) => state.forecastData)
+const HourlyForecast = ({ forecastData }: { forecastData: ForecastData[] }) => {
 
     return (
         <div className="rounded-lg pt-6 w-full max-w-2xl">

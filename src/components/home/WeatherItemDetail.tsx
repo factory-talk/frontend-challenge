@@ -1,30 +1,35 @@
 import { Wind, Droplets, Gauge, CloudRain, Archive } from 'lucide-react';
-import { WeatherResp } from '@/interface/response/weather-resp';
 import HourlyForecast from './HourlyForcast';
 import Image from 'next/image';
 import { convertDatetimeFormat } from '@/util/convert-date';
 import { useValueStore } from '@/lib/store';
+import UnitsGroup from '@/components/tools/UnitsGroup';
+import { WeatherDetail } from '@/interface/weather-detail';
 
-export const WeatherDetail = ({ weather }: {
-    weather: WeatherResp
+export const WeatherItemDetail = ({ weatherDetail }: {
+    weatherDetail: WeatherDetail
 }) => {
-    const resetWeather = useValueStore((state) => state.resetWeather)
-    const resetForecast = useValueStore((state) => state.resetForecast)
 
-    const handleRemove = () => {
-        resetWeather()
-        resetForecast()
+    const { weather, forecast, id } = weatherDetail
+    const deleteWeatherDetails = useValueStore((state) => state.deleteWeatherDetails)
+
+    const handleRemove = (value: string) => {
+        deleteWeatherDetails(value)
     }
 
     return (
         <div className='flex justify-center flex-col items-center'>
             <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-2xl">
                 <div className="mb-5">
+                    <div className='flex float-end items-center gap-3'>
+                        {/* <UnitsGroup /> */}
+                        <Archive onClick={() => handleRemove(id)} className='text-gray-500 hover:text-red-400 cursor-pointer' />
+                    </div>
                     <div className="flex items-center justify-between max-w-2xl w-full">
                         <h2 className="text-2xl font-bold text-gray-800 capitalize">
                             {weather.display_place}, {weather.sys.country}
                         </h2>
-                        <Archive onClick={handleRemove} className='text-gray-500 hover:text-red-400 cursor-pointer' />
+
                     </div>
                     <p className="text-gray-600">{convertDatetimeFormat(weather.dt)}</p>
                 </div>
@@ -73,7 +78,7 @@ export const WeatherDetail = ({ weather }: {
                     </div>
                 </div>
 
-                <HourlyForecast />
+                <HourlyForecast forecastData={forecast} />
             </div>
         </div>
     )
