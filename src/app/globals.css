@@ -2,32 +2,31 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
-
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+@layer components {
+
+    .search-cities {
+        @apply block w-[80%] xl:w-[70%] 2xl:w-[60%] rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6
+    }
+
+    .weather-content {
+        @apply grid 2xl:grid-cols-6 xl:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mb-2
+    }
+    
+    .weather-item {
+        @apply bg-white rounded shadow-xl p-3 h-[150px] flex flex-col items-center justify-center border-t-8
+    }
+     
+    .forecast-box {
+        @apply bg-white rounded shadow-md p-3 h-[300px] flex flex-col items-center justify-center border-t-8
+    }
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+
 }
