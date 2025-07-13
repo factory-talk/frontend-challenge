@@ -52,5 +52,7 @@ export type WeatherResp = {
     id: number
     name: string
     cod: number
+
+    // addon type
     display_place: string
 }
