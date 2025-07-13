@@ -7,14 +7,16 @@ import { getLocations } from '@/hooks/get-location';
 import { useValueStore } from '@/lib/store';
 import { getWeather } from '@/hooks/get-weather';
 import { getForecast } from '@/hooks/get-forecast';
+import { WeatherDetail } from '@/interface/weather-detail';
+import { SearchOptionData } from '@/interface/search-option';
 
 function SearchBox() {
     const searchText = useValueStore((state) => state.searchText)
     const setSearchText = useValueStore((state) => state.setSearchText)
 
-    const setWeatherData = useValueStore((state) => state.setWeatherData)
-    const setForecastData = useValueStore((state) => state.setForecastData)
-    const [options, setOptions] = useState<AutoCompleteProps['options']>([]);
+    const setWeatherDetails = useValueStore((state) => state.setWeatherDetails)
+
+    const [options, setOptions] = useState<AutoCompleteProps['options']>([])
 
     const handleSearch = useCallback(
         debounce((value: string) => {
@@ -25,12 +27,18 @@ function SearchBox() {
 
     const handleFetch = async () => {
         const data = await getLocations({ dedupe: '1', limit: '20', q: searchText })
-        const address = data ? data.map(({ display_name, lat, lon, display_place }) => ({ value: display_name, lat, lon, display_place })) : []
+        const address = data ? data.map(({ display_name, lat, lon, display_place, place_id }) => ({
+            value: display_name,
+            lat,
+            lon,
+            display_place,
+            id: place_id
+        })) as SearchOptionData[] : []
         setOptions(address)
     }
 
     const onSelect = async (value: string) => {
-        const selected = options?.find(opt => opt.value === value);
+        const selected = options?.find(opt => opt.value === value) as SearchOptionData
         if (selected) {
             const weather = await getWeather({
                 lat: selected.lat,
@@ -44,12 +52,17 @@ function SearchBox() {
                 units: 'metric',
                 cnt: '24'
             })
+            const newData: WeatherDetail = {
+                id: selected.id,
+                weather: {
+                    ...weather,
+                    display_place: selected.display_place
+                },
+                forecast
+            }
 
-            setWeatherData({ ...weather, display_place: selected.display_place })
-            setForecastData(forecast)
+            setWeatherDetails(newData)
         }
-        setSearchText(value)
-
     };
 
     useEffect(() => {
