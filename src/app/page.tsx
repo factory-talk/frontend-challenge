@@ -1,9 +1,12 @@
-import { WeatherDetailList } from "@/components/home/WeatherDetailList";
+
+import CityList from "@/components/home/city/CityList";
 
 
 export default function Home() {
 
   return (
-    <WeatherDetailList />
+    <>
+      <CityList />
+    </>
   );
 }
