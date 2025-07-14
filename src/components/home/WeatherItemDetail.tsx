@@ -1,29 +1,27 @@
-import { Wind, Droplets, Gauge, CloudRain, Archive } from 'lucide-react';
+'use client'
+import { Wind, Droplets, Gauge, CloudRain } from 'lucide-react';
 import HourlyForecast from './HourlyForcast';
 import Image from 'next/image';
 import { convertDatetimeFormat } from '@/util/convert-date';
-import { useValueStore } from '@/lib/store';
-import UnitsGroup from '@/components/tools/UnitsGroup';
 import { WeatherDetail } from '@/interface/weather-detail';
+import { ArrowLeftOutlined } from "@ant-design/icons";
+import { Button } from 'antd';
+import { useRouter } from 'next/navigation';
+
 
 export const WeatherItemDetail = ({ weatherDetail }: {
     weatherDetail: WeatherDetail
 }) => {
+    const router = useRouter()
 
-    const { weather, forecast, id } = weatherDetail
-    const deleteWeatherDetails = useValueStore((state) => state.deleteWeatherDetails)
-
-    const handleRemove = (value: string) => {
-        deleteWeatherDetails(value)
-    }
+    const { weather, forecast } = weatherDetail
 
     return (
         <div className='flex justify-center flex-col items-center'>
             <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-2xl">
                 <div className="mb-5">
-                    <div className='flex float-end items-center gap-3'>
-                        {/* <UnitsGroup /> */}
-                        <Archive onClick={() => handleRemove(id)} className='text-gray-500 hover:text-red-400 cursor-pointer' />
+                    <div className='flex float-start items-center gap-3 py-3'>
+                        <Button type="primary" size='large' shape="circle" icon={<ArrowLeftOutlined />} onClick={() => router.push('/')} />
                     </div>
                     <div className="flex items-center justify-between max-w-2xl w-full">
                         <h2 className="text-2xl font-bold text-gray-800 capitalize">
