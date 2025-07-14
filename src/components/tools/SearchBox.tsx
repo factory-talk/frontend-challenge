@@ -7,14 +7,12 @@ import { getLocations } from '@/hooks/get-location';
 import { useValueStore } from '@/lib/store';
 import { getWeather } from '@/hooks/get-weather';
 import { getForecast } from '@/hooks/get-forecast';
-import { WeatherDetail } from '@/interface/weather-detail';
 import { SearchOptionData } from '@/interface/search-option';
 
 function SearchBox() {
-    const searchText = useValueStore((state) => state.searchText)
-    const setSearchText = useValueStore((state) => state.setSearchText)
+    const [searchText, setSearchText] = useState('')
 
-    const setWeatherDetails = useValueStore((state) => state.setWeatherDetails)
+    const setCityList = useValueStore((state) => state.setCityList)
 
     const [options, setOptions] = useState<AutoCompleteProps['options']>([])
 
@@ -27,41 +25,42 @@ function SearchBox() {
 
     const handleFetch = async () => {
         const data = await getLocations({ dedupe: '1', limit: '20', q: searchText })
-        const address = data ? data.map(({ display_name, lat, lon, display_place, place_id }) => ({
-            value: display_name,
-            lat,
-            lon,
-            display_place,
-            id: place_id
+        const address = data ? data.map((item) => ({
+            ...item,
+            value: item.display_name,
+            id: item.place_id,
         })) as SearchOptionData[] : []
         setOptions(address)
     }
 
     const onSelect = async (value: string) => {
-        const selected = options?.find(opt => opt.value === value) as SearchOptionData
-        if (selected) {
-            const weather = await getWeather({
-                lat: selected.lat,
-                lon: selected.lon,
-                units: 'metric'
-            })
+        const location = options?.find(opt => opt.value === value) as SearchOptionData
+        if (location) {
 
-            const forecast = await getForecast({
-                lat: selected.lat,
-                lon: selected.lon,
-                units: 'metric',
-                cnt: '24'
-            })
-            const newData: WeatherDetail = {
-                id: selected.id,
-                weather: {
-                    ...weather,
-                    display_place: selected.display_place
-                },
+            const [weather, forecast] = await Promise.all([
+                getWeather({
+                    lat: location.lat,
+                    lon: location.lon,
+                    units: 'metric'
+                }),
+                getForecast({
+                    lat: location.lat,
+                    lon: location.lon,
+                    units: 'metric',
+                    cnt: '24'
+                })
+            ])
+
+            setCityList({
+                id: location.place_id,
+                lat: location.lat,
+                lon: location.lon,
+                display_name: location.display_name,
+                display_place: location.display_place,
+                country_code: location.address.country_code,
+                weather,
                 forecast
-            }
-
-            setWeatherDetails(newData)
+            })
         }
     };
 
