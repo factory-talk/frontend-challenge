@@ -1,5 +1,5 @@
 'use client'
-import { AutoComplete, AutoCompleteProps } from 'antd'
+import { AutoComplete, AutoCompleteProps, Spin } from 'antd'
 import React, { useCallback, useEffect, useState } from 'react'
 import { SearchOutlined } from "@ant-design/icons";
 import { debounce } from 'lodash';
@@ -8,11 +8,17 @@ import { useValueStore } from '@/lib/store';
 import { getWeather } from '@/hooks/get-weather';
 import { getForecast } from '@/hooks/get-forecast';
 import { SearchOptionData } from '@/interface/search-option';
+import { usePathname, useRouter } from 'next/navigation';
 
 function SearchBox() {
-    const [searchText, setSearchText] = useState('')
+    const pathname = usePathname()
+    const router = useRouter()
 
+    const [searchText, setSearchText] = useState('')
     const setCityList = useValueStore((state) => state.setCityList)
+    const units = useValueStore((state) => state.units)
+    const [loading, setLoading] = useState(false)
+
 
     const [options, setOptions] = useState<AutoCompleteProps['options']>([])
 
@@ -24,6 +30,7 @@ function SearchBox() {
     );
 
     const handleFetch = async () => {
+        setLoading(true)
         const data = await getLocations({ dedupe: '1', limit: '20', q: searchText })
         const address = data ? data.map((item) => ({
             ...item,
@@ -31,6 +38,7 @@ function SearchBox() {
             id: item.place_id,
         })) as SearchOptionData[] : []
         setOptions(address)
+        setLoading(false)
     }
 
     const onSelect = async (value: string) => {
@@ -41,12 +49,12 @@ function SearchBox() {
                 getWeather({
                     lat: location.lat,
                     lon: location.lon,
-                    units: 'metric'
+                    units: units
                 }),
                 getForecast({
                     lat: location.lat,
                     lon: location.lon,
-                    units: 'metric',
+                    units: units,
                     cnt: '24'
                 })
             ])
@@ -62,12 +70,15 @@ function SearchBox() {
                 forecast
             })
         }
+        if (pathname.startsWith('/detail/')) {
+            router.push('/')
+        }
     };
 
     useEffect(() => {
         if (searchText.length < 2) return
         handleFetch()
-    }, [searchText])
+    }, [searchText, units])
 
     return (
         <AutoComplete
@@ -78,6 +89,7 @@ function SearchBox() {
             options={options}
             placeholder="Search Location"
             size='large'
+            notFoundContent={loading ? <Spin size="small" /> : 'No results'}
         />
     )
 }
