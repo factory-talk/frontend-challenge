@@ -2,17 +2,20 @@
 import { Wind, Droplets, Gauge, CloudRain } from 'lucide-react';
 import HourlyForecast from './HourlyForcast';
 import Image from 'next/image';
-import { convertDatetimeFormat } from '@/util/convert-date';
+import { convertDatetimeFormat, convertLocalTime } from '@/util/convert-date';
 import { WeatherDetail } from '@/interface/weather-detail';
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { Button } from 'antd';
 import { useRouter } from 'next/navigation';
+import { convertUnits } from '@/util/convert-unit';
+import { useValueStore } from '@/lib/store';
 
 
 export const WeatherItemDetail = ({ weatherDetail }: {
     weatherDetail: WeatherDetail
 }) => {
     const router = useRouter()
+    const units = useValueStore((state) => state.units)
 
     const { weather, forecast } = weatherDetail
 
@@ -23,7 +26,7 @@ export const WeatherItemDetail = ({ weatherDetail }: {
                     <div className='flex float-start items-center gap-3 py-3'>
                         <Button type="primary" size='large' shape="circle" icon={<ArrowLeftOutlined />} onClick={() => router.push('/')} />
                     </div>
-                    <div className="flex items-center justify-between max-w-2xl w-full">
+                    <div className="flex items-center max-w-2xl w-full">
                         <h2 className="text-2xl font-bold text-gray-800 capitalize">
                             {weather.display_place}, {weather.sys.country}
                         </h2>
@@ -32,7 +35,11 @@ export const WeatherItemDetail = ({ weatherDetail }: {
                     <p className="text-gray-600">{convertDatetimeFormat(weather.dt)}</p>
                 </div>
 
-                <div className="flex items-center justify-center mb-6">
+                <div className="flex items-center justify-center mb-6 flex-col">
+                    <div className="flex flex-col items-center justify-center text-center">
+                        <span className="font-bold">Local of City Time:</span>
+                        <span>{convertLocalTime(weather.dt, weather.timezone)}</span>
+                    </div>
                     <Image
                         alt='forecast-icon'
                         width={100}
@@ -40,10 +47,10 @@ export const WeatherItemDetail = ({ weatherDetail }: {
                         src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@4x.png`}
                     />
                     <div className="ml-4 text-center">
-                        <div className="text-4xl font-bold text-gray-800">{weather.main.temp}°C</div>
+                        <div className="text-4xl font-bold text-gray-800">{weather.main.temp}{convertUnits(units)}</div>
                         <div className="text-lg text-gray-600 capitalize">{weather.weather[0].description}</div>
                         <div className="text-sm text-gray-500">
-                            H: {weather.main.temp_max}°C L: {weather.main.temp_min}°C
+                            H: {weather.main.temp_max}{convertUnits(units)} L: {weather.main.temp_min}{convertUnits(units)}
                         </div>
                     </div>
                 </div>
