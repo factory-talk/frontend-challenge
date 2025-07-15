@@ -2,6 +2,7 @@ import { ForecastData } from "@/interface/response/forecast-resp";
 import { useValueStore } from "@/lib/store";
 import { convertTimeHour } from "@/util/convert-date";
 import { convertUnits } from "@/util/convert-unit";
+import { getWeatherImage } from "@/util/getweather-image";
 import Image from "next/image";
 
 
@@ -22,7 +23,7 @@ const HourlyForecast = ({ forecastData }: { forecastData: ForecastData[] }) => {
                                     alt='forecast-icon'
                                     width={48}
                                     height={48}
-                                    src={`https://openweathermap.org/img/wn/${item.weather[0].icon}@2x.png`}
+                                    src={getWeatherImage(item.weather[0].icon)}
                                 />
                             </div>
                             <div className="text-sm font-semibold text-gray-800 mt-2">{item.main.temp}{convertUnits(units)}</div>

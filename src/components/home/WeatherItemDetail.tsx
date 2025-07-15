@@ -9,6 +9,7 @@ import { Button } from 'antd';
 import { useRouter } from 'next/navigation';
 import { convertUnits } from '@/util/convert-unit';
 import { useValueStore } from '@/lib/store';
+import { getWeatherImage } from '@/util/getweather-image';
 
 
 export const WeatherItemDetail = ({ weatherDetail }: {
@@ -44,7 +45,7 @@ export const WeatherItemDetail = ({ weatherDetail }: {
                         alt='forecast-icon'
                         width={100}
                         height={100}
-                        src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@4x.png`}
+                        src={getWeatherImage(weather.weather[0].icon)}
                     />
                     <div className="ml-4 text-center">
                         <div className="text-4xl font-bold text-gray-800">{weather.main.temp}{convertUnits(units)}</div>
@@ -77,7 +78,7 @@ export const WeatherItemDetail = ({ weatherDetail }: {
                     <div className="bg-gray-50 rounded-lg p-4 text-center">
                         <CloudRain className="mx-auto mb-2 text-gray-600" size={24} />
                         <div className="text-lg font-semibold text-gray-800">
-                            {weather.rain ? `${weather.rain['1h']} mm` : '0 mm'}
+                            {weather.rain ? `${weather.rain['1h']}` : '0'} mm
                         </div>
                         <div className="text-sm text-gray-600">Rain</div>
                     </div>

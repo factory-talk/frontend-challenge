@@ -8,6 +8,7 @@ import Image from 'next/image'
 import { useValueStore } from '@/lib/store'
 import { convertUnits } from '@/util/convert-unit'
 import { convertLocalTime } from '@/util/convert-date'
+import { getWeatherImage } from '@/util/getweather-image'
 
 
 function CityItem({ cityDetail }: { cityDetail: CityDetail }) {
@@ -40,7 +41,7 @@ function CityItem({ cityDetail }: { cityDetail: CityDetail }) {
                         alt="forecast-icon"
                         width={80}
                         height={80}
-                        src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@4x.png`}
+                        src={getWeatherImage(weather.weather[0].icon)}
                     />
                     <div className="text-2xl font-bold text-gray-800 mt-2">
                         {weather.main.temp}
