@@ -31,49 +31,59 @@ function SearchBox() {
 
     const handleFetch = async () => {
         setLoading(true)
-        const data = await getLocations({ dedupe: '1', limit: '20', q: searchText })
-        const address = data ? data.map((item) => ({
-            ...item,
-            value: item.display_name,
-            id: item.place_id,
-        })) as SearchOptionData[] : []
-        setOptions(address)
-        setLoading(false)
+        try {
+            const data = await getLocations({ dedupe: '1', limit: '20', q: searchText })
+            const address = data ? data.map((item) => ({
+                ...item,
+                value: item.display_name,
+                id: item.place_id,
+            })) as SearchOptionData[] : []
+            setOptions(address)
+            setLoading(false)
+        } catch (error) {
+            alert(error)
+        }
+
     }
 
     const onSelect = async (value: string) => {
         const location = options?.find(opt => opt.value === value) as SearchOptionData
         if (location) {
-
-            const [weather, forecast] = await Promise.all([
-                getWeather({
+            try {
+                const [weather, forecast] = await Promise.all([
+                    getWeather({
+                        lat: location.lat,
+                        lon: location.lon,
+                        units: units
+                    }),
+                    getForecast({
+                        lat: location.lat,
+                        lon: location.lon,
+                        units: units,
+                        cnt: '24'
+                    })
+                ])
+                setCityList({
+                    id: location.place_id,
                     lat: location.lat,
                     lon: location.lon,
-                    units: units
-                }),
-                getForecast({
-                    lat: location.lat,
-                    lon: location.lon,
-                    units: units,
-                    cnt: '24'
+                    display_name: location.display_name,
+                    display_place: location.display_place,
+                    country_code: location.address.country_code,
+                    weather,
+                    forecast
                 })
-            ])
 
-            setCityList({
-                id: location.place_id,
-                lat: location.lat,
-                lon: location.lon,
-                display_name: location.display_name,
-                display_place: location.display_place,
-                country_code: location.address.country_code,
-                weather,
-                forecast
-            })
-        }
-        if (pathname.startsWith('/detail/')) {
-            router.push('/')
-        }
-    };
+            } catch (error) {
+                alert(error)
+            }
+
+            if (pathname.startsWith('/detail/')) {
+                router.push('/')
+            }
+        };
+
+    }
 
     useEffect(() => {
         if (searchText.length < 2) return

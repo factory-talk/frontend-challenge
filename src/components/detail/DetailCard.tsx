@@ -26,22 +26,26 @@ function DetailCard() {
             return
         }
 
-        const [weather, forecast] = await Promise.all([
-            getWeather({ lat: city.lat, lon: city.lon, units }),
-            getForecast({ lat: city.lat, lon: city.lon, units, cnt: '24' }),
-        ])
+        try {
+            const [weather, forecast] = await Promise.all([
+                getWeather({ lat: city.lat, lon: city.lon, units }),
+                getForecast({ lat: city.lat, lon: city.lon, units, cnt: '24' }),
+            ])
 
-        const newData = {
-            id: params.id,
-            weather: {
-                ...weather,
-                display_place: city.display_place,
-            },
-            forecast,
-        } as WeatherDetail
+            const newData = {
+                id: params.id,
+                weather: {
+                    ...weather,
+                    display_place: city.display_place,
+                },
+                forecast,
+            } as WeatherDetail
 
-        setWeatherDetail(newData)
-        setLoading(false)
+            setWeatherDetail(newData)
+            setLoading(false)
+        } catch (error) {
+            alert(error)
+        }
     }
 
     useEffect(() => {
