@@ -23,3 +23,8 @@ export const convertDatetimeFormat = (timestamp: number) => {
 
     return formatted
 }
+
+export const convertLocalTime = (timestamp: number, timezoneOffset: number) => {
+    const formatted = dayjs((timestamp + timezoneOffset) * 1000).format('dddd, D MMMM, YYYY hh:mm A')
+    return formatted
+}
