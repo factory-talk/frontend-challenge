@@ -12,7 +12,7 @@ interface GetLocationProp {
 export const getLocations = async (query: GetLocationProp) => {
     const url = APP_CONFIG.NEXT_PUBLIC_LACATION_URL
     const params = new URLSearchParams({
-        key: APP_CONFIG.NEXT_PUBLIC_KEY || 'pk.a8e410d9b3f374d01522db250a0b3835',
+        key: APP_CONFIG.NEXT_PUBLIC_KEY || '',
         ...query
     }).toString();
 

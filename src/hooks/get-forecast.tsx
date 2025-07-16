@@ -12,7 +12,7 @@ interface GetForecastProp {
 export const getForecast = async (query: GetForecastProp) => {
     const url = APP_CONFIG.NEXT_PUBLIC_FORECAST_URL
     const params = new URLSearchParams({
-        appid: APP_CONFIG.NEXT_PUBLIC_APPID || '07318e34fb59a790b30ba1a3caa8c851',
+        appid: APP_CONFIG.NEXT_PUBLIC_APPID || '',
         ...query
     }).toString();
 
