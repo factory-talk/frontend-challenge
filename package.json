@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest"
+    "test": "jest --verbose"
   },
   "dependencies": {
     "@ant-design/nextjs-registry": "^1.0.2",

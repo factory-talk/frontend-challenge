@@ -66,35 +66,3 @@ function CityItem({ cityDetail }: { cityDetail: CityDetail }) {
 }
 
 export default CityItem
-
-
-// <div className='text-base'>
-//     <div className="flex flex-col items-center justify-center mb-6">
-//         <div className='flex flex-col justify-center items-center'>
-//             <span className='font-bold'>Local Time : </span>
-//             <span>{convertLocalTime(weather.dt, weather.timezone)}</span>
-//         </div>
-//         <div className='flex flex-col'>
-//             <div className='flex justify-center'>
-
-//                 <Image
-//                     alt='forecast-icon'
-//                     width={80}
-//                     height={80}
-//                     src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@4x.png`}
-//                 />
-//             </div>
-//             <div className="ml-4 text-center">
-//                 <div className="text-2xl font-bold text-gray-800">{weather.main.temp}{convertUnits(units)}</div>
-//             </div>
-//         </div>
-//     </div>
-//     <div>
-//         <span className='font-bold'>Lat : </span>
-//         <span>{lat}</span>
-//     </div>
-//     <div>
-//         <span className='font-bold'>Long : </span>
-//         <span>{lon}</span>
-//     </div>
-// </div>
