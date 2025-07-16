@@ -12,7 +12,7 @@ export interface ForecastData {
     dt: number
     main: MainWeather
     weather: Weather[]
-    rain: {
+    rain?: {
         "1h": number
     }
     clouds: Clouds

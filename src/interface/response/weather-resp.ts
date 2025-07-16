@@ -23,8 +23,8 @@ export interface IWind {
     gust: number
 }
 export interface ISys {
-    type: number
-    id: number
+    type?: number
+    id?: number
     country: string
     sunrise: number
     sunset: number
