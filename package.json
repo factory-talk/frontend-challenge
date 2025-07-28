@@ -7,9 +7,20 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest"
+    "lint:fix": "next lint --fix",
+    "type-check": "tsc --noEmit",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:ci": "jest --coverage --watchAll=false --ci",
+    "audit:fix": "npm audit fix",
+    "clean": "rm -rf .next node_modules/.cache",
+    "prepare": "husky install || true"
   },
   "dependencies": {
+    "@next/env": "^15.4.4",
+    "bootstrap": "^5.3.7",
+    "fs": "^0.0.1-security",
     "next": "14.2.3",
     "react": "^18",
     "react-dom": "^18"

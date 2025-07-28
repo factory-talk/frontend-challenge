@@ -1,0 +1,11 @@
+.forecastScrollContainer {
+  overflow-x: auto;
+}
+
+.cityInfoCard {
+  padding: 32px;
+}
+
+.weatherInfoCard {
+  padding: 12px;
+}
