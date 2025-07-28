@@ -93,7 +93,7 @@ const SearchResultsList: React.FC<SearchResultsListProps> = ({
             Search Results
           </h2>
           <div className="text-sm text-gray-500">
-            {results.length} result{results.length !== 1 ? 's' : ''} for "{query}"
+            {results.length} result{results.length !== 1 ? 's' : ''} for &ldquo;{query}&rdquo;
           </div>
         </div>
       </div>
@@ -197,7 +197,7 @@ const SearchResultsList: React.FC<SearchResultsListProps> = ({
             </div>
             <h3 className="text-lg font-medium text-gray-900 mb-2">No cities found</h3>
             <p className="text-gray-500">
-              No cities match your search for "{query}". Try searching with a different term or check your spelling.
+              No cities match your search for &ldquo;{query}&rdquo;. Try searching with a different term or check your spelling.
             </p>
           </div>
         )}

@@ -28,7 +28,7 @@ const CityDetailPage: React.FC<CityDetailPageProps> = ({ city: propCity }) => {
       setLoading(false);
     };
     loadCityData();
-  }, [cityId, propCity]);
+  }, [cityId, propCity, numericCityId]);
   const formatDate = (timestamp: number): string => {
     return new Date(timestamp * 1000).toLocaleString();
   };
@@ -56,7 +56,7 @@ const CityDetailPage: React.FC<CityDetailPageProps> = ({ city: propCity }) => {
               City Not Found
             </h1>
             <p className="text-gray-600 mb-6">
-              The city you're looking for doesn't exist or has been removed.
+              The city you&apos;re looking for doesn&apos;t exist or has been removed.
             </p>
             <button
               onClick={() => router.push('/')}

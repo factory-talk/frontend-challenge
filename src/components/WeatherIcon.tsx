@@ -1,5 +1,6 @@
 'use client';
 import React from 'react';
+import Image from 'next/image';
 import { useWeatherIcon } from '@/hooks/useWeatherIcon';
 interface WeatherIconProps {
   iconCode: string;
@@ -115,11 +116,12 @@ const WeatherIcon: React.FC<WeatherIconProps> = ({
   return (
     <div className={containerClass} onClick={onClick}>
       <div className={`${sizeClasses[size]} relative flex items-center justify-center`}>
-        <img
+        <Image
           src={icon.url}
           alt={alt || icon.description}
           className={`${sizeClasses[size]} object-contain drop-shadow-lg`}
-          loading="lazy"
+          width={48}
+          height={48}
           onError={(e) => {
             console.error('Failed to load weather icon:', icon.url);
             (e.target as HTMLImageElement).style.display = 'none';

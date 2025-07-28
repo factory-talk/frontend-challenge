@@ -55,7 +55,7 @@ const CityDetailPage: React.FC<CityDetailPageProps> = ({ city: propCity }) => {
       }
     };
     loadCityData();
-  }, [cityId, propCity]);
+  }, [cityId, propCity, numericCityId]);
   const loadForecastData = async (city: City) => {
     setForecastLoading(true);
     try {
@@ -129,7 +129,7 @@ const CityDetailPage: React.FC<CityDetailPageProps> = ({ city: propCity }) => {
           <div className="text-6xl mb-4">🏙️</div>
           <h1 className="text-2xl font-bold text-gray-900 mb-4">City Not Found</h1>
           <p className="text-gray-600 mb-6">
-            The city with ID "{cityId}" could not be found in our database.
+            The city with ID &ldquo;{cityId}&rdquo; could not be found in our database.
           </p>
           <button
             onClick={() => router.push('/')}
