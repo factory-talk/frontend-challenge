@@ -4,6 +4,9 @@ import { City } from '@/model/CityModel';
 // Mock fetch globally
 global.fetch = jest.fn();
 
+// Mock environment variable before importing
+process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY = 'test_api_key';
+
 const mockCity: City = {
   id: 1,
   name: 'Bangkok',
