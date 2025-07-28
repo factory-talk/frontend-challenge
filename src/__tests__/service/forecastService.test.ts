@@ -1,11 +1,11 @@
-import { ForecastService, ForecastResponse, CurrentWeatherResponse, DailyForecast } from '@/service/forecastService';
-import { City } from '@/model/CityModel';
+// Mock environment variable before any imports
+process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY = 'test_api_key';
 
-// Mock fetch globally
+// Mock fetch globally  
 global.fetch = jest.fn();
 
-// Mock environment variable before importing
-process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY = 'test_api_key';
+import { ForecastService, ForecastResponse, CurrentWeatherResponse, DailyForecast } from '@/service/forecastService';
+import { City } from '@/model/CityModel';
 
 const mockCity: City = {
   id: 1,
