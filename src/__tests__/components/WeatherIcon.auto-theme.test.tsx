@@ -324,8 +324,8 @@ describe('WeatherIcon Component - Auto Theme', () => {
       
       // Check image attributes
       expect(container).toHaveAttribute('alt', 'Test weather icon');
-      // Next.js Image component transforms src URL for optimization
-      expect(container.getAttribute('src')).toContain('01d%402x.png');
+      // Next.js Image component URL (may be transformed for optimization)
+      expect(container.getAttribute('src')).toContain('01d@2x.png');
       
       // Check description
       expect(screen.getByText('clear sky')).toBeInTheDocument();

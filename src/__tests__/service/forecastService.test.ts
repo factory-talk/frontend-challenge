@@ -177,20 +177,13 @@ const mockForecastResponse: ForecastResponse = {
   }
 };
 
-// Mock environment variable
-const originalEnv = process.env;
-
 describe('ForecastService', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    process.env = { 
-      ...originalEnv, 
-      NEXT_PUBLIC_OPENWEATHER_API_KEY: 'test_api_key' 
-    };
-  });
-
-  afterEach(() => {
-    process.env = originalEnv;
+    // Ensure API key is set for all tests
+    if (!process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY) {
+      process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY = 'test_api_key';
+    }
   });
 
   describe('getCurrentWeather', () => {
