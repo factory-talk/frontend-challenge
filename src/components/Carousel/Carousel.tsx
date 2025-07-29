@@ -29,28 +29,24 @@ const Carousel: React.FC<CarouselProps> = ({
     const updateLayout = () => {
       if (carouselRef.current && trackRef.current) {
         const containerWidth = carouselRef.current.offsetWidth;
-        const gap = 16;
-        const minItemWidth = 120;
+        const gap = window.innerWidth <= 768 ? 12 : 16;
+        const minItemWidth = window.innerWidth <= 768 ? 100 : 120;
         
-        // Calculate item width based on container constraints
         let itemWidth = (containerWidth - (gap * (itemsPerView - 1))) / itemsPerView;
         itemWidth = Math.max(itemWidth, minItemWidth);
         
-        // Ensure we don't exceed container width
         const maxItemsCanFit = Math.floor((containerWidth + gap) / (itemWidth + gap));
         const actualItemsToShow = Math.min(maxItemsCanFit, itemsPerView, totalItems);
         
         setActualItemsPerView(actualItemsToShow);
         
         if (actualItemsToShow > 0) {
-          // Recalculate to fit exactly within container
           itemWidth = (containerWidth - (gap * (actualItemsToShow - 1))) / actualItemsToShow;
         }
         
         const translateX = currentIndex * (itemWidth + gap);
         trackRef.current.style.transform = `translateX(-${translateX}px)`;
         
-        // Apply calculated width to items
         const items = trackRef.current.children;
         for (let i = 0; i < items.length; i++) {
           const item = items[i] as HTMLElement;
@@ -105,7 +101,7 @@ const Carousel: React.FC<CarouselProps> = ({
             className={`${styles.carouselArrow} ${styles.carouselArrowLeft}`}
             aria-label="Previous"
           >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <polyline points="15,18 9,12 15,6"></polyline>
             </svg>
           </button>
@@ -115,7 +111,7 @@ const Carousel: React.FC<CarouselProps> = ({
             className={`${styles.carouselArrow} ${styles.carouselArrowRight}`}
             aria-label="Next"
           >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <polyline points="9,18 15,12 9,6"></polyline>
             </svg>
           </button>

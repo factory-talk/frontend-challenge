@@ -3,7 +3,7 @@
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
-  padding: 0 60px; /* เพิ่ม padding เพื่อให้ที่ว่างสำหรับปุ่ม */
+  padding: 0 60px; 
 }
 
 .carouselContainer {
@@ -93,22 +93,73 @@
   background: #3b82f6;
 }
 
-/* Responsive adjustments */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .carousel {
+    padding: 0 40px; 
+  }
+}
+
 @media (max-width: 768px) {
   .carousel {
-    padding: 0 50px; /* ลด padding บนมือถือ */
+    padding: 0;
+  }
+  
+  .carouselTrack {
+    gap: 12px;
+  }
+  
+  .carouselItem {
+    min-width: 100px;
   }
   
   .carouselArrowLeft {
-    left: 4px;
+    left: -12px;
   }
   
   .carouselArrowRight {
-    right: 4px;
+    right: -12px;
   }
   
   .carouselArrow {
-    width: 40px;
-    height: 40px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    z-index: 20;
+    color: rgba(59, 130, 246, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .carouselArrow::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    right: -8px;
+    bottom: -8px;
+  }
+  
+  .carouselArrow:hover:not(:disabled) {
+    color: rgba(59, 130, 246, 1);
+    transform: translateY(-50%) scale(1.2);
+  }
+  
+  .carouselArrow:active {
+    transform: translateY(-50%) scale(1.0);
+    color: rgba(59, 130, 246, 0.6);
+  }
+  
+  .carouselArrow:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    color: rgba(156, 163, 175, 0.5);
   }
 }
