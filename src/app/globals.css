@@ -26,8 +26,128 @@ body {
     rgb(var(--background-start-rgb));
 }
 
+/* Container utilities for responsive design */
+@layer utilities {
+  .container-responsive {
+    width: 100%;
+    max-width: 1024px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  @media (min-width: 768px) {
+    .container-responsive {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .container-responsive {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+  
+  /* Hide scrollbar completely */
+  .scrollbar-hide {
+    scrollbar-width: none !important; /* Firefox */
+    -ms-overflow-style: none !important; /* IE 10+ */
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    width: 0 !important;
+    height: 0 !important;
+    display: none !important;
+    background: transparent !important;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar-track {
+    display: none !important;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar-thumb {
+    display: none !important;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar-corner {
+    display: none !important;
+  }
+  
+  /* Force hide scrollbar in all scenarios */
+  .force-no-scrollbar {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+    /* Ensure content can scroll but scrollbar is hidden */
+    scroll-behavior: smooth;
+  }
+  
+  .force-no-scrollbar::-webkit-scrollbar {
+    display: none !important;
+    width: 0px !important;
+    height: 0px !important;
+    background: transparent !important;
+  }
+  
+  .force-no-scrollbar::-webkit-scrollbar-track {
+    display: none !important;
+  }
+  
+  .force-no-scrollbar::-webkit-scrollbar-thumb {
+    display: none !important;
+  }
+  
+  .force-no-scrollbar::-webkit-scrollbar-corner {
+    display: none !important;
+  }
+  
+  /* Forecast container improvements */
+  .forecast-container {
+    max-width: 100%;
+    overflow: hidden;
+  }
+  
+  .forecast-scroll {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+    scroll-behavior: smooth;
+    padding-bottom: 8px;
+  }
+  
+  .forecast-scroll::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+  
+  /* Smooth scroll animations */
+  .forecast-scroll {
+    scroll-snap-type: x proximity;
+  }
+  
+  .forecast-scroll > div > div {
+    scroll-snap-align: start;
+  }
+
+  /* Hide scrollbar for recent searches carousel */
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar { 
+    display: none;  /* Safari and Chrome */
   }
 }
