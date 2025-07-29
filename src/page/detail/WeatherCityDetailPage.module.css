@@ -1,0 +1,67 @@
+.forecastScrollContainer {
+  overflow-x: auto;
+}
+
+.cardsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.weatherSectionsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+@media (min-width: 768px) {
+  .cardsContainer {
+    flex-direction: row;
+  }
+  
+  .weatherSectionsContainer {
+    flex-direction: row;
+    align-items: stretch;
+    width: 100%;
+  }
+  
+  .weatherSectionsContainer > * {
+    flex: 1;
+    width: 50%;
+    max-width: 50%;
+  }
+}
+
+.cityInfoCard {
+  padding: 20px;
+  margin: 0;
+  flex: 1;
+}
+
+.weatherInfoCard {
+  padding: 20px;
+  margin: 0;
+  flex: 1;
+}
+
+.currentWeatherCard {
+  flex: 1 !important;
+  min-height: 300px;
+}
+
+.forecastCard {
+  flex: 1 !important;
+  min-height: 300px;
+}
+
+@media (min-width: 768px) {
+  .cityInfoCard {
+    padding: 24px;
+  }
+  
+  .weatherInfoCard {
+    padding: 24px;
+  }
+}

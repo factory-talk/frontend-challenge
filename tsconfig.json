@@ -20,14 +20,26 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
+      "@/*": [
+        "src/*"
+      ],
       "@/components/*": [
-        "components/*"
+        "src/components/*"
       ],
       "@/pages/*": [
-        "pages/*"
+        "src/pages/*"
       ],
       "@/styles/*": [
-        "styles/*"
+        "src/styles/*"
+      ],
+      "@/model/*": [
+        "src/model/*"
+      ],
+      "@/service/*": [
+        "src/service/*"
+      ],
+      "@/data/*": [
+        "src/data/*"
       ]
     },
     "types": [
