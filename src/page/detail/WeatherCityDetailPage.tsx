@@ -111,40 +111,45 @@ const CityDetailPage: React.FC<CityDetailPageProps> = ({ city: propCity }) => {
     : [];
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-        <div className="bg-white rounded-xl shadow-lg p-8 text-center">
-          <svg className="animate-spin h-12 w-12 text-blue-500 mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-          </svg>
-          <p className="text-gray-600">Loading city information...</p>
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center py-8 px-4">
+        <div className="w-full max-w-[1024px] mx-auto">
+          <div className="bg-white rounded-xl shadow-lg p-8 text-center">
+            <svg className="animate-spin h-12 w-12 text-blue-500 mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <p className="text-gray-600">Loading city information...</p>
+          </div>
         </div>
       </div>
     );
   }
   if (!city) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-        <div className="bg-white rounded-xl shadow-lg p-8 text-center max-w-md mx-auto">
-          <div className="text-6xl mb-4">🏙️</div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">City Not Found</h1>
-          <p className="text-gray-600 mb-6">
-            The city with ID &ldquo;{cityId}&rdquo; could not be found in our database.
-          </p>
-          <button
-            onClick={() => router.push('/')}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-6 rounded-lg transition-colors"
-          >
-            Back to Search
-          </button>
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center py-8 px-4">
+        <div className="w-full max-w-[1024px] mx-auto">
+          <div className="bg-white rounded-xl shadow-lg p-8 text-center max-w-md mx-auto">
+            <div className="text-6xl mb-4">🏙️</div>
+            <h1 className="text-2xl font-bold text-gray-900 mb-4">City Not Found</h1>
+            <p className="text-gray-600 mb-6">
+              The city with ID &ldquo;{cityId}&rdquo; could not be found in our database.
+            </p>
+            <button
+              onClick={() => router.push('/')}
+              className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-6 rounded-lg transition-colors"
+            >
+              Back to Search
+            </button>
+          </div>
         </div>
       </div>
     );
   }
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4">
-      <div className="max-w-6xl mx-auto">
-        <div className="mb-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-4 md:py-8 px-4 pb-8 md:pb-16">
+      <div className="w-full max-w-[1024px] mx-auto">
+        <div className="mb-6 md:mb-8">
           <button
             onClick={() => router.push('/')}
             className="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium mb-4 transition-colors"
@@ -154,15 +159,15 @@ const CityDetailPage: React.FC<CityDetailPageProps> = ({ city: propCity }) => {
             </svg>
             Back to Search
           </button>
-          <div className="bg-white rounded-xl shadow-lg p-8">
+          <div className="bg-white rounded-xl shadow-lg p-6 md:p-8">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-4xl font-bold text-gray-900 mb-2">
+                <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-2">
                   {city.name}
                 </h1>
-                <div className="flex items-center text-gray-600 space-x-4">
+                <div className="flex items-center text-gray-600 space-x-4 text-sm md:text-base">
                   <span className="flex items-center">
-                    <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 md:w-5 md:h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
@@ -174,8 +179,8 @@ const CityDetailPage: React.FC<CityDetailPageProps> = ({ city: propCity }) => {
                 </div>
               </div>
               <div className="text-right">
-                <div className="text-sm text-gray-500">City ID</div>
-                <div className="text-2xl font-bold text-gray-900">
+                <div className="text-xs md:text-sm text-gray-500">City ID</div>
+                <div className="text-lg md:text-2xl font-bold text-gray-900">
                   {city.id}
                 </div>
               </div>
@@ -183,7 +188,7 @@ const CityDetailPage: React.FC<CityDetailPageProps> = ({ city: propCity }) => {
           </div>
         </div>
         {forecastLoading ? (
-          <div className="bg-white rounded-xl shadow-lg p-8 text-center mb-8">
+          <div className="bg-white rounded-xl shadow-lg p-6 text-center mb-6 md:mb-8 max-w-[240px] mx-auto">
             <svg className="animate-spin h-12 w-12 text-blue-500 mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -192,10 +197,11 @@ const CityDetailPage: React.FC<CityDetailPageProps> = ({ city: propCity }) => {
           </div>
         ) : (
           <>
+            <div className={`${styles.weatherSectionsContainer} flex flex-col md:flex-row gap-6 mb-8`}>
             {currentWeatherData && (
-              <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">Current Weather</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className={`bg-white rounded-xl shadow-lg p-6 md:p-8 ${styles.currentWeatherCard} flex-1`}>
+                <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-4 md:mb-6">Current Weather</h2>
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                   <div className="text-center">
                     <div className="text-4xl font-bold text-blue-600">
                       {kelvinToCelsius(currentWeatherData.main.temp)}°C
@@ -240,14 +246,14 @@ const CityDetailPage: React.FC<CityDetailPageProps> = ({ city: propCity }) => {
               </div>
             )}
             {dailyForecasts.length > 0 && (
-              <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">Forecast</h2>
-                <Carousel 
-                  itemsPerView={3}
-                  showArrows={true}
-                  showDots={false}
-                  className="px-8"
-                >
+              <div className={`bg-white rounded-xl shadow-lg p-6 md:p-8 ${styles.forecastCard} flex-1 flex flex-col`}>
+                <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-4 md:mb-6">Forecast</h2>
+                <div className="flex-1 flex items-center">
+                  <Carousel 
+                    itemsPerView={3}
+                    showArrows={true}
+                    showDots={false}
+                  >
                   {dailyForecasts.slice(0, 5).map((dayForecast, index) => (
                     <div 
                       key={dayForecast.date}
@@ -290,11 +296,13 @@ const CityDetailPage: React.FC<CityDetailPageProps> = ({ city: propCity }) => {
                     </div>
                   ))}
                 </Carousel>
+                </div>
               </div>
             )}
+            </div>
             {selectedDay && hourlyData.length > 0 && (
-              <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">
+              <div className="bg-white rounded-xl shadow-lg p-6 md:p-8 mb-6 md:mb-8">
+                <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-4 md:mb-6">
                   Hourly Forecast - {selectedDay === new Date().toISOString().split('T')[0] 
                     ? 'Today' 
                     : ForecastService.formatDate(selectedDay)
@@ -304,7 +312,6 @@ const CityDetailPage: React.FC<CityDetailPageProps> = ({ city: propCity }) => {
                   itemsPerView={4}
                   showArrows={true}
                   showDots={false}
-                  className="px-8"
                 >
                   {hourlyData.map((hourData, index) => (
                     <div key={index} className="p-4 rounded-lg w-full">
@@ -342,10 +349,10 @@ const CityDetailPage: React.FC<CityDetailPageProps> = ({ city: propCity }) => {
                 </Carousel>
               </div>
             )}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className={styles.cardsContainer}>
               <div className={`bg-white rounded-xl shadow-lg ${styles.cityInfoCard}`}>
-                <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
-                  <svg className="w-6 h-6 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-4 flex items-center">
+                  <svg className="w-5 h-5 md:w-6 md:h-6 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
@@ -369,8 +376,8 @@ const CityDetailPage: React.FC<CityDetailPageProps> = ({ city: propCity }) => {
                 </div>
               </div>
               <div className={`bg-white rounded-xl shadow-lg ${styles.weatherInfoCard}`}>
-                <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
-                  <svg className="w-6 h-6 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-4 flex items-center">
+                  <svg className="w-5 h-5 md:w-6 md:h-6 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   Weather Information

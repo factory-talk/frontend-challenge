@@ -31,16 +31,26 @@ const Carousel: React.FC<CarouselProps> = ({
         const containerWidth = carouselRef.current.offsetWidth;
         const gap = 16;
         const minItemWidth = 120;
+        
+        // Calculate item width based on container constraints
         let itemWidth = (containerWidth - (gap * (itemsPerView - 1))) / itemsPerView;
         itemWidth = Math.max(itemWidth, minItemWidth);
-        const actualItemsCanFit = Math.floor((containerWidth + gap) / (itemWidth + gap));
-        const actualItemsToShow = Math.min(actualItemsCanFit, itemsPerView, totalItems);
+        
+        // Ensure we don't exceed container width
+        const maxItemsCanFit = Math.floor((containerWidth + gap) / (itemWidth + gap));
+        const actualItemsToShow = Math.min(maxItemsCanFit, itemsPerView, totalItems);
+        
         setActualItemsPerView(actualItemsToShow);
+        
         if (actualItemsToShow > 0) {
+          // Recalculate to fit exactly within container
           itemWidth = (containerWidth - (gap * (actualItemsToShow - 1))) / actualItemsToShow;
         }
+        
         const translateX = currentIndex * (itemWidth + gap);
         trackRef.current.style.transform = `translateX(-${translateX}px)`;
+        
+        // Apply calculated width to items
         const items = trackRef.current.children;
         for (let i = 0; i < items.length; i++) {
           const item = items[i] as HTMLElement;

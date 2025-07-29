@@ -43,17 +43,17 @@ const SearchPage: React.FC = () => {
     localStorage.removeItem('recentCitySearches');
   };
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8 px-4">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-4 md:py-8 px-4">
+      <div className="w-full max-w-[1024px] mx-auto">
+        <div className="text-center mb-6 md:mb-8">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
             Weather Forecast
           </h1>
-          <p className="text-lg text-gray-600">
+          <p className="text-base md:text-lg text-gray-600">
             Get detailed weather forecasts for cities around the world
           </p>
         </div>
-        <div className="bg-white rounded-xl shadow-lg p-8 mb-8 overflow-hidden">
+        <div className="bg-white rounded-xl shadow-lg p-6 md:p-8 mb-6 md:mb-8 overflow-hidden">
           <div className="mb-6">
             <label htmlFor="city-search" className="block text-sm font-medium text-gray-700 mb-2">
               Search for a city to get weather forecast
@@ -120,11 +120,11 @@ const SearchPage: React.FC = () => {
           />
         )}
         {!searchQuery && (
-          <div className="bg-white rounded-xl shadow-lg p-8">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">
+          <div className="bg-white rounded-xl shadow-lg p-6 md:p-8 mb-8">
+            <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-4">
               How to get weather forecast
             </h2>
-            <ul className="space-y-3 text-gray-600">
+            <ul className="space-y-3 text-gray-600 text-sm md:text-base">
               <li className="flex items-start">
                 <span className="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-sm font-medium mr-3 mt-0.5">
                   1

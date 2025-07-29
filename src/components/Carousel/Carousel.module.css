@@ -1,11 +1,16 @@
 .carousel {
   position: relative;
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 0 60px; /* เพิ่ม padding เพื่อให้ที่ว่างสำหรับปุ่ม */
 }
 
 .carouselContainer {
   overflow: hidden;
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .carouselTrack {
@@ -17,15 +22,17 @@
 .carouselItem {
   flex-shrink: 0;
   min-width: 120px;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .carouselArrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: transparent;
-  /* border: 2px solid #e5e7eb; */
-  color: #000;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #e5e7eb;
+  color: #374151;
   border-radius: 50%;
   width: 48px;
   height: 48px;
@@ -35,32 +42,30 @@
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   z-index: 10;
-  /* box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .carouselArrow:hover:not(:disabled) {
-  /* background: #f3f4f6; */
-  /* border-color: #d1d5db; */
+  background: rgba(255, 255, 255, 1);
+  border-color: #d1d5db;
   transform: translateY(-50%) scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .carouselArrow:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
-  /* color: #686767;
-  background: #d6d6d8;
-  border-color: #f3f4f6; */
-  color: transparent;
-  background: transparent;
-  border-color: transparent;
+  background: rgba(255, 255, 255, 0.5);
+  border-color: #f3f4f6;
+  color: #9ca3af;
 }
 
 .carouselArrowLeft {
-  left: -24px;
+  left: 8px;
 }
 
 .carouselArrowRight {
-  right: -24px;
+  right: 8px;
 }
 
 .carouselDots {
@@ -90,12 +95,16 @@
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
+  .carousel {
+    padding: 0 50px; /* ลด padding บนมือถือ */
+  }
+  
   .carouselArrowLeft {
-    left: -12px;
+    left: 4px;
   }
   
   .carouselArrowRight {
-    right: -12px;
+    right: 4px;
   }
   
   .carouselArrow {
